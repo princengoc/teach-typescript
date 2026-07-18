@@ -42,7 +42,10 @@ function runTests(dir) {
 function stage(lesson) {
   const tmp = mkdtempSync(join(tmpdir(), `lesson-${lesson}-`));
   const dir = join(tmp, lesson);
-  cpSync(join(LESSONS, lesson), dir, { recursive: true });
+  cpSync(join(LESSONS, lesson), dir, {
+    recursive: true,
+    filter: (src) => !src.includes('node_modules'),
+  });
   symlinkSync(join(ROOT, 'node_modules'), join(dir, 'node_modules'));
   return { tmp, dir };
 }

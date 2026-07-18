@@ -14,14 +14,33 @@ lessons/NN-slug/
   capstone/    -- the rung in the teaching world
 ```
 
+### The worked example
+
+The teaching text lives in the code file the kid has open, not in prose about it. The top of
+`src/exercise.ts` is a worked example, read before the drills, with each step preceded by a
+comment naming its purpose -- "Step 1: name each number" -- never paraphrasing the line.
+Subgoal-labeled worked examples are the best-evidenced move in programming instruction
+(Margulieux et al.: better transfer, half the failure rate), and putting the explanation
+beside the code is what the split-attention research demands. The exercise below mirrors the
+worked example's steps, the kid filling in the last one. Test names read as the same kind of
+label.
+
 ### The card
 
-Two parts, after Exercism's introduction/about split. The front is read before drilling: only
-what today's drills need, each new word's exact meaning in two or three sentences, code
-snippets only to introduce new syntax, terms spelled so a kid can search them. The back is
-read after the capstone: pitfalls, limits, one or two links. Never below the truth: `const`
-binds a name to a value and the binding cannot change -- binding, not value, because arrays
-will later make the difference real.
+The card is a reference, not a lesson: it carries what code comments do badly. Two parts,
+after Exercism's introduction/about split, and the card never restates what the worked
+example's labels already say -- divided roles, no duplication.
+
+The front is read before drilling and kept open beside the code. Hard limit 250 words plus
+tables: one sentence saying what the lesson lets you build, then each new word as a bolded
+term with its exact meaning in two or three sentences and a one-to-three-line example, rule
+then instance, in one visual unit. Code snippets only to introduce new syntax. Terms spelled
+so a kid can search them. No links.
+
+The back is read after the capstone, limit 300 words: the deferred truth, one why, one thing
+a later lesson will break. Never state what a later lesson must retract; defer explicitly
+instead. Phrasing rule for bindings, the one all careful sources converge on: talk about
+re-pointing the name, never about freezing the value.
 
 Every card carries a two-column table, "this compiles / this does not," with the exact tsc
 error text in the second column. The compiler co-teaches: strict tsc errors are legible, and

@@ -8,11 +8,12 @@ says where the door is.
 
 ## Order of work
 
-1. Read the front of `card.md`.
+1. Read the front of `card.md`, then the worked example at the top of
+   `src/exercise.ts`.
 2. Do the drills, in order: `drills/01` to `drills/04`. In each folder, read
    `readme.md`, edit the one file it names, run `npm test` until green.
-3. Capstone: edit `src/exercise.ts` so `npm test` goes green and the preview
-   shows the robot painting the dashed target from the door.
+3. Capstone: the YOUR TURN section of `src/exercise.ts`. Green tests, and the
+   preview shows the robot painting the dashed target from the door.
 4. Read the back of `card.md`. Tell your teacher what the robot did wrong
    before your fix, and why.
 
