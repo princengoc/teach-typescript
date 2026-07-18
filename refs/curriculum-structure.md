@@ -40,9 +40,23 @@ so a kid can search them. No links.
 The back is read after the capstone, limit 300 words: the deferred truth, one why, one thing
 a later lesson will break. Never state what a later lesson must retract; defer explicitly
 instead. Phrasing rule for bindings, the one all careful sources converge on: talk about
-re-pointing the name, never about freezing the value. Register: plain textbook prose. No
-narrative framing, no filler, no drama -- "Lesson 08 returns to this", not "the truth we
-postponed".
+re-pointing the name, never about freezing the value. Register: plain prose a high schooler
+parses on one tired read. No narrative framing, no filler, no epigrams -- write "you cannot
+give the name a new value later", not "const locks the name, not the value". Concrete
+subject, concrete verb, one idea per sentence.
+
+### The wordbook and real documentation
+
+Reading references is a taught skill. Two instruments:
+
+1. Each lesson carries `wordbook.md`: every word the course has introduced so far, one line
+   each, with the card that defines it. Copied forward and extended each lesson, since the
+   StackBlitz subtree shows the kid only one lesson's folder. The wordbook is the kid's
+   first API index; look there before asking.
+2. From the first built-in on (Math in lesson 06, array methods in lesson 08), the card
+   cites the exact MDN page, and one drill per such lesson is a doc-reading drill: use a
+   function the course never taught, only documented. We do not write our own docs for the
+   language; the kid learns to read the real ones, scaffolded by the wordbook habit.
 
 Every card carries a two-column table, "this compiles / this does not," with the exact tsc
 error text in the second column. The compiler co-teaches: strict tsc errors are legible, and

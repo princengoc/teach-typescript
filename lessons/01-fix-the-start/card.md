@@ -4,28 +4,29 @@ Front. Read before the drills.
 
 ## The words
 
-**Statement.** One instruction, ended with a semicolon. A program is a list of
-statements, run top to bottom.
+**Statement.** One instruction. It ends with a semicolon. A program is a list
+of statements, and it runs them top to bottom.
 
-**`const`** gives a value a name.
+**`const`** creates a name for a value.
 
 ```ts
 const startX = 6;
 ```
 
-Below this line, `startX` means `6`. A `const` name cannot be assigned again;
-the compiler rejects the attempt.
+From this line on, `startX` means `6`. You cannot give the name a new value
+later; if you try, the compiler shows an error.
 
-**Number literal.** A number written in the code: `6`, `24`, `0`. A literal is
-a value, not a name.
+**Number literal.** A number typed directly into the code, like `6`, `24`, or
+`0`.
 
-**Property access.** A dot reads one named part of a value.
+**Property access.** The dot looks inside a value and picks out one named
+part.
 
 ```ts
 world.robot.x
 ```
 
-This reads: in `world`, the `robot`, its `x`.
+This means: take `world`, find its `robot`, and read that robot's `x`.
 
 ## This compiles / this does not
 
@@ -46,19 +47,22 @@ This reads: in `world`, the `robot`, its `x`.
 
 # Back. Read after the capstone.
 
-**`const` locks the name, not the value.**
+**What `const` does not protect.**
 
 ```ts
 const charger = { x: 7, y: 5 };
 charger.x = 9;
 ```
 
-The second line compiles. `charger` still names the same object; a value
-inside the object changed. Lesson 08 returns to this.
+The second line works. `const` stops you from giving the name `charger` a
+whole new value. It does not stop changes inside the object that `charger`
+names. Lesson 08 comes back to this.
 
-**`let`** declares a name that can be assigned again. It first appears in
-lesson 05, where a loop needs a counter.
+**`let`.** TypeScript has a second keyword, `let`, for names that are allowed
+to get new values. We start using it in lesson 05, when a loop needs a
+counter.
 
-**Types.** The values in this lesson are numbers and objects of numbers. The
-kinds of values are called types. The compiler tracks them; that is why
-`world.robat.x` fails to compile.
+**Types.** Every value has a kind: `6` is a number, and `{ x: 7, y: 5 }` is an
+object holding two numbers. The kinds are called types, and the compiler
+keeps track of them. That is how it caught the typo `robat`: the robot has no
+part with that name.
