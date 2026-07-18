@@ -1,26 +1,25 @@
 # Todo
 
-Harness is scaffolded. Curriculum is not. Work top to bottom.
+Curriculum is designed (see refs/). Lesson 01 is built. Work top to bottom.
 
-## Curriculum design
+## Done
 
-- [ ] Map the concept arc from zero to a working for loop: values, variables, functions,
-      arrays, then the loop. One concept per lesson.
-- [ ] Pick the north-star game the for loop builds toward (canvas grid or sprites is the
-      default assumption; confirm with the lead teacher).
+- [x] Curriculum designed: refs/curriculum-overview.md (three acts, twelve lessons),
+      refs/painter-world.md (the world and ladder), refs/curriculum-structure.md (card,
+      drills, capstone), refs/serious-informatics-teaching.md (principles),
+      refs/arpeggio-project.md (the capstone target).
+- [x] Lesson infrastructure, built with lesson 01: self-contained lesson workspace (own
+      package.json, tsconfig, .stackblitzrc; no extends above the folder, so the StackBlitz
+      subtree serves alone), harness under src/harness/, solutions under solutions/NN-slug/
+      mirroring kid-edited files, scripts/verify-lessons.mjs (root npm test asserts starter
+      RED and solution GREEN per lesson).
+- [x] Lesson 01 fix-the-start: card, four drills plus overflow, capstone, preview. Verified:
+      starter RED, solution GREEN, npm run check clean, standalone install/test/build clean.
 
-## Lesson infrastructure (build with lesson 01, not before)
+## Next
 
-- [ ] Author `templates/lesson/`: `package.json`, `vite.config.ts`, `tsconfig.json` extending
-      `../../tsconfig.base.json`, `index.html`, `src/exercise.ts`, `src/exercise.test.ts`,
-      `src/main.ts`, `README.md`.
-- [ ] StackBlitz serving: per-lesson `.stackblitzrc` (start command, install deps) and the
-      GitHub subtree URL shape `stackblitz.com/github/<user>/teach-typescript/tree/main/lessons/NN-slug`.
-- [ ] Decide where reference solutions live so the kid cannot peek (default: outside the served
-      subtree, under `solutions/NN-slug.ts`).
-
-## First lesson
-
-- [ ] Build lesson 01 via `/design-lesson`. Verify: starter RED, solution GREEN, `npm run check`
-      clean, preview renders.
-- [ ] Push to a GitHub remote and confirm the StackBlitz link boots and renders.
+- [ ] Lead teacher: open the StackBlitz link in lesson 01's README and confirm it boots and
+      the preview renders (no local browser here; this is the one manual check).
+- [ ] Extract `templates/lesson/` from lesson 01 once lesson 02 shows what varies.
+- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; the recording facade
+      enters the harness.
