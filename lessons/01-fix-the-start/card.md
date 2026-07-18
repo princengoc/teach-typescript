@@ -1,35 +1,31 @@
 # Card 01: values
 
-Read this front before the drills. Keep it open next to the code: the code
-shows the words working, the card says exactly what they mean.
-
-**This lesson:** you place things in the world by naming numbers, and you read
-numbers back out of the world.
+Front. Read before the drills.
 
 ## The words
 
-**Statement.** One complete instruction, ended with `;`. A program is
+**Statement.** One instruction, ended with a semicolon. A program is a list of
 statements, run top to bottom.
 
-**`const`** starts a statement that gives a value a name.
+**`const`** gives a value a name.
 
 ```ts
 const startX = 6;
 ```
 
-After that line runs, `startX` means `6` everywhere below it. A name made with
-`const` cannot be pointed at a new value: the compiler stops you.
+Below this line, `startX` means `6`. A `const` name cannot be assigned again;
+the compiler rejects the attempt.
 
-**Number literal.** A number written out in the code: `6`, `24`, `0`. It is a
-value itself, not a name for one.
+**Number literal.** A number written in the code: `6`, `24`, `0`. A literal is
+a value, not a name.
 
-**The dot** reaches into a value and picks one part by name.
+**Property access.** A dot reads one named part of a value.
 
 ```ts
 world.robot.x
 ```
 
-reads: in `world`, the `robot`, its `x`. Say it aloud as "the robot's x".
+This reads: in `world`, the `robot`, its `x`.
 
 ## This compiles / this does not
 
@@ -42,29 +38,27 @@ reads: in `world`, the `robot`, its `x`. Say it aloud as "the robot's x".
 ## For Racket hands
 
 - `const startX = 6;` is `(define startX 6)`.
-- `world.robot.x` is `(robot-x (world-robot world))`: the dot is the accessor,
+- `world.robot.x` is `(robot-x (world-robot world))`. The dot is the accessor,
   read left to right.
 - A Vitest `test` with `expect(a).toBe(b)` is a `check-expect`.
 
 ---
 
-# The back
+# Back. Read after the capstone.
 
-Read this after the capstone is green.
-
-**The truth we postponed.** `const` locks the name, not the value.
+**`const` locks the name, not the value.**
 
 ```ts
 const charger = { x: 7, y: 5 };
 charger.x = 9;
 ```
 
-The second line compiles: you did not point `charger` at anything new, you
-changed something inside what it holds. Lesson 08 uses this on purpose.
+The second line compiles. `charger` still names the same object; a value
+inside the object changed. Lesson 08 returns to this.
 
-**The other keyword.** TypeScript also has `let`, which makes a name that can
-be re-pointed. We do not touch it until a loop needs a counter, in lesson 05.
+**`let`** declares a name that can be assigned again. It first appears in
+lesson 05, where a loop needs a counter.
 
-**Types.** Every name in this lesson held a number, or a grouping of numbers.
-The kinds of values are called types, and the compiler tracks them. That is
-how `robat` died before the program ever ran.
+**Types.** The values in this lesson are numbers and objects of numbers. The
+kinds of values are called types. The compiler tracks them; that is why
+`world.robat.x` fails to compile.
