@@ -40,7 +40,9 @@ so a kid can search them. No links.
 The back is read after the capstone, limit 300 words: the deferred truth, one why, one thing
 a later lesson will break. Never state what a later lesson must retract; defer explicitly
 instead. Phrasing rule for bindings, the one all careful sources converge on: talk about
-re-pointing the name, never about freezing the value.
+re-pointing the name, never about freezing the value. Register: plain textbook prose. No
+narrative framing, no filler, no drama -- "Lesson 08 returns to this", not "the truth we
+postponed".
 
 Every card carries a two-column table, "this compiles / this does not," with the exact tsc
 error text in the second column. The compiler co-teaches: strict tsc errors are legible, and
