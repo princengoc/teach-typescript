@@ -1,0 +1,21 @@
+{
+  "name": "teach-typescript",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "lessons/*"
+  ],
+  "scripts": {
+    "typecheck": "node scripts/typecheck.mjs",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run --passWithNoTests",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0",
+    "happy-dom": "^15.7.0"
+  }
+}
