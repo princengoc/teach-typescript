@@ -40,6 +40,12 @@ lead teacher wants lesson 01 refined further before building lesson 02.
 ## Next
 
 - [ ] Refine lesson 01 further with the lead teacher (their explicit next intent).
+  - [x] Entry UX: preview page now carries the game premise, the one task, a
+        legend, and a big live PASS/FAIL verdict. README stripped to a pointer;
+        StackBlitz link opens on src/exercise.ts (?file=). Feedback loop for
+        lesson 01 is preview-only -- no terminal, no npm test for the kid.
+  - [ ] Lead teacher: open the link in a real browser and confirm the preview
+        reads as the obvious call-to-action.
 - [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
       (never verified in a real browser; no browser in the dev environment).
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.

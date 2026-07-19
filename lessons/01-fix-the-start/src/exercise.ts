@@ -13,8 +13,9 @@ export const charger = { x: 7, y: 5 };
 export const chargerColumn = charger.x;
 
 // YOUR TURN -------------------------------------------------------------
-// The robot must start at the door. The blue box in the preview is the
-// door, and the test names its x and y. Fix the two numbers.
+// The robot must start on the door. Find the blue door square in the
+// preview, read its column (x) and row (y), and fix the two numbers below.
+// Save the file, then watch the preview. Green PASS means you are done.
 
 export const startX = 6;
 export const startY = 1;
