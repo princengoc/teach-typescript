@@ -69,7 +69,8 @@ says so plainly: Racket loops by recursion, so `while` and `for` are new to ever
 
 ### The drills
 
-Five to seven per lesson, the dose the many-small-programs studies validated. No world, no
+Five to seven per lesson from lesson 3 on, the dose the many-small-programs studies
+validated. Lessons 1 and 2 have none; see rule 4. No world, no
 canvas. Each drill is named for its story, not its concept. Test files skip all but the first
 test, so the kid faces one red at a time. Test names read as specification: on a red run, the
 test name is the error message.
@@ -124,7 +125,11 @@ earlier cards.
 2. One concept per lesson. A lesson may introduce zero new words: consolidation is a lesson.
 3. The kid explains the solution aloud after green. Prediction before execution: say what the
    picture will show before pressing run.
-4. Drills before capstone, always. Five cheap uses before one expensive one.
+4. Drills before capstone, from lesson 3 on. Five cheap uses before one expensive one.
+   Lessons 1 and 2 ship no drills: before `return` and real pure functions exist, a drill
+   degenerates into "read the file, write the number over here", which is not work. There
+   the capstone is the drill. Any drill that a kid can clear without thinking is cut, at
+   any lesson.
 5. Cards accumulate: the kid's own cards become their language reference.
 
 ## Word introduction map

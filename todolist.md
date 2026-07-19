@@ -36,19 +36,30 @@ lesson 02 is next.
 - [x] Lesson 01 fix-the-start, finished. The kid edits five values in src/exercise.ts and
       the preview marks itself PASS. Menu -> demo -> concepts -> build the room, hash-routed
       so a save-reload keeps the view. Card, wordbook, solution; green under npm run check.
+- [x] Lesson 02 paint-the-L, finished. The kid writes a straight-line script of calls in
+      src/exercise.ts and the preview replays it. Recording facade in src/harness/robot.ts.
+      Try-the-calls console, then the L, then the door-follows payoff, then the card.
+      Drills deferred to lesson 03 by rule; `argument` deferred with them.
+- [x] design-lesson skill records the lesson-01 shape; curriculum-structure.md rule 4 now
+      says drills start at lesson 03.
 
 ## Next
 
-- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; recording facade enters
-      the harness. Two things belong to it, both cut from lesson 01:
-  - the door-follows challenge (set startX/startY to door.x/door.y, then move the door),
-  - a first real exercise beyond the capstone.
+- [ ] Lead teacher: open the lesson 02 link in a real browser. Confirm (a) the try-the-calls
+      console advances one command per press and logs the call, (b) Paint the L replays the
+      starter and reads "Good start: 2 of 5", (c) finishing the L turns the verdict green,
+      shows the well-done banner and two PASS tiles from other doors, (d) the card renders.
 - [ ] Lead teacher: open the lesson 01 link in a real browser. Confirm (a) menu shows,
       (b) demo Next walks still -> success -> failure -> Start Lesson 1, (c) Start Lesson 1
       shows concepts then Build the room, (d) resizing grid resizes live, (e) door-on-goal
       shows blue praise then robot-on-door flips to green PASS with the lesson-02 pointer.
+- [ ] Lesson 03 name-the-move: defining functions. `argument` and `parameter` land here
+      together, deferred from lesson 02 where no call took one. Drills resume at this lesson
+      (curriculum-structure.md rule 4).
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.
-- [ ] Extract templates/lesson/ once lesson 02 shows what varies.
+- [ ] Extract templates/lesson/ now that lessons 01 and 02 show what varies: index.html
+      styles, markdown.ts, world.ts, types.ts are copied verbatim; task.ts and render.ts
+      differ per lesson.
 
 ## Cut from lesson 01, and why
 
