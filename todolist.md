@@ -50,10 +50,16 @@ lead teacher wants lesson 01 refined further before building lesson 02.
   - [x] Concepts slide (in-app "card"): menu -> Start Lesson 1 -> concepts
         (variable / object / dot) -> Build the room. Lets exercise.ts stay a
         real 5-line code file with one comment.
+  - [x] Linear demo: one Next button walks still-scene -> success paint ->
+        failed run -> Start Lesson 1. Lesson feedback is instruction-style
+        (no "FAIL"): red = next action, blue praise when the door lands, green
+        PASS at the end. Post-PASS bonus: set startX/startY to door.x/door.y
+        (ungradable -- same values -- so it is an explore prompt, not a gate).
   - [ ] Lead teacher: open the link in a real browser. Confirm (a) menu shows,
-        (b) demo Play/failure animate, (c) Start Lesson 1 shows the concepts
-        slide then Build the room, (d) resizing grid resizes live, (e) landing
-        door on the goal and robot on the door flips verdict to PASS.
+        (b) demo Next walks still -> success -> failure -> Start Lesson 1,
+        (c) Start Lesson 1 shows concepts then Build the room, (d) resizing
+        grid resizes live, (e) door-on-goal shows blue praise then robot-on-door
+        flips to green PASS and reveals the bonus line.
 - [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
       (never verified in a real browser; no browser in the dev environment).
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.

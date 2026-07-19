@@ -169,17 +169,10 @@
       <section id="demo" hidden>
         <button class="back" data-go="menu" type="button">&larr; Menu</button>
         <h2>Demo: what the robot does</h2>
-        <p>
-          Once the room is built, the robot follows a set of moves and paints as
-          it goes. Press <b>Play</b> to watch it start on the door and paint the
-          target. Then see what happens when it starts in the wrong place.
-        </p>
+        <p id="demo-caption"></p>
         <canvas id="demo-canvas"></canvas>
         <p id="demo-verdict" class="verdict"></p>
-        <div class="controls">
-          <button id="demo-play" type="button">Play</button>
-          <button id="demo-fail" type="button">Show a failure</button>
-        </div>
+        <button id="demo-next" class="primary" type="button">Next</button>
       </section>
 
       <!-- CONCEPTS -->
@@ -220,6 +213,12 @@
         <canvas id="lesson-canvas"></canvas>
         <p id="lesson-verdict" class="verdict"></p>
         <p>When the line above turns green and reads <b>PASS</b>, you are done.</p>
+
+        <p id="lesson-bonus" class="idea" hidden>
+          <b>Bonus:</b> set <code>startX</code> to <code>door.x</code> and
+          <code>startY</code> to <code>door.y</code>. Now move the door and watch
+          the robot follow it.
+        </p>
 
         <div class="legend">
           <span class="swatch goal"></span><span>the goal: where the door should go</span>

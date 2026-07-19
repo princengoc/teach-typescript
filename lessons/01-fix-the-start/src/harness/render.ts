@@ -1,4 +1,3 @@
-import { placementSolved } from './task';
 import type { Command, World } from './types';
 import { makeWorld, sameCells, step } from './world';
 
@@ -207,10 +206,23 @@ export interface SceneOptions {
   goal: { x: number; y: number };
 }
 
-function sceneReason(o: SceneOptions): string {
+// The verdict speaks as an instruction, not a grade: it names the next thing
+// to do, praises the door once it lands, and reads PASS only when both are set.
+type Tone = 'todo' | 'progress' | 'done';
+
+const TONE_COLOR: Record<Tone, string> = {
+  todo: '#c62828',
+  progress: '#1565c0',
+  done: '#2e7d32',
+};
+
+function sceneStatus(o: SceneOptions): { message: string; tone: Tone } {
   const { grid, door, start, goal } = o;
   if (grid.width < 1 || grid.height < 1) {
-    return 'FAIL: give the room a width and a height of at least 1';
+    return {
+      message: 'Give the room a width and a height of at least 1.',
+      tone: 'todo',
+    };
   }
   if (
     door.x < 0 ||
@@ -218,25 +230,34 @@ function sceneReason(o: SceneOptions): string {
     door.y < 0 ||
     door.y >= grid.height
   ) {
-    return 'FAIL: make the room big enough to hold the door';
+    return {
+      message: 'Make the room big enough to hold the door.',
+      tone: 'todo',
+    };
   }
   if (door.x !== goal.x || door.y !== goal.y) {
-    return 'FAIL: move the door onto the dashed goal square';
+    return { message: 'Put the door on the dashed goal square.', tone: 'todo' };
   }
   if (start.x !== door.x || start.y !== door.y) {
-    return 'FAIL: put the robot on the door';
+    return {
+      message: 'Nice. The door is on the goal. Now put the robot on the door.',
+      tone: 'progress',
+    };
   }
-  return 'PASS: the door is on the goal and the robot is on the door';
+  return {
+    message: 'PASS. Door on the goal, robot on the door.',
+    tone: 'done',
+  };
 }
 
-export function drawScene(options: SceneOptions): void {
+export function drawScene(options: SceneOptions): boolean {
   const { canvas, verdict, grid, door, start, goal } = options;
   const cols = Math.min(Math.max(grid.width, 1), MAX_DRAWN);
   const rows = Math.min(Math.max(grid.height, 1), MAX_DRAWN);
   canvas.width = MARGIN * 2 + cols * CELL;
   canvas.height = MARGIN * 2 + rows * CELL;
   const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  if (!ctx) return false;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawEmptyGrid(ctx, cols, rows);
@@ -247,7 +268,24 @@ export function drawScene(options: SceneOptions): void {
     makeWorld(cols, rows, { x: start.x, y: start.y, facing: 'east' }),
   );
 
-  const solved = placementSolved({ grid, door, start, goal });
-  verdict.textContent = sceneReason(options);
-  verdict.style.color = solved ? '#2e7d32' : '#c62828';
+  const status = sceneStatus(options);
+  verdict.textContent = status.message;
+  verdict.style.color = TONE_COLOR[status.tone];
+  return status.tone === 'done';
+}
+
+// A single still frame for the demo: grid, door, and robot, no movement.
+export function drawStill(
+  canvas: HTMLCanvasElement,
+  world: World,
+  door: { x: number; y: number },
+): void {
+  canvas.width = MARGIN * 2 + world.width * CELL;
+  canvas.height = MARGIN * 2 + world.height * CELL;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawEmptyGrid(ctx, world.width, world.height);
+  drawDoor(ctx, door);
+  drawRobot(ctx, world);
 }
