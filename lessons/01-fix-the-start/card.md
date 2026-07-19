@@ -1,6 +1,6 @@
 # Card 01: values
 
-Front. Read before the drills.
+Front. Read after part 2.
 
 ## The words
 
@@ -45,7 +45,7 @@ This means: take `world`, find its `robot`, and read that robot's `x`.
 
 ---
 
-# Back. Read after the capstone.
+# Back. Read after part 4.
 
 **What `const` does not protect.**
 

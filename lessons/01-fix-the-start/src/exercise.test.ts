@@ -1,24 +1,54 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
-import { door, grid, startX, startY } from './exercise';
-import { goalDoor, placementSolved } from './harness/task';
+import {
+  atticDoorY,
+  cellarDoorX,
+  door,
+  grid,
+  kitchenDoorX,
+  parkX,
+  parkY,
+  predictedDoorX,
+  predictedDoorY,
+  predictedWidth,
+  startX,
+  startY,
+} from './exercise';
+import {
+  checkDots,
+  checkPark,
+  checkPlacement,
+  checkPredictions,
+} from './harness/steps';
+import { goalDoor } from './harness/task';
 
-const start = { x: startX, y: startY };
+const source = readFileSync(new URL('./exercise.ts', import.meta.url), 'utf8');
 
-test('the room is big enough to hold the door', () => {
-  expect(grid.width).toBeGreaterThan(door.x);
-  expect(grid.height).toBeGreaterThan(door.y);
+test('part 1: the predictions match the room', () => {
+  const result = checkPredictions({
+    width: predictedWidth,
+    doorX: predictedDoorX,
+    doorY: predictedDoorY,
+  });
+  expect(result.pass, result.message).toBe(true);
 });
 
-test('the door sits on the goal square', () => {
-  expect(door.x).toBe(goalDoor.x);
-  expect(door.y).toBe(goalDoor.y);
+test('part 2: the three names are read with dots', () => {
+  const result = checkDots({ kitchenDoorX, atticDoorY, cellarDoorX }, source);
+  expect(result.pass, result.message).toBe(true);
 });
 
-test('the robot starts on the door', () => {
-  expect(start.x).toBe(door.x);
-  expect(start.y).toBe(door.y);
+test('part 3: the robot parks on the charger', () => {
+  const result = checkPark(parkX, parkY);
+  expect(result.pass, result.message).toBe(true);
 });
 
-test('the whole scene is solved', () => {
-  expect(placementSolved({ grid, door, start, goal: goalDoor })).toBe(true);
+test('part 4: the room is built and the robot is on the door', () => {
+  const result = checkPlacement({
+    grid,
+    door,
+    start: { x: startX, y: startY },
+    goal: goalDoor,
+  });
+  expect(result.pass, result.message).toBe(true);
 });

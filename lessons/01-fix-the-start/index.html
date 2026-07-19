@@ -75,6 +75,20 @@
       button:hover {
         background: #f5f5f5;
       }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      button.primary:disabled:hover {
+        background: #1565c0;
+      }
+      .counter {
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #607d8b;
+        margin: 0 0 0.25rem;
+      }
       button.primary {
         background: #1565c0;
         border-color: #1565c0;
@@ -187,7 +201,7 @@
       <!-- CONCEPTS -->
       <section id="learn" hidden>
         <button class="back" data-go="menu" type="button">&larr; Menu</button>
-        <h2>Three ideas, then build the room</h2>
+        <h2>Three ideas, then four parts</h2>
 
         <p class="idea"><b>Variable:</b> a name for a value. You make one with
           <code>const</code>. After that line, the name means that value.</p>
@@ -203,47 +217,79 @@
         <p>A place on the grid uses <code>x</code> for the column and
           <code>y</code> for the row.</p>
 
-        <button id="to-build" class="primary" type="button">Build the room</button>
+        <button id="to-build" class="primary" type="button">Start Part 1</button>
       </section>
 
       <!-- LESSON -->
       <section id="lesson" hidden>
         <button class="back" data-go="menu" type="button">&larr; Menu</button>
-        <h2>Lesson 1: build the room</h2>
-        <p>
-          Edit <code>src/exercise.ts</code> (open on the left), save, and watch
-          here. Do it one value at a time:
-        </p>
-        <ol class="steps">
-          <li><b>Size the room:</b> change <code>grid.width</code> and <code>grid.height</code>. Watch it resize.</li>
-          <li><b>Place the door:</b> set <code>door</code> onto the dashed goal square.</li>
-          <li><b>Start the robot:</b> set <code>startX</code> and <code>startY</code> onto the door.</li>
-        </ol>
-        <canvas id="lesson-canvas"></canvas>
-        <p id="lesson-verdict" class="verdict"></p>
-        <p>When the line above turns green and reads <b>PASS</b>, you are done.</p>
+        <p id="lesson-counter" class="counter"></p>
 
-        <div id="lesson-done" hidden>
-          <p class="celebrate">Well done. You built the room.</p>
-
-          <p class="idea">
-            <b>Challenge:</b> the door could be anywhere. Set <code>startX</code>
-            to <code>door.x</code> and <code>startY</code> to <code>door.y</code>.
-            Now move the door to any spot and save: the robot follows it every
-            time. That is why a name beats a fixed number. Put the door back on
-            the goal to keep your PASS.
-          </p>
-
+        <div id="part-1" hidden>
+          <h2>Part 1: say what you see</h2>
           <p>
-            <b>Now do the drills.</b> In the file list, open the
-            <code>drills</code> folder and do <code>01</code> to <code>04</code>
-            in order. Each has a short <code>readme.md</code> naming the one file
-            to edit.
+            Open <code>src/rooms.ts</code> and read the first room. Do not run
+            anything yet. Predict three values, and write each one as a number in
+            <code>src/exercise.ts</code>:
+          </p>
+          <ol class="steps">
+            <li><code>predictedWidth</code>: how wide the room is.</li>
+            <li><code>predictedDoorX</code>: the door's column.</li>
+            <li><code>predictedDoorY</code>: the door's row.</li>
+          </ol>
+          <p>Save. The room appears here when all three are right.</p>
+        </div>
+
+        <div id="part-2" hidden>
+          <h2>Part 2: read with dots</h2>
+          <p>
+            Three more rooms live in <code>src/rooms.ts</code>. In
+            <code>exercise.ts</code>, each part 2 line reads the right room but
+            the wrong part:
+          </p>
+          <pre><code>export const kitchenDoorX = kitchen.door.y;</code></pre>
+          <p>
+            Fix the last dot on each line so the name holds what it says. Keep
+            the dots: typing the number by hand does not count.
           </p>
         </div>
 
+        <div id="part-3" hidden>
+          <h2>Part 3: park on the charger</h2>
+          <p>
+            The delivery robot parks at the charger, and the charger sits at
+            <b>x 7</b>, <b>y 5</b>. Set <code>parkX</code> and <code>parkY</code>
+            in <code>exercise.ts</code> so the robot lands on the dashed square.
+          </p>
+          <p><code>x</code> is the column, <code>y</code> is the row.</p>
+        </div>
+
+        <div id="part-4" hidden>
+          <h2>Part 4: build the room</h2>
+          <p>Do it one value at a time, saving after each change:</p>
+          <ol class="steps">
+            <li><b>Size the room:</b> change <code>grid.width</code> and <code>grid.height</code>. Watch it resize.</li>
+            <li><b>Place the door:</b> set <code>door</code> onto the dashed goal square.</li>
+            <li><b>Start the robot:</b> set <code>startX</code> and <code>startY</code> onto the door.</li>
+          </ol>
+        </div>
+
+        <canvas id="lesson-canvas"></canvas>
+        <p id="lesson-verdict" class="verdict"></p>
+
+        <div class="controls">
+          <button id="lesson-back" type="button" hidden>&larr; Back</button>
+          <button id="lesson-next" class="primary" type="button">Next part &rarr;</button>
+        </div>
+
+        <div id="lesson-done" hidden>
+          <p class="celebrate">Well done. You finished lesson 1.</p>
+          <p>Read the back of <code>card.md</code>, then tell your teacher what
+            each value in <code>exercise.ts</code> controls.</p>
+        </div>
+
         <div class="legend">
-          <span class="swatch goal"></span><span>the goal: where the door should go</span>
+          <span class="swatch goal"></span><span>the goal: where the door or the charger should be</span>
           <span class="swatch door"></span><span>the door you placed</span>
           <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
         </div>
