@@ -60,6 +60,7 @@ Both kids take every lesson in this order; speed may differ, the sequence does n
 ## The documents
 
 - serious-informatics-teaching.md: the ten principles.
-- curriculum-structure.md: card, drills, capstone; word map; outside practice.
+- curriculum-structure.md: lesson anatomy, card, drills, capstone; word map; outside
+  practice. Lesson 02 is the reference implementation.
 - painter-world.md: the world, the ladder, the harness boundary.
 - arpeggio-project.md: what the capstone is and what it demands.

@@ -10,10 +10,9 @@ lesson 02 is next.
   both kids.
 - refs/painter-world.md: the teaching world, its types, the ten-rung ladder, harness
   boundary, per-kid notes (Bong: one semester Racket; JJ: 13, beginner).
-- refs/curriculum-structure.md: lesson anatomy -- worked example in the exercise file
-  (subgoal-labeled), card (front/back, plain prose, compiles/does-not table, For Racket
-  hands), drills (5-7, fixed format order: predict, reorder or fix, implement, twist,
-  review), capstone, wordbook, doc-reading policy (MDN from lesson 06 on).
+- refs/curriculum-structure.md: lesson anatomy, with lessons/02-paint-the-l as the reference
+  implementation -- linear lesson, worked example in the exercise file, card (150 words,
+  three terms, code-led), wordbook, drills from lesson 03 on, capstone, word map.
 - refs/serious-informatics-teaching.md: the ten principles behind all of it.
 - refs/arpeggio-project.md: the capstone target in ~/gitfolders/arpeggio.
 
@@ -40,8 +39,9 @@ lesson 02 is next.
       src/exercise.ts and the preview replays it. Recording facade in src/harness/robot.ts.
       Try-the-calls console, then the L, then the door-follows payoff, then the card.
       Drills deferred to lesson 03 by rule; `argument` deferred with them.
-- [x] design-lesson skill records the lesson-01 shape; curriculum-structure.md rule 4 now
-      says drills start at lesson 03.
+- [x] Cards cut to 150 words and three terms, code-led. curriculum-structure.md rewritten
+      short and prescriptive, pointing at lesson 02 as the shape to copy; design-lesson
+      skill records the same.
 
 ## Next
 
@@ -54,8 +54,8 @@ lesson 02 is next.
       shows concepts then Build the room, (d) resizing grid resizes live, (e) door-on-goal
       shows blue praise then robot-on-door flips to green PASS with the lesson-02 pointer.
 - [ ] Lesson 03 name-the-move: defining functions. `argument` and `parameter` land here
-      together, deferred from lesson 02 where no call took one. Drills resume at this lesson
-      (curriculum-structure.md rule 4).
+      together, deferred from lesson 02 where no call took one. Drills resume at this lesson.
+      Copy lesson 02's shape, not lesson 01's.
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.
 - [ ] Extract templates/lesson/ now that lessons 01 and 02 show what varies: index.html
       styles, markdown.ts, world.ts, types.ts are copied verbatim; task.ts and render.ts

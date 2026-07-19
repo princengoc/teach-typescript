@@ -23,7 +23,7 @@ Every lesson keeps this shape unless the lead teacher says otherwise.
   before. Hard limit 150 words and three terms: one bolded one-line claim per term, each
   followed by the code block that shows it. The code carries the weight. No error tables, no
   "coming later" section, nothing the kid did not just use. `card.md` stays the one place
-  those words live. See curriculum-structure.md for why the ceiling is not negotiable.
+  those words live. `lessons/02-paint-the-l/card.md` is the format.
 - **No mindless drills.** A drill that is "read the file, write the number over here" is not
   work. Cut it. Extra reps must demand something the capstone did not.
 
