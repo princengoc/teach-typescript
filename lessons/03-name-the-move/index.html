@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 03: name the move</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        color: #263238;
+        background: #eceff1;
+      }
+      .wrap {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 1.25rem 1.25rem 2rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        line-height: 1.45;
+      }
+      code {
+        background: #cfd8dc;
+        border-radius: 3px;
+        padding: 0 0.25rem;
+        font-size: 0.95em;
+      }
+      pre {
+        background: #263238;
+        color: #eceff1;
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        overflow-x: auto;
+        font-size: 0.95rem;
+      }
+      pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+      }
+      .idea {
+        margin: 0 0 0.4rem;
+      }
+      .idea b {
+        color: #1565c0;
+      }
+      .celebrate {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+        border-radius: 6px;
+        padding: 0.5rem 0.8rem;
+        text-align: center;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.45rem 1rem;
+        border: 1px solid #90a4ae;
+        border-radius: 5px;
+        background: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #f5f5f5;
+      }
+      button.primary {
+        background: #1565c0;
+        border-color: #1565c0;
+        color: #fff;
+      }
+      button.primary:hover {
+        background: #0d47a1;
+      }
+      button.call {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9rem;
+      }
+      .back {
+        background: none;
+        border: none;
+        color: #1565c0;
+        cursor: pointer;
+        padding: 0;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+      .steps {
+        padding-left: 1.2rem;
+        line-height: 1.6;
+      }
+      .steps b {
+        color: #1565c0;
+      }
+      canvas {
+        display: block;
+        max-width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+      .verdict {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0.75rem 0 0.25rem;
+        min-height: 1.4em;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0.7rem 0;
+      }
+      .console-log {
+        background: #263238;
+        color: #eceff1;
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        min-height: 4.5rem;
+        white-space: pre-wrap;
+      }
+      .console-log .empty {
+        color: #90a4ae;
+      }
+      .anywhere {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 0.6rem 0;
+      }
+      .anywhere figure {
+        margin: 0;
+      }
+      .anywhere figcaption {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #2e7d32;
+        text-align: center;
+        margin-top: 0.2rem;
+      }
+      .legend {
+        margin-top: 1.25rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.9rem;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+        align-items: center;
+      }
+      .swatch {
+        width: 20px;
+        height: 20px;
+      }
+      .swatch.ghost {
+        border: 2px dashed #9e9e9e;
+      }
+      .swatch.painted {
+        background: #4caf50;
+      }
+      .swatch.door {
+        border: 3px solid #1565c0;
+      }
+      .swatch.robot {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 18px solid #37474f;
+      }
+      .card h2 {
+        font-size: 1.3rem;
+        margin: 0 0 0.5rem;
+      }
+      .card h3 {
+        font-size: 1.05rem;
+        margin: 1.4rem 0 0.4rem;
+        color: #1565c0;
+      }
+      .card table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+      }
+      .card th,
+      .card td {
+        border: 1px solid #cfd8dc;
+        padding: 0.35rem 0.5rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .card th {
+        background: #dde5e9;
+      }
+      .card ul {
+        padding-left: 1.2rem;
+        line-height: 1.6;
+      }
+      .next-lesson {
+        margin-top: 1.5rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.9rem;
+        font-weight: 700;
+      }
+      [hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- LEARN -->
+      <section id="learn">
+        <h1>Lesson 3: name the move</h1>
+        <p>
+          A shelf is three squares in a row. Paint one with the buttons below,
+          and count your presses. The robot walks with
+          <code>robot.walk(1);</code> &mdash; the <b>1</b> is how far.
+        </p>
+        <canvas id="try-canvas"></canvas>
+        <div class="controls">
+          <button class="call" data-call="paint" type="button">robot.paint();</button>
+          <button class="call" data-call="walk" type="button">robot.walk(1);</button>
+          <button class="call" data-call="turnLeft" type="button">robot.turnLeft();</button>
+          <button class="call" data-call="turnRight" type="button">robot.turnRight();</button>
+          <button id="try-reset" type="button">Start over</button>
+        </div>
+        <div id="try-log" class="console-log"></div>
+
+        <div id="name-it">
+          <p>
+            One shelf is a lot of presses. Three shelves is three times that,
+            and you would be writing the same calls out again and again.
+          </p>
+          <p>
+            So give the calls one name. That is a <b>function</b>:
+          </p>
+          <pre><code>function paintShelf(): void {
+  robot.paint();
+  robot.walk(1);
+  robot.paint();
+  robot.walk(1);
+  robot.paint();
+  robot.turnLeft();
+  robot.turnLeft();
+  robot.walk(2);
+  robot.turnLeft();
+  robot.turnLeft();
+}</code></pre>
+          <button id="teach" class="primary" type="button">Teach the robot this move</button>
+        </div>
+
+        <div id="named" hidden>
+          <p>
+            Now the whole move is one press, and one line. The last four calls
+            walk the robot back to where it started, so the next shelf can
+            begin the same way.
+          </p>
+          <div class="controls">
+            <button class="call" data-named="paintShelf" type="button">paintShelf();</button>
+            <button class="call" data-named="goToNextShelf" type="button">goToNextShelf();</button>
+          </div>
+          <p>
+            You wrote the move once and spent it three times. That is the whole
+            lesson. Now do it in the file.
+          </p>
+          <button id="to-build" class="primary" type="button">Paint the shelves</button>
+        </div>
+      </section>
+
+      <!-- LESSON -->
+      <section id="lesson" hidden>
+        <button class="back" data-back-learn type="button">&larr; Try the move</button>
+        <h2>Paint the shelves</h2>
+        <p>
+          <code>src/exercise.ts</code> is open on the left. The three calls at
+          the bottom are written for you. Your work is inside
+          <code>paintShelf</code>.
+        </p>
+        <ol class="steps">
+          <li><b>Step 3:</b> one more <code>walk</code> and one more <code>paint</code> finish the shelf.</li>
+          <li><b>Step 4:</b> send the robot home: two left turns, <code>robot.walk(2);</code>, two more left turns.</li>
+        </ol>
+        <canvas id="lesson-canvas"></canvas>
+        <p id="lesson-verdict" class="verdict"></p>
+        <button id="lesson-again" type="button">Run it again</button>
+
+        <div id="lesson-done" hidden>
+          <p class="celebrate">Well done! You wrote a move and spent it three times.</p>
+          <p>
+            You painted nine squares and wrote one shelf. And because the move
+            says nothing about which shelf it is, the same three calls work
+            from a different door:
+          </p>
+          <div id="anywhere" class="anywhere"></div>
+          <p>
+            Next, the drills in the <code>drills/</code> folder on the left.
+            Start at <code>01</code> and work down; each one has a
+            <code>readme.md</code>. They have no robot in them. Come back here
+            for the card when you are through.
+          </p>
+          <button id="to-card" class="primary" type="button">What you just learned</button>
+        </div>
+
+        <div class="legend">
+          <span class="swatch ghost"></span><span>a square a shelf needs painted</span>
+          <span class="swatch painted"></span><span>a square you painted</span>
+          <span class="swatch door"></span><span>the door the robot came in by</span>
+          <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
+        </div>
+      </section>
+
+      <!-- CARD -->
+      <section id="card" hidden>
+        <button class="back" data-back-lesson type="button">&larr; The shelves</button>
+        <div id="card-body" class="card"></div>
+        <p class="next-lesson">Now open lesson 4.</p>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
