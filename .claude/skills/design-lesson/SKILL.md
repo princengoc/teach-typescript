@@ -19,8 +19,11 @@ Every lesson keeps this shape unless the lead teacher says otherwise.
   re-renders, and a verdict reads `PASS` or `FAIL`. The Vitest spec is the author's judge;
   both call the same pure function, so they cannot disagree.
 - **Encouraging.** A visible well-done banner on PASS, and a pointer to what comes next.
-- **The card is a recap.** It renders in the preview after the build, not before: the words
-  for what the kid just wrote. `card.md` stays the one place those words live.
+- **The card is a recap, and it is short.** It renders in the preview after the build, not
+  before. Hard limit 150 words and three terms: one bolded one-line claim per term, each
+  followed by the code block that shows it. The code carries the weight. No error tables, no
+  "coming later" section, nothing the kid did not just use. `card.md` stays the one place
+  those words live. See curriculum-structure.md for why the ceiling is not negotiable.
 - **No mindless drills.** A drill that is "read the file, write the number over here" is not
   work. Cut it. Extra reps must demand something the capstone did not.
 

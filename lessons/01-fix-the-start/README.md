@@ -14,9 +14,9 @@ test.
 
 ## After the room is built
 
-The preview shows you a card: the words for what you just wrote, and what the
-compiler says when one of them is wrong. Read it, tell your teacher what each
-value in `exercise.ts` controls, then open lesson 2.
+The preview shows you a card: three words for what you just wrote. Read it,
+tell your teacher what each value in `exercise.ts` controls, then open
+lesson 2.
 
 ## Rules
 

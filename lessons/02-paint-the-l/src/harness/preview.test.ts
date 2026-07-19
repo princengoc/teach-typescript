@@ -49,5 +49,12 @@ test('the card view renders card.md, not raw markdown', () => {
   document.querySelector<HTMLElement>('#to-card')?.click();
   const body = document.querySelector<HTMLElement>('#card-body');
   expect(body?.querySelector('h2')?.textContent).toContain('calling functions');
-  expect(body?.querySelector('table')).not.toBe(null);
+  expect(body?.querySelector('pre code')?.textContent).toContain('robot.paint');
+});
+
+test('the card stays a recap: three terms, under 150 words', () => {
+  const body = document.querySelector<HTMLElement>('#card-body');
+  const prose = body?.textContent ?? '';
+  expect(body?.querySelectorAll('p > b').length).toBeLessThanOrEqual(3);
+  expect(prose.split(/\s+/).filter(Boolean).length).toBeLessThan(150);
 });

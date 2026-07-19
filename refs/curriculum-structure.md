@@ -27,23 +27,33 @@ label.
 
 ### The card
 
-The card is a reference, not a lesson: it carries what code comments do badly. Two parts,
-after Exercism's introduction/about split, and the card never restates what the worked
-example's labels already say -- divided roles, no duplication.
+The card is a recap, not a lesson and not a manual: three words and the code that shows
+them. Exercism's comprehensive introduction/about split is written for adults who chose to
+read documentation; ours is for a ten-year-old who has just finished and wants to leave.
 
-The front is read before drilling and kept open beside the code. Hard limit 250 words plus
-tables: one sentence saying what the lesson lets you build, then each new word as a bolded
-term with its exact meaning in two or three sentences and a one-to-three-line example, rule
-then instance, in one visual unit. Code snippets only to introduce new syntax. Terms spelled
-so a kid can search them. No links.
+The card is read after the capstone, as a recap of what the kid just made work. **Hard limit
+150 words and three terms.** One sentence saying what they built, then each term as a bolded
+one-line claim followed immediately by the code block that shows it. The code carries the
+weight; the prose only points at it. A term the kid did not just use does not go on the card.
 
-The back is read after the capstone, limit 300 words: the deferred truth, one why, one thing
-a later lesson will break. Never state what a later lesson must retract; defer explicitly
-instead. Phrasing rule for bindings, the one all careful sources converge on: talk about
-re-pointing the name, never about freezing the value. Register: plain prose a high schooler
-parses on one tired read. No narrative framing, no filler, no epigrams -- write "you cannot
-give the name a new value later", not "const locks the name, not the value". Concrete
-subject, concrete verb, one idea per sentence.
+The 150-word ceiling is not a style preference. Novice working memory holds about four chunks
+(Cowan 2001), and the exercise has already spent one. Code.org's loops lesson, same age band,
+ships two terms and thirteen words. A card that runs long is a card the kid skims.
+
+Three things stay off the card:
+
+- **A compiles/does-not error table.** The evidence for compiler-error work (Becker) is that
+  messages should be better *when the student hits them*, not that errors should be paraded
+  in advance. Preemptive error tables have no evidence behind them and cost words.
+- **A "coming later" section.** Content the kid can neither use nor practice now is
+  extraneous load. Never state what a later lesson must retract; just say nothing.
+- **Anything the worked example's subgoal labels already said.** Divided roles, no
+  duplication: structural explanation belongs in the code the kid reads.
+
+Phrasing rule for bindings, the one all careful sources converge on: talk about re-pointing
+the name, never about freezing the value -- write "you cannot give the name a new value
+later", not "const locks the name, not the value". No narrative framing, no filler, no
+epigrams. Concrete subject, concrete verb, one idea per sentence. No links.
 
 ### The wordbook and real documentation
 
@@ -58,9 +68,10 @@ Reading references is a taught skill. Two instruments:
    function the course never taught, only documented. We do not write our own docs for the
    language; the kid learns to read the real ones, scaffolded by the wordbook habit.
 
-Every card carries a two-column table, "this compiles / this does not," with the exact tsc
-error text in the second column. The compiler co-teaches: strict tsc errors are legible, and
-reading them is a skill. The table doubles as the answer key for provoke-error drills.
+The compiler co-teaches, but it teaches on contact. Strict tsc errors are legible and reading
+them is a skill, so error text belongs where the kid meets the error: in the fix-compile
+drills from lesson 03 on, and in the preview's verdict line. It does not belong on the card,
+listed in advance for errors the kid has not made.
 
 Cards that introduce something Racket has carry a short "For Racket hands" note drawing the
 parallel: `function` is `define`, an if-else chain is `cond`, a Vitest case is `check-expect`,
