@@ -1,25 +1,48 @@
 # Todo
 
-Curriculum is designed (see refs/). Lesson 01 is built. Work top to bottom.
+State as of 2026-07-19. The curriculum is designed, lesson 01 is built and pushed, and the
+lead teacher wants lesson 01 refined further before building lesson 02.
+
+## Where everything lives
+
+- refs/curriculum-overview.md: the arc. Three acts (Painter lessons 1-10, Pig interleaved as
+  lessons P1/P2, arpeggio capstone in the family repo), twelve lessons, one sequence for
+  both kids.
+- refs/painter-world.md: the teaching world, its types, the ten-rung ladder, harness
+  boundary, per-kid notes (Bong: one semester Racket; JJ: 13, beginner).
+- refs/curriculum-structure.md: lesson anatomy -- worked example in the exercise file
+  (subgoal-labeled), card (front/back, plain prose, compiles/does-not table, For Racket
+  hands), drills (5-7, fixed format order: predict, reorder or fix, implement, twist,
+  review), capstone, wordbook, doc-reading policy (MDN from lesson 06 on).
+- refs/serious-informatics-teaching.md: the ten principles behind all of it.
+- refs/arpeggio-project.md: the capstone target in ~/gitfolders/arpeggio.
+
+## Repo mechanics
+
+- Each lesson is fully self-contained (own package.json, tsconfig, .stackblitzrc, harness
+  under src/harness/) because StackBlitz serves the subtree alone:
+  stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/NN-slug.
+  StackBlitz re-imports from GitHub on every open; pushes are live on reload. Kid edits
+  stay in their in-browser copy.
+- Reference solutions in solutions/NN-slug/ mirror kid-edited files by relative path.
+- Root `npm test` runs scripts/verify-lessons.mjs: asserts each lesson's shipped starter is
+  RED and its solution copy is GREEN, staged in a temp dir. `npm run check` = typecheck +
+  biome + that.
+- Repo is public; no StackBlitz login needed.
 
 ## Done
 
-- [x] Curriculum designed: refs/curriculum-overview.md (three acts, twelve lessons),
-      refs/painter-world.md (the world and ladder), refs/curriculum-structure.md (card,
-      drills, capstone), refs/serious-informatics-teaching.md (principles),
-      refs/arpeggio-project.md (the capstone target).
-- [x] Lesson infrastructure, built with lesson 01: self-contained lesson workspace (own
-      package.json, tsconfig, .stackblitzrc; no extends above the folder, so the StackBlitz
-      subtree serves alone), harness under src/harness/, solutions under solutions/NN-slug/
-      mirroring kid-edited files, scripts/verify-lessons.mjs (root npm test asserts starter
-      RED and solution GREEN per lesson).
-- [x] Lesson 01 fix-the-start: card, four drills plus overflow, capstone, preview. Verified:
-      starter RED, solution GREEN, npm run check clean, standalone install/test/build clean.
+- [x] Curriculum designed and written to refs/ (research-backed; sources cited in refs).
+- [x] Lesson 01 fix-the-start: worked example + YOUR TURN in src/exercise.ts, card.md
+      (plain prose), wordbook.md, four drills plus overflow, canvas preview with replay and
+      PASS/FAIL verdict, solutions, all green under npm run check.
 
 ## Next
 
-- [ ] Lead teacher: open the StackBlitz link in lesson 01's README and confirm it boots and
-      the preview renders (no local browser here; this is the one manual check).
-- [ ] Extract `templates/lesson/` from lesson 01 once lesson 02 shows what varies.
-- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; the recording facade
-      enters the harness.
+- [ ] Refine lesson 01 further with the lead teacher (their explicit next intent).
+- [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
+      (never verified in a real browser; no browser in the dev environment).
+- [ ] Consider a README line for kids: keep the tab open or fork to save progress.
+- [ ] Extract templates/lesson/ once lesson 02 shows what varies.
+- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; recording facade enters
+      the harness.
