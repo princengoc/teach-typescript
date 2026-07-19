@@ -1,14 +1,8 @@
-// WORKED EXAMPLE -- read top to bottom, then do YOUR TURN below.
-// You build the room out of numbers. Here is the move, shown once.
-
-// Name a number.
-export const chargerX = 3;
-
-// Group numbers that belong together into one value.
-export const charger = { x: 3, y: 1 };
-
-// Read one back out with a dot.
-export const chargerColumn = charger.x;
+// READ ME FIRST -- three ways to write the values below.
+//   - const gives a name to a value:   const tiles = 5;
+//   - { x, y } groups two numbers into one spot on the grid:
+//                                       const spot = { x: 4, y: 2 };
+//   - a dot reads one number back:      spot.x  is  4
 
 // YOUR TURN -------------------------------------------------------------
 // Open the Lesson preview and build the room one value at a time. After
