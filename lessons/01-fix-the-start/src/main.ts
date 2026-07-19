@@ -1,4 +1,6 @@
+import cardSource from '../card.md?raw';
 import { door, grid, startX, startY } from './exercise';
+import { renderMarkdown } from './harness/markdown';
 import { drawScene, drawStill, replay } from './harness/render';
 import {
   builtInMoves,
@@ -8,8 +10,8 @@ import {
   targetWorld,
 } from './harness/task';
 
-type View = 'menu' | 'demo' | 'learn' | 'lesson';
-const VIEWS: View[] = ['menu', 'demo', 'learn', 'lesson'];
+type View = 'menu' | 'demo' | 'learn' | 'lesson' | 'card';
+const VIEWS: View[] = ['menu', 'demo', 'learn', 'lesson', 'card'];
 
 function el<T extends HTMLElement>(id: string): T | null {
   return document.querySelector<T>(`#${id}`);
@@ -29,6 +31,13 @@ function renderLesson(): void {
     goal: goalDoor,
   });
   if (done) done.hidden = !solved;
+}
+
+// The card is card.md itself, rendered. The file stays the one place its words
+// live, so it can go on being the kid's reference.
+function renderCard(): void {
+  const body = el('card-body');
+  if (body) body.innerHTML = renderMarkdown(cardSource);
 }
 
 // The demo is one path: still scene, then the success run, then a failed run.
@@ -99,6 +108,7 @@ function show(view: View): void {
     if (section) section.hidden = id !== view;
   }
   if (view === 'lesson') renderLesson();
+  if (view === 'card') renderCard();
   if (view === 'demo') {
     demoIndex = 0;
     renderDemo();
@@ -120,6 +130,12 @@ el('to-demo')?.addEventListener('click', () => go('demo'));
 el('start-lesson')?.addEventListener('click', () => go('learn'));
 el('to-build')?.addEventListener('click', () => go('lesson'));
 el('demo-next')?.addEventListener('click', advanceDemo);
+el('to-card')?.addEventListener('click', () => go('card'));
+for (const link of document.querySelectorAll<HTMLElement>(
+  '[data-back-lesson]',
+)) {
+  link.addEventListener('click', () => go('lesson'));
+}
 for (const back of document.querySelectorAll<HTMLElement>('[data-go]')) {
   back.addEventListener('click', () => go('menu'));
 }

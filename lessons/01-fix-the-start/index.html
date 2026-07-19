@@ -152,6 +152,41 @@
         border-right: 10px solid transparent;
         border-bottom: 18px solid #37474f;
       }
+      .card h2 {
+        font-size: 1.3rem;
+        margin: 0 0 0.5rem;
+      }
+      .card h3 {
+        font-size: 1.05rem;
+        margin: 1.4rem 0 0.4rem;
+        color: #1565c0;
+      }
+      .card table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+      }
+      .card th,
+      .card td {
+        border: 1px solid #cfd8dc;
+        padding: 0.35rem 0.5rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      .card th {
+        background: #dde5e9;
+      }
+      .card ul {
+        padding-left: 1.2rem;
+        line-height: 1.6;
+      }
+      .next-lesson {
+        margin-top: 1.5rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.9rem;
+        font-weight: 700;
+      }
       [hidden] {
         display: none;
       }
@@ -225,8 +260,8 @@
 
         <div id="lesson-done" hidden>
           <p class="celebrate">Well done. You built the room.</p>
-          <p>That is all of lesson 1. Read <code>card.md</code>, then open
-            lesson 2.</p>
+          <p>That is all of lesson 1.</p>
+          <button id="to-card" class="primary" type="button">What you just learned</button>
         </div>
 
         <div class="legend">
@@ -234,6 +269,12 @@
           <span class="swatch door"></span><span>the door you placed</span>
           <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
         </div>
+      </section>
+      <!-- CARD -->
+      <section id="card" hidden>
+        <button class="back" data-back-lesson type="button">&larr; The room</button>
+        <div id="card-body" class="card"></div>
+        <p class="next-lesson">Now open lesson 2.</p>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

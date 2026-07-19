@@ -14,14 +14,15 @@ test.
 
 ## After the room is built
 
-1. Read the front of `card.md` (the words behind what you just did).
-2. Read the back of `card.md`, then tell your teacher what each value in
-   `exercise.ts` controls.
-3. Start lesson 2.
+The preview shows you a card: the words for what you just wrote, and what the
+compiler says when one of them is wrong. Read it, tell your teacher what each
+value in `exercise.ts` controls, then open lesson 2.
 
 ## Rules
 
 - Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
+- `card.md` is yours to keep. The preview renders it, so you never have to open
+  it, but it is there when you want to look something up.
 
 ## The StackBlitz link
 
