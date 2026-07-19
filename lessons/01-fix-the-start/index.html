@@ -36,6 +36,25 @@
         padding: 0 0.25rem;
         font-size: 0.95em;
       }
+      pre {
+        background: #263238;
+        color: #eceff1;
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        overflow-x: auto;
+        font-size: 0.95rem;
+      }
+      pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+      }
+      .idea {
+        margin: 0 0 0.4rem;
+      }
+      .idea b {
+        color: #1565c0;
+      }
       button {
         font-size: 1rem;
         padding: 0.45rem 1rem;
@@ -142,7 +161,7 @@
         </p>
         <div class="menu-buttons">
           <button id="to-demo" class="primary" type="button">Watch the demo</button>
-          <button id="to-lesson" class="primary" type="button">Start Lesson 1</button>
+          <button id="start-lesson" class="primary" type="button">Start Lesson 1</button>
         </div>
       </section>
 
@@ -161,6 +180,28 @@
           <button id="demo-play" type="button">Play</button>
           <button id="demo-fail" type="button">Show a failure</button>
         </div>
+      </section>
+
+      <!-- CONCEPTS -->
+      <section id="learn" hidden>
+        <button class="back" data-go="menu" type="button">&larr; Menu</button>
+        <h2>Three ideas, then build the room</h2>
+
+        <p class="idea"><b>Variable:</b> a name for a value. You make one with
+          <code>const</code>. After that line, the name means that value.</p>
+        <pre><code>const width = 8;</code></pre>
+
+        <p class="idea"><b>Object:</b> a group of values that belong together.
+          The grid holds its width and height in one value.</p>
+        <pre><code>const grid = { width: 8, height: 6 };</code></pre>
+
+        <p class="idea"><b>Dot:</b> reads one value back out.
+          <code>grid.width</code> is 8.</p>
+
+        <p>A place on the grid uses <code>x</code> for the column and
+          <code>y</code> for the row.</p>
+
+        <button id="to-build" class="primary" type="button">Build the room</button>
       </section>
 
       <!-- LESSON -->

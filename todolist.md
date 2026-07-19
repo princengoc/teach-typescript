@@ -47,9 +47,13 @@ lead teacher wants lesson 01 refined further before building lesson 02.
         place the robot moves (Play success + Show-a-failure). Feedback is
         preview-only -- no terminal. Starter red / solution green under check;
         Vite build clean. Plan: ~/.claude/plans/binary-fluttering-stallman.md.
+  - [x] Concepts slide (in-app "card"): menu -> Start Lesson 1 -> concepts
+        (variable / object / dot) -> Build the room. Lets exercise.ts stay a
+        real 5-line code file with one comment.
   - [ ] Lead teacher: open the link in a real browser. Confirm (a) menu shows,
-        (b) demo Play/failure animate, (c) resizing grid resizes live, (d)
-        landing door on the goal and robot on the door flips verdict to PASS.
+        (b) demo Play/failure animate, (c) Start Lesson 1 shows the concepts
+        slide then Build the room, (d) resizing grid resizes live, (e) landing
+        door on the goal and robot on the door flips verdict to PASS.
 - [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
       (never verified in a real browser; no browser in the dev environment).
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.

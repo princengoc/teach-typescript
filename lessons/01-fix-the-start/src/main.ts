@@ -8,8 +8,8 @@ import {
   targetWorld,
 } from './harness/task';
 
-type View = 'menu' | 'demo' | 'lesson';
-const VIEWS: View[] = ['menu', 'demo', 'lesson'];
+type View = 'menu' | 'demo' | 'learn' | 'lesson';
+const VIEWS: View[] = ['menu', 'demo', 'learn', 'lesson'];
 
 function el<T extends HTMLElement>(id: string): T | null {
   return document.querySelector<T>(`#${id}`);
@@ -52,8 +52,8 @@ function show(view: View): void {
 }
 
 function currentView(): View {
-  const hash = location.hash.replace('#', '');
-  return hash === 'demo' || hash === 'lesson' ? hash : 'menu';
+  const hash = location.hash.replace('#', '') as View;
+  return VIEWS.includes(hash) ? hash : 'menu';
 }
 
 function go(view: View): void {
@@ -63,7 +63,8 @@ function go(view: View): void {
 window.addEventListener('hashchange', () => show(currentView()));
 
 el('to-demo')?.addEventListener('click', () => go('demo'));
-el('to-lesson')?.addEventListener('click', () => go('lesson'));
+el('start-lesson')?.addEventListener('click', () => go('learn'));
+el('to-build')?.addEventListener('click', () => go('lesson'));
 for (const back of document.querySelectorAll<HTMLElement>('[data-go]')) {
   back.addEventListener('click', () => go('menu'));
 }
