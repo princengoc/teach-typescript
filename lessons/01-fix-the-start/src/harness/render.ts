@@ -240,12 +240,12 @@ function sceneStatus(o: SceneOptions): { message: string; tone: Tone } {
   }
   if (start.x !== door.x || start.y !== door.y) {
     return {
-      message: 'Nice. The door is on the goal. Now put the robot on the door.',
+      message: 'Nice! The door is on the goal. Now put the robot on the door.',
       tone: 'progress',
     };
   }
   return {
-    message: 'PASS. Door on the goal, robot on the door.',
+    message: 'Well done! PASS. The robot is on the door.',
     tone: 'done',
   };
 }

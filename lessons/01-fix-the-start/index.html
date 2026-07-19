@@ -55,6 +55,15 @@
       .idea b {
         color: #1565c0;
       }
+      .celebrate {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+        border-radius: 6px;
+        padding: 0.5rem 0.8rem;
+        text-align: center;
+      }
       button {
         font-size: 1rem;
         padding: 0.45rem 1rem;
@@ -214,13 +223,24 @@
         <p id="lesson-verdict" class="verdict"></p>
         <p>When the line above turns green and reads <b>PASS</b>, you are done.</p>
 
-        <p id="lesson-bonus" class="idea" hidden>
-          <b>Challenge:</b> the door could be anywhere. Set <code>startX</code> to
-          <code>door.x</code> and <code>startY</code> to <code>door.y</code>. Now
-          move the door to any spot and save: the robot follows it every time.
-          That is why a name beats a fixed number. Put the door back on the goal
-          to keep your PASS.
-        </p>
+        <div id="lesson-done" hidden>
+          <p class="celebrate">Well done. You built the room.</p>
+
+          <p class="idea">
+            <b>Challenge:</b> the door could be anywhere. Set <code>startX</code>
+            to <code>door.x</code> and <code>startY</code> to <code>door.y</code>.
+            Now move the door to any spot and save: the robot follows it every
+            time. That is why a name beats a fixed number. Put the door back on
+            the goal to keep your PASS.
+          </p>
+
+          <p>
+            <b>Now do the drills.</b> In the file list, open the
+            <code>drills</code> folder and do <code>01</code> to <code>04</code>
+            in order. Each has a short <code>readme.md</code> naming the one file
+            to edit.
+          </p>
+        </div>
 
         <div class="legend">
           <span class="swatch goal"></span><span>the goal: where the door should go</span>

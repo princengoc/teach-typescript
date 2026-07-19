@@ -18,7 +18,7 @@ function el<T extends HTMLElement>(id: string): T | null {
 function renderLesson(): void {
   const canvas = el<HTMLCanvasElement>('lesson-canvas');
   const verdict = el('lesson-verdict');
-  const bonus = el('lesson-bonus');
+  const done = el('lesson-done');
   if (!canvas || !verdict) return;
   const solved = drawScene({
     canvas,
@@ -28,7 +28,7 @@ function renderLesson(): void {
     start: { x: startX, y: startY },
     goal: goalDoor,
   });
-  if (bonus) bonus.hidden = !solved;
+  if (done) done.hidden = !solved;
 }
 
 // The demo is one path: still scene, then the success run, then a failed run.
