@@ -1,19 +1,11 @@
-// READ ME FIRST -- three ways to write the values below.
-//   - const gives a name to a value:   const tiles = 5;
-//   - { x, y } groups two numbers into one spot on the grid:
-//                                       const spot = { x: 4, y: 2 };
-//   - a dot reads one number back:      spot.x  is  4
+// Change these numbers, save, and watch the Lesson preview.
 
-// YOUR TURN -------------------------------------------------------------
-// Open the Lesson preview and build the room one value at a time. After
-// each change, save and watch. Green PASS means you are done.
-
-// 1. Size the room. Change these numbers and watch the grid resize.
+// grid groups two numbers. Read one back with a dot, like grid.width.
 export const grid = { width: 8, height: 6 };
 
-// 2. Place the door on the dashed goal square in the preview.
+// Put the door on the dashed goal square.
 export const door = { x: 0, y: 0 };
 
-// 3. Put the robot on the door. Read the door's two numbers above.
+// Put the robot on the door.
 export const startX = 0;
 export const startY = 0;
