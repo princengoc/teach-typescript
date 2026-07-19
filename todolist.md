@@ -1,7 +1,7 @@
 # Todo
 
-State as of 2026-07-19. The curriculum is designed, lessons 01 to 03 are written and green
-under the gate, and lesson 04 is next.
+State as of 2026-07-19. Lessons 01 to 04 are written and green under the gate. Lesson 05,
+walk to the wall, is next.
 
 ## Where everything lives
 
@@ -23,65 +23,63 @@ under the gate, and lesson 04 is next.
   stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/NN-slug.
   StackBlitz re-imports from GitHub on every open; pushes are live on reload. Kid edits
   stay in their in-browser copy.
-- Reference solutions in solutions/NN-slug/ mirror kid-edited files by relative path.
+- Reference solutions in solutions/NN-slug/ mirror kid-edited files by relative path, with
+  every `test.skip` in the drills unskipped.
 - Root `npm test` runs scripts/verify-lessons.mjs: asserts each lesson's shipped starter is
   RED and its solution copy is GREEN, staged in a temp dir. `npm run check` = typecheck +
   biome + that.
+- Each lesson tsconfig includes `src` only, on purpose: a fix-the-compiler drill has to fail
+  tsc without failing the gate.
 - Repo is public; no StackBlitz login needed.
 
-## Done
+## Lessons built
 
-- [x] Curriculum designed and written to refs/ (research-backed; sources cited in refs).
-- [x] Lesson 01 fix-the-start, finished. The kid edits five values in src/exercise.ts and
-      the preview marks itself PASS. Menu -> demo -> concepts -> build the room, hash-routed
-      so a save-reload keeps the view. Card, wordbook, solution; green under npm run check.
-- [x] Lesson 02 paint-the-L, finished. The kid writes a straight-line script of calls in
-      src/exercise.ts and the preview replays it. Recording facade in src/harness/robot.ts.
-      Try-the-calls console, then the L, then the door-follows payoff, then the card.
-      Drills deferred to lesson 03 by rule; `argument` deferred with them.
-- [x] Cards cut to 150 words and three terms, code-led. curriculum-structure.md rewritten
-      short and prescriptive, pointing at lesson 02 as the shape to copy; design-lesson
-      skill records the same.
-- [x] Lesson 03 name-the-move, finished. The kid finishes the body of `paintShelf` in
-      src/exercise.ts; the three calls and the joining `goToNextShelf` ship written, so one
-      bug shows on all three shelves. `robot.walk(steps)` added to the facade, which is where
-      `argument` arrives. The judge names the definition when the three shelves are wrong the
-      same way, and names drift when the move does not come home. Taught part: nine presses
-      for one shelf, then the same calls under one name, one press. Drills resume: five plus
-      two overflow, no world. `parameter` and `return` live there, since no robot command
-      takes or hands back a value. Card is read after the drills, so all three of its terms
-      are words the kid has used.
+| Lesson | Rung | The kid writes | Card terms |
+| --- | --- | --- | --- |
+| 01 fix-the-start | values | five constants in src/exercise.ts | `const`, object, the dot |
+| 02 paint-the-l | calling functions | a straight-line script of calls | call, brackets, execution order |
+| 03 name-the-move | defining functions | the body of `paintShelf` | `function`, argument/parameter, `return` |
+| 04 coin-flip-door | conditionals | the `else` in `faceTheRoom` | boolean, `if`, `else` |
+
+Notes carried forward. Lesson 04 moved the harness boundary: the recording facade became a
+live one, because a sensor answer depends on the room. The kid's code is now a function the
+harness spends once per room, not a script that runs on import. Lesson 05 keeps that shape.
 
 ## Next
 
-- [ ] Lead teacher: open the lesson 02 link in a real browser. Confirm (a) the try-the-calls
-      console advances one command per press and logs the call, (b) Paint the L replays the
-      starter and reads "Good start: 2 of 5", (c) finishing the L turns the verdict green,
-      shows the well-done banner and two PASS tiles from other doors, (d) the card renders.
-- [ ] Lead teacher: open the lesson 01 link in a real browser. Confirm (a) menu shows,
-      (b) demo Next walks still -> success -> failure -> Start Lesson 1, (c) Start Lesson 1
-      shows concepts then Build the room, (d) resizing grid resizes live, (e) door-on-goal
-      shows blue praise then robot-on-door flips to green PASS with the lesson-02 pointer.
-- [ ] Lead teacher: open the lesson 03 link in a real browser. Confirm (a) the four call
-      buttons move the robot and log one line each, (b) "Teach the robot this move" clears
-      the board and leaves two buttons, and one press of `paintShelf();` paints a whole
-      shelf, (c) Paint the shelves replays the starter and reads "Each shelf starts further
-      along than the last", (d) finishing paintShelf turns the verdict green with two PASS
-      tiles, (e) the card renders and the drills pointer reads before it.
-- [ ] Lead teacher: work drill 02 the-broken-recipe in StackBlitz and confirm the editor
-      underlines all three errors. Root `npm run check` cannot see it: the lesson tsconfig
-      includes `src` only, on purpose, so a drill that must fail tsc does not fail the gate.
-- [ ] Lesson 04 coin-flip door: conditionals. The first rung randomness forces, so a
-      straight-line script stops being enough. Copy lesson 03's shape.
+- [ ] Lesson 05 walk-to-the-wall: `while`, `let`, counter. Rung 5. The room's width is
+      unknown, so a fixed count either crashes or stops short. `robot.wallAhead()` is the
+      second sensor; the live facade from lesson 04 already supports it.
+- [ ] Extract templates/lesson/ now that lessons 01 to 04 show what varies: index.html
+      styles, markdown.ts, render.ts, types.ts, world.ts are copied near-verbatim; task.ts,
+      exercise.ts, main.ts and the taught part differ per lesson.
+- [ ] ideas.md: drill discoverability after lesson 01. Lessons 03 and 04 point at the
+      drills from the post-PASS banner; lesson 01 still has no path to them.
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.
-- [ ] Extract templates/lesson/ now that lessons 01 to 03 show what varies: index.html
-      styles, markdown.ts, world.ts, types.ts are copied verbatim; task.ts and render.ts
-      differ per lesson.
 
-## Cut from lesson 01, and why
+## Waiting on the lead teacher, in a real browser
 
-- Four drills plus overflow (predict / const-error / three-rooms / parking-spot). Each was
-  "read the file, write the number over here": no work for the kid to do. Folding them into
-  the lesson as a four-part stepper did not save them; the shape was the problem, not the
-  packaging. Lesson 01 now ends at the capstone PASS.
-- The post-PASS door-follows challenge: it belongs to lesson 02.
+- [ ] Lesson 01. (a) menu shows, (b) demo Next walks still -> success -> failure -> Start
+      Lesson 1, (c) Start Lesson 1 shows concepts then Build the room, (d) resizing grid
+      resizes live, (e) door-on-goal shows blue praise then robot-on-door flips to green
+      PASS with the lesson-02 pointer.
+- [ ] Lesson 02. (a) the try-the-calls console advances one command per press and logs the
+      call, (b) Paint the L replays the starter and reads "Good start: 2 of 5", (c)
+      finishing the L turns the verdict green, shows the well-done banner and two PASS
+      tiles from other doors, (d) the card renders.
+- [ ] Lesson 03. (a) the four call buttons move the robot and log one line each, (b) "Teach
+      the robot this move" clears the board and leaves two buttons, and one press of
+      `paintShelf();` paints a whole shelf, (c) Paint the shelves replays the starter and
+      reads "Each shelf starts further along than the last", (d) finishing paintShelf turns
+      the verdict green with two PASS tiles, (e) the card renders and the drills pointer
+      reads before it.
+- [ ] Lesson 03, drill 02 the-broken-recipe: work it in StackBlitz and confirm the editor
+      underlines all three errors.
+- [ ] Lesson 04. (a) the two rooms draw with the door in opposite walls, (b) "Run this move
+      in both rooms" animates both and captions them "door on the left: crash" and "door on
+      the right: PASS", (c) `robot.wallOnLeft();` logs false for the left room and true for
+      the right, (d) the build view's starter fails on the left door, (e) writing the else
+      turns both tiles PASS and shows the well-done banner however the coin lands, (f) the
+      card renders.
+- [ ] Lesson 04, drill 02 the-broken-gate: confirm the editor underlines all three errors,
+      and that the "lacks ending return statement" one reads clearly enough to act on.
