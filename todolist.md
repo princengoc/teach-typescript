@@ -40,12 +40,16 @@ lead teacher wants lesson 01 refined further before building lesson 02.
 ## Next
 
 - [ ] Refine lesson 01 further with the lead teacher (their explicit next intent).
-  - [x] Entry UX: preview page now carries the game premise, the one task, a
-        legend, and a big live PASS/FAIL verdict. README stripped to a pointer;
-        StackBlitz link opens on src/exercise.ts (?file=). Feedback loop for
-        lesson 01 is preview-only -- no terminal, no npm test for the kid.
-  - [ ] Lead teacher: open the link in a real browser and confirm the preview
-        reads as the obvious call-to-action.
+  - [x] Pivot to static placement (values, not movement). Preview is now a
+        3-view app (menu -> demo / lesson) with hash routing so a save-reload
+        keeps the kid in the Lesson view. Lesson: kid edits grid/door/robot in
+        exercise.ts; live PASS/FAIL via pure placementSolved(). Demo: the only
+        place the robot moves (Play success + Show-a-failure). Feedback is
+        preview-only -- no terminal. Starter red / solution green under check;
+        Vite build clean. Plan: ~/.claude/plans/binary-fluttering-stallman.md.
+  - [ ] Lead teacher: open the link in a real browser. Confirm (a) menu shows,
+        (b) demo Play/failure animate, (c) resizing grid resizes live, (d)
+        landing door on the goal and robot on the door flips verdict to PASS.
 - [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
       (never verified in a real browser; no browser in the dev environment).
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.

@@ -1,21 +1,24 @@
 import { expect, test } from 'vitest';
-import { startX, startY } from './exercise';
-import {
-  builtInMoves,
-  doorCell,
-  makeStartWorld,
-  targetWorld,
-} from './harness/task';
-import { paintedCells, run } from './harness/world';
+import { door, grid, startX, startY } from './exercise';
+import { goalDoor, placementSolved } from './harness/task';
 
-test('the robot starts at the door: x is 2, y is 4', () => {
-  const world = makeStartWorld(startX, startY);
-  expect(world.robot.x).toBe(doorCell.x);
-  expect(world.robot.y).toBe(doorCell.y);
+const start = { x: startX, y: startY };
+
+test('the room is big enough to hold the door', () => {
+  expect(grid.width).toBeGreaterThan(door.x);
+  expect(grid.height).toBeGreaterThan(door.y);
 });
 
-test('from the door, the built-in moves paint the whole target', () => {
-  const finished = run(makeStartWorld(startX, startY), builtInMoves);
-  expect(finished.crashed).toBe(false);
-  expect(paintedCells(finished)).toEqual(paintedCells(targetWorld));
+test('the door sits on the goal square', () => {
+  expect(door.x).toBe(goalDoor.x);
+  expect(door.y).toBe(goalDoor.y);
+});
+
+test('the robot starts on the door', () => {
+  expect(start.x).toBe(door.x);
+  expect(start.y).toBe(door.y);
+});
+
+test('the whole scene is solved', () => {
+  expect(placementSolved({ grid, door, start, goal: goalDoor })).toBe(true);
 });

@@ -15,28 +15,20 @@
         background: #eceff1;
       }
       .wrap {
-        max-width: 460px;
+        max-width: 480px;
         margin: 0 auto;
         padding: 1.25rem 1.25rem 2rem;
       }
       h1 {
         font-size: 1.4rem;
-        margin: 0 0 0.25rem;
+        margin: 0 0 0.5rem;
       }
-      .premise {
-        margin: 0 0 1rem;
-        line-height: 1.4;
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
       }
-      .job {
-        background: #fff;
-        border-left: 4px solid #1565c0;
-        border-radius: 4px;
-        padding: 0.75rem 0.9rem;
-        margin: 0 0 1rem;
+      p {
         line-height: 1.45;
-      }
-      .job b {
-        color: #1565c0;
       }
       code {
         background: #cfd8dc;
@@ -44,26 +36,9 @@
         padding: 0 0.25rem;
         font-size: 0.95em;
       }
-      canvas {
-        display: block;
-        background: #fff;
-        border-radius: 6px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-      }
-      #verdict {
-        font-size: 1.15rem;
-        font-weight: 700;
-        margin: 0.75rem 0 0.25rem;
-        min-height: 1.4em;
-      }
-      .win-note {
-        margin: 0 0 1rem;
-        color: #546e7a;
-        font-size: 0.9rem;
-      }
       button {
         font-size: 1rem;
-        padding: 0.4rem 1rem;
+        padding: 0.45rem 1rem;
         border: 1px solid #90a4ae;
         border-radius: 5px;
         background: #fff;
@@ -71,6 +46,55 @@
       }
       button:hover {
         background: #f5f5f5;
+      }
+      button.primary {
+        background: #1565c0;
+        border-color: #1565c0;
+        color: #fff;
+      }
+      button.primary:hover {
+        background: #0d47a1;
+      }
+      .menu-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+        max-width: 260px;
+      }
+      .back {
+        background: none;
+        border: none;
+        color: #1565c0;
+        cursor: pointer;
+        padding: 0;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+      .steps {
+        padding-left: 1.2rem;
+        line-height: 1.6;
+      }
+      .steps b {
+        color: #1565c0;
+      }
+      canvas {
+        display: block;
+        max-width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+      .verdict {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0.75rem 0 0.25rem;
+        min-height: 1.4em;
+      }
+      .controls {
+        display: flex;
+        gap: 0.6rem;
+        margin: 0.5rem 0 0.5rem;
       }
       .legend {
         margin-top: 1.25rem;
@@ -83,59 +107,85 @@
         align-items: center;
       }
       .swatch {
-        width: 18px;
-        height: 18px;
-        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+      }
+      .swatch.goal {
+        border: 2px dashed #1565c0;
       }
       .swatch.door {
         border: 3px solid #1565c0;
-        background: #fff;
-      }
-      .swatch.target {
-        border: 2px dashed #9e9e9e;
-        background: #fff;
-      }
-      .swatch.painted {
-        background: #4caf50;
+        background: #bbdefb;
       }
       .swatch.robot {
         width: 0;
         height: 0;
-        border-left: 9px solid transparent;
-        border-right: 9px solid transparent;
-        border-bottom: 16px solid #37474f;
-        border-radius: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 18px solid #37474f;
+      }
+      [hidden] {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <h1>Lesson 1: Fix the Start</h1>
-      <p class="premise">
-        You program a robot to paint a room. It follows a fixed set of moves and
-        paints one square at a time. Right now it starts in the wrong spot, so it
-        paints the wrong squares.
-      </p>
+      <!-- MENU -->
+      <section id="menu">
+        <h1>The Painter Robot</h1>
+        <p>
+          You program a robot that lives on a grid and paints squares. In this
+          first lesson you build the room: you set its size, place a door, and
+          put the robot where it should start. You do it all by changing
+          numbers in <code>src/exercise.ts</code>.
+        </p>
+        <div class="menu-buttons">
+          <button id="to-demo" class="primary" type="button">Watch the demo</button>
+          <button id="to-lesson" class="primary" type="button">Start Lesson 1</button>
+        </div>
+      </section>
 
-      <div class="job">
-        <b>Your job:</b> in the file <code>src/exercise.ts</code> (open on the
-        left), set <code>startX</code> and <code>startY</code> so the robot
-        starts on the blue <b>door</b> square. Save the file, then watch below.
-      </div>
+      <!-- DEMO -->
+      <section id="demo" hidden>
+        <button class="back" data-go="menu" type="button">&larr; Menu</button>
+        <h2>Demo: what the robot does</h2>
+        <p>
+          Once the room is built, the robot follows a set of moves and paints as
+          it goes. Press <b>Play</b> to watch it start on the door and paint the
+          target. Then see what happens when it starts in the wrong place.
+        </p>
+        <canvas id="demo-canvas"></canvas>
+        <p id="demo-verdict" class="verdict"></p>
+        <div class="controls">
+          <button id="demo-play" type="button">Play</button>
+          <button id="demo-fail" type="button">Show a failure</button>
+        </div>
+      </section>
 
-      <canvas id="room"></canvas>
-      <p id="verdict"></p>
-      <p class="win-note">
-        When the line above turns green and reads <b>PASS</b>, you have finished.
-      </p>
-      <button id="again" type="button">watch again</button>
+      <!-- LESSON -->
+      <section id="lesson" hidden>
+        <button class="back" data-go="menu" type="button">&larr; Menu</button>
+        <h2>Lesson 1: build the room</h2>
+        <p>
+          Edit <code>src/exercise.ts</code> (open on the left), save, and watch
+          here. Do it one value at a time:
+        </p>
+        <ol class="steps">
+          <li><b>Size the room:</b> change <code>grid.width</code> and <code>grid.height</code>. Watch it resize.</li>
+          <li><b>Place the door:</b> set <code>door</code> onto the dashed goal square.</li>
+          <li><b>Start the robot:</b> set <code>startX</code> and <code>startY</code> onto the door.</li>
+        </ol>
+        <canvas id="lesson-canvas"></canvas>
+        <p id="lesson-verdict" class="verdict"></p>
+        <p>When the line above turns green and reads <b>PASS</b>, you are done.</p>
 
-      <div class="legend">
-        <span class="swatch door"></span><span>the door: where the robot should start</span>
-        <span class="swatch target"></span><span>a square the robot must paint</span>
-        <span class="swatch painted"></span><span>a square the robot has painted</span>
-        <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
-      </div>
+        <div class="legend">
+          <span class="swatch goal"></span><span>the goal: where the door should go</span>
+          <span class="swatch door"></span><span>the door you placed</span>
+          <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
+        </div>
+      </section>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

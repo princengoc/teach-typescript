@@ -51,7 +51,7 @@ test('the built-in moves from the door paint an L of five cells', () => {
   expect(targetWorld.crashed).toBe(false);
 });
 
-test('the built-in moves from the shipped wrong start crash', () => {
+test('the built-in moves from a start near the wall crash', () => {
   const finished = run(makeStartWorld(6, 1), builtInMoves);
   expect(finished.crashed).toBe(true);
 });

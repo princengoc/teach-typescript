@@ -1,21 +1,25 @@
-// WORKED EXAMPLE -- read top to bottom, then scroll to YOUR TURN.
+// WORKED EXAMPLE -- read top to bottom, then do YOUR TURN below.
+// You build the room out of numbers. Here is the move, shown once.
 
-// Goal: pin the charger to the map, then read its position back.
+// Name a number.
+export const chargerX = 3;
 
-// Step 1: name each number.
-export const chargerX = 7;
-export const chargerY = 5;
+// Group numbers that belong together into one value.
+export const charger = { x: 3, y: 1 };
 
-// Step 2: group numbers that belong together into one value.
-export const charger = { x: 7, y: 5 };
-
-// Step 3: read a number back out with a dot.
+// Read one back out with a dot.
 export const chargerColumn = charger.x;
 
 // YOUR TURN -------------------------------------------------------------
-// The robot must start on the door. Find the blue door square in the
-// preview, read its column (x) and row (y), and fix the two numbers below.
-// Save the file, then watch the preview. Green PASS means you are done.
+// Open the Lesson preview and build the room one value at a time. After
+// each change, save and watch. Green PASS means you are done.
 
-export const startX = 6;
-export const startY = 1;
+// 1. Size the room. Change these numbers and watch the grid resize.
+export const grid = { width: 8, height: 6 };
+
+// 2. Place the door on the dashed goal square in the preview.
+export const door = { x: 0, y: 0 };
+
+// 3. Put the robot on the door. Read the door's two numbers above.
+export const startX = 0;
+export const startY = 0;

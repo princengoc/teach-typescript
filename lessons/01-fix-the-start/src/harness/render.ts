@@ -1,8 +1,10 @@
+import { placementSolved } from './task';
 import type { Command, World } from './types';
-import { sameCells, step } from './world';
+import { makeWorld, sameCells, step } from './world';
 
 const CELL = 48;
 const MARGIN = 12;
+const MAX_DRAWN = 16;
 
 interface Frame {
   world: World;
@@ -153,4 +155,99 @@ export function replay(options: ReplayOptions): void {
   verdict.textContent = 'running...';
   verdict.style.color = '#37474f';
   tick();
+}
+
+function drawEmptyGrid(
+  ctx: CanvasRenderingContext2D,
+  cols: number,
+  rows: number,
+): void {
+  ctx.strokeStyle = '#cfd8dc';
+  for (let y = 0; y < rows; y += 1) {
+    for (let x = 0; x < cols; x += 1) {
+      ctx.strokeRect(MARGIN + x * CELL, MARGIN + y * CELL, CELL, CELL);
+    }
+  }
+}
+
+function drawGoalOutline(
+  ctx: CanvasRenderingContext2D,
+  goal: { x: number; y: number },
+): void {
+  const px = MARGIN + goal.x * CELL;
+  const py = MARGIN + goal.y * CELL;
+  ctx.strokeStyle = '#1565c0';
+  ctx.setLineDash([5, 4]);
+  ctx.lineWidth = 2;
+  ctx.strokeRect(px + 4, py + 4, CELL - 8, CELL - 8);
+  ctx.setLineDash([]);
+  ctx.lineWidth = 1;
+}
+
+function drawDoorSquare(
+  ctx: CanvasRenderingContext2D,
+  door: { x: number; y: number },
+): void {
+  const px = MARGIN + door.x * CELL;
+  const py = MARGIN + door.y * CELL;
+  ctx.fillStyle = '#bbdefb';
+  ctx.fillRect(px + 3, py + 3, CELL - 6, CELL - 6);
+  ctx.strokeStyle = '#1565c0';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(px + 3, py + 3, CELL - 6, CELL - 6);
+  ctx.lineWidth = 1;
+}
+
+export interface SceneOptions {
+  canvas: HTMLCanvasElement;
+  verdict: HTMLElement;
+  grid: { width: number; height: number };
+  door: { x: number; y: number };
+  start: { x: number; y: number };
+  goal: { x: number; y: number };
+}
+
+function sceneReason(o: SceneOptions): string {
+  const { grid, door, start, goal } = o;
+  if (grid.width < 1 || grid.height < 1) {
+    return 'FAIL: give the room a width and a height of at least 1';
+  }
+  if (
+    door.x < 0 ||
+    door.x >= grid.width ||
+    door.y < 0 ||
+    door.y >= grid.height
+  ) {
+    return 'FAIL: make the room big enough to hold the door';
+  }
+  if (door.x !== goal.x || door.y !== goal.y) {
+    return 'FAIL: move the door onto the dashed goal square';
+  }
+  if (start.x !== door.x || start.y !== door.y) {
+    return 'FAIL: put the robot on the door';
+  }
+  return 'PASS: the door is on the goal and the robot is on the door';
+}
+
+export function drawScene(options: SceneOptions): void {
+  const { canvas, verdict, grid, door, start, goal } = options;
+  const cols = Math.min(Math.max(grid.width, 1), MAX_DRAWN);
+  const rows = Math.min(Math.max(grid.height, 1), MAX_DRAWN);
+  canvas.width = MARGIN * 2 + cols * CELL;
+  canvas.height = MARGIN * 2 + rows * CELL;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawEmptyGrid(ctx, cols, rows);
+  drawGoalOutline(ctx, goal);
+  drawDoorSquare(ctx, door);
+  drawRobot(
+    ctx,
+    makeWorld(cols, rows, { x: start.x, y: start.y, facing: 'east' }),
+  );
+
+  const solved = placementSolved({ grid, door, start, goal });
+  verdict.textContent = sceneReason(options);
+  verdict.style.color = solved ? '#2e7d32' : '#c62828';
 }
