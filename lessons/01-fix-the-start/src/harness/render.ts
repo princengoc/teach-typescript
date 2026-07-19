@@ -197,67 +197,81 @@ function drawDoorSquare(
   ctx.lineWidth = 1;
 }
 
-function fitted(
-  canvas: HTMLCanvasElement,
-  cols: number,
-  rows: number,
-): CanvasRenderingContext2D | null {
-  canvas.width = MARGIN * 2 + cols * CELL;
-  canvas.height = MARGIN * 2 + rows * CELL;
-  const ctx = canvas.getContext('2d');
-  if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  return ctx;
-}
-
 export interface SceneOptions {
+  canvas: HTMLCanvasElement;
+  verdict: HTMLElement;
   grid: { width: number; height: number };
   door: { x: number; y: number };
   start: { x: number; y: number };
   goal: { x: number; y: number };
 }
 
-// The part 4 scene: the room as the kid has written it so far.
-export function drawScene(
-  canvas: HTMLCanvasElement,
-  options: SceneOptions,
-): void {
-  const { grid, door, start, goal } = options;
+// The verdict speaks as an instruction, not a grade: it names the next thing
+// to do, praises the door once it lands, and reads PASS only when both are set.
+type Tone = 'todo' | 'progress' | 'done';
+
+const TONE_COLOR: Record<Tone, string> = {
+  todo: '#c62828',
+  progress: '#1565c0',
+  done: '#2e7d32',
+};
+
+function sceneStatus(o: SceneOptions): { message: string; tone: Tone } {
+  const { grid, door, start, goal } = o;
+  if (grid.width < 1 || grid.height < 1) {
+    return {
+      message: 'Give the room a width and a height of at least 1.',
+      tone: 'todo',
+    };
+  }
+  if (
+    door.x < 0 ||
+    door.x >= grid.width ||
+    door.y < 0 ||
+    door.y >= grid.height
+  ) {
+    return {
+      message: 'Make the room big enough to hold the door.',
+      tone: 'todo',
+    };
+  }
+  if (door.x !== goal.x || door.y !== goal.y) {
+    return { message: 'Put the door on the dashed goal square.', tone: 'todo' };
+  }
+  if (start.x !== door.x || start.y !== door.y) {
+    return {
+      message: 'Nice! The door is on the goal. Now put the robot on the door.',
+      tone: 'progress',
+    };
+  }
+  return {
+    message: 'Well done! PASS. The robot is on the door.',
+    tone: 'done',
+  };
+}
+
+export function drawScene(options: SceneOptions): boolean {
+  const { canvas, verdict, grid, door, start, goal } = options;
   const cols = Math.min(Math.max(grid.width, 1), MAX_DRAWN);
   const rows = Math.min(Math.max(grid.height, 1), MAX_DRAWN);
-  const ctx = fitted(canvas, cols, rows);
-  if (!ctx) return;
+  canvas.width = MARGIN * 2 + cols * CELL;
+  canvas.height = MARGIN * 2 + rows * CELL;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return false;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawEmptyGrid(ctx, cols, rows);
   drawGoalOutline(ctx, goal);
   drawDoorSquare(ctx, door);
-  drawRobot(ctx, makeWorld(cols, rows, { ...start, facing: 'east' }));
-}
-
-// The part 1 reveal: the room from rooms.ts, drawn once the kid has read it.
-export function drawRoom(
-  canvas: HTMLCanvasElement,
-  room: { width: number; height: number; door: { x: number; y: number } },
-): void {
-  const ctx = fitted(canvas, room.width, room.height);
-  if (!ctx) return;
-  drawEmptyGrid(ctx, room.width, room.height);
-  drawDoorSquare(ctx, room.door);
-}
-
-// The part 3 scene: the charger, and the robot where the kid parked it.
-export function drawPark(
-  canvas: HTMLCanvasElement,
-  room: { width: number; height: number },
-  charger: { x: number; y: number },
-  park: { x: number; y: number },
-): void {
-  const ctx = fitted(canvas, room.width, room.height);
-  if (!ctx) return;
-  drawEmptyGrid(ctx, room.width, room.height);
-  drawGoalOutline(ctx, charger);
   drawRobot(
     ctx,
-    makeWorld(room.width, room.height, { ...park, facing: 'east' }),
+    makeWorld(cols, rows, { x: start.x, y: start.y, facing: 'east' }),
   );
+
+  const status = sceneStatus(options);
+  verdict.textContent = status.message;
+  verdict.style.color = TONE_COLOR[status.tone];
+  return status.tone === 'done';
 }
 
 // A single still frame for the demo: grid, door, and robot, no movement.

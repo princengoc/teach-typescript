@@ -1,7 +1,7 @@
 # Todo
 
-State as of 2026-07-19. The curriculum is designed, lesson 01 is built and pushed, and the
-lead teacher wants lesson 01 refined further before building lesson 02.
+State as of 2026-07-19. The curriculum is designed, lesson 01 is finished and pushed, and
+lesson 02 is next.
 
 ## Where everything lives
 
@@ -33,36 +33,27 @@ lead teacher wants lesson 01 refined further before building lesson 02.
 ## Done
 
 - [x] Curriculum designed and written to refs/ (research-backed; sources cited in refs).
-- [x] Lesson 01 fix-the-start: worked example + YOUR TURN in src/exercise.ts, card.md
-      (plain prose), wordbook.md, four drills plus overflow, canvas preview with replay and
-      PASS/FAIL verdict, solutions, all green under npm run check.
+- [x] Lesson 01 fix-the-start, finished. The kid edits five values in src/exercise.ts and
+      the preview marks itself PASS. Menu -> demo -> concepts -> build the room, hash-routed
+      so a save-reload keeps the view. Card, wordbook, solution; green under npm run check.
 
 ## Next
 
-- [ ] Refine lesson 01 further with the lead teacher (their explicit next intent).
-  - [x] Pivot to static placement (values, not movement). Preview is now a
-        3-view app (menu -> demo / lesson) with hash routing so a save-reload
-        keeps the kid in the Lesson view. Lesson: kid edits grid/door/robot in
-        exercise.ts; live PASS/FAIL via pure placementSolved(). Demo: the only
-        place the robot moves (Play success + Show-a-failure). Feedback is
-        preview-only -- no terminal. Starter red / solution green under check;
-        Vite build clean. Plan: ~/.claude/plans/binary-fluttering-stallman.md.
-  - [x] Concepts slide (in-app "card"): menu -> Start Lesson 1 -> concepts
-        (variable / object / dot) -> Build the room. Lets exercise.ts stay a
-        real 5-line code file with one comment.
-  - [x] Linear demo: one Next button walks still-scene -> success paint ->
-        failed run -> Start Lesson 1. Lesson feedback is instruction-style
-        (no "FAIL"): red = next action, blue praise when the door lands, green
-        PASS at the end. Post-PASS bonus: set startX/startY to door.x/door.y
-        (ungradable -- same values -- so it is an explore prompt, not a gate).
-  - [ ] Lead teacher: open the link in a real browser. Confirm (a) menu shows,
-        (b) demo Next walks still -> success -> failure -> Start Lesson 1,
-        (c) Start Lesson 1 shows concepts then Build the room, (d) resizing
-        grid resizes live, (e) door-on-goal shows blue praise then robot-on-door
-        flips to green PASS and reveals the bonus line.
-- [ ] Lead teacher: confirm the StackBlitz link boots and the preview renders in a browser
-      (never verified in a real browser; no browser in the dev environment).
+- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; recording facade enters
+      the harness. Two things belong to it, both cut from lesson 01:
+  - the door-follows challenge (set startX/startY to door.x/door.y, then move the door),
+  - a first real exercise beyond the capstone.
+- [ ] Lead teacher: open the lesson 01 link in a real browser. Confirm (a) menu shows,
+      (b) demo Next walks still -> success -> failure -> Start Lesson 1, (c) Start Lesson 1
+      shows concepts then Build the room, (d) resizing grid resizes live, (e) door-on-goal
+      shows blue praise then robot-on-door flips to green PASS with the lesson-02 pointer.
 - [ ] Consider a README line for kids: keep the tab open or fork to save progress.
 - [ ] Extract templates/lesson/ once lesson 02 shows what varies.
-- [ ] Lesson 02 paint-the-L via /design-lesson: calling functions; recording facade enters
-      the harness.
+
+## Cut from lesson 01, and why
+
+- Four drills plus overflow (predict / const-error / three-rooms / parking-spot). Each was
+  "read the file, write the number over here": no work for the kid to do. Folding them into
+  the lesson as a four-part stepper did not save them; the shape was the problem, not the
+  packaging. Lesson 01 now ends at the capstone PASS.
+- The post-PASS door-follows challenge: it belongs to lesson 02.

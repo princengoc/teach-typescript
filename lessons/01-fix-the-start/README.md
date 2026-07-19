@@ -4,31 +4,24 @@
 two buttons.
 
 1. **Watch the demo** first, to see what the painter robot does.
-2. **Start Lesson 1**. Read the three ideas, then work the four parts in order.
+2. **Start Lesson 1**, then build the room by editing `src/exercise.ts` (open on
+   the left). Do it one value at a time: size the room, place the door on its
+   goal, put the robot on the door. Save after each change and watch the preview.
 
-The lesson is one line of four parts, and you edit one file for all of them:
-`src/exercise.ts` (open on the left). Each part says what it wants and marks
-itself `PASS` or `FAIL` as you save. The **Next part** button unlocks on `PASS`.
+When the preview's verdict turns green and reads `PASS`, you have finished the
+main task. You do not need the terminal for this lesson. The preview is your
+test.
 
-| Part | What you do |
-| --- | --- |
-| 1 | Read `src/rooms.ts` and predict three values. |
-| 2 | Read three doors with dots, not by hand. |
-| 3 | Park the robot on the charger. |
-| 4 | Build the room: size it, place the door, start the robot. |
-
-You do not need the terminal for this lesson. The preview is your test.
-
-## After the four parts
+## After the room is built
 
 1. Read the front of `card.md` (the words behind what you just did).
 2. Read the back of `card.md`, then tell your teacher what each value in
    `exercise.ts` controls.
+3. Start lesson 2.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/rooms.ts` is yours to read, not to change,
-  and `src/harness/` runs the world; leave it closed.
+- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
 
 ## The StackBlitz link
 

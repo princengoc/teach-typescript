@@ -1,6 +1,6 @@
 # Card 01: values
 
-Front. Read after part 2.
+Front. Read before you build the room.
 
 ## The words
 
@@ -45,7 +45,7 @@ This means: take `world`, find its `robot`, and read that robot's `x`.
 
 ---
 
-# Back. Read after part 4.
+# Back. Read after you build the room.
 
 **What `const` does not protect.**
 
