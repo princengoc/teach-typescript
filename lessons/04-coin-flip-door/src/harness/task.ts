@@ -88,7 +88,7 @@ export function judge(door: Cell, program: () => void): Verdict {
   if (right.length === wanted.length && got.length === wanted.length) {
     return {
       solved: true,
-      message: `PASS. The shelf is painted from the ${doorName(door)}.`,
+      message: 'PASS. The shelf is painted.',
       tone: 'done',
     };
   }

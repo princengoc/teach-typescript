@@ -191,6 +191,11 @@ function go(view: View): void {
 
 window.addEventListener('hashchange', () => show(currentView()));
 
+el('to-room')?.addEventListener('click', () => {
+  const rooms = el('room-part');
+  if (rooms) rooms.hidden = false;
+  drawDemoRooms();
+});
 el('run-same')?.addEventListener('click', runDemo);
 el('ask')?.addEventListener('click', ask);
 el('to-build')?.addEventListener('click', () => go('lesson'));

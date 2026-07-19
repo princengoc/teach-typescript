@@ -15,7 +15,7 @@ that defines it. When you forget a word, look here first.
 | parameter | the name an argument arrives under inside the function | 03 |
 | `return` | hands a value back to whoever called | 03 |
 | boolean | a value that is only ever `true` or `false` | 04 |
-| `===`, `<`, `>` | ask a question about two values; hand back a boolean | 04 |
+| `===`, `<`, `>` | compare two values and hand back a boolean | 04 |
 | `!` | flips a boolean: true becomes false, false becomes true | 04 |
-| `if` | runs a block only when its boolean is true | 04 |
+| `if` | runs the block after it when its boolean is true | 04 |
 | `else` | the block to run instead, when that boolean is false | 04 |

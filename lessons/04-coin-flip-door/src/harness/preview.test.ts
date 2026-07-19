@@ -19,13 +19,16 @@ beforeAll(async () => {
   await import('../main');
 });
 
-test('the preview opens on the two-rooms view', () => {
+test('the preview opens on the syntax, with the room still hidden', () => {
   expect(document.querySelector<HTMLElement>('#learn')?.hidden).toBe(false);
+  expect(document.querySelector<HTMLElement>('#room-part')?.hidden).toBe(true);
   expect(document.querySelector<HTMLElement>('#lesson')?.hidden).toBe(true);
   expect(document.querySelector<HTMLElement>('#card')?.hidden).toBe(true);
 });
 
 test('the same move passes one room and crashes the other', () => {
+  document.querySelector<HTMLElement>('#to-room')?.click();
+  expect(document.querySelector<HTMLElement>('#room-part')?.hidden).toBe(false);
   expect(document.querySelector<HTMLElement>('#ask-it')?.hidden).toBe(true);
   document.querySelector<HTMLElement>('#run-same')?.click();
   expect(document.querySelector<HTMLElement>('#ask-it')?.hidden).toBe(false);
@@ -65,7 +68,7 @@ test('the card view renders card.md, not raw markdown', () => {
   document.querySelector<HTMLElement>('#to-card')?.click();
   const body = document.querySelector<HTMLElement>('#card-body');
   expect(body?.querySelector('h2')?.textContent).toContain('coin-flip door');
-  expect(body?.querySelector('pre code')?.textContent).toContain('wallOnLeft');
+  expect(body?.querySelector('pre code')?.textContent).toContain('else');
 });
 
 test('the card stays a recap: three terms, under 150 words', () => {

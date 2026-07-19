@@ -245,43 +245,64 @@
       <section id="learn">
         <h1>Lesson 4: the coin-flip door</h1>
         <p>
-          One shelf to paint, and a door that moves. Half the rooms have the
-          door in the left wall, half in the right. The robot always walks in
-          the same way: facing down the page, standing on the door.
+          You know what an if and an else do. This lesson is how TypeScript
+          spells them.
         </p>
-        <div class="rooms">
-          <figure>
-            <canvas id="room-left"></canvas>
-            <figcaption id="cap-left">door on the left</figcaption>
-          </figure>
-          <figure>
-            <canvas id="room-right"></canvas>
-            <figcaption id="cap-right">door on the right</figcaption>
-          </figure>
-        </div>
-        <p>
-          Here is a straight-line move. It turns right, then paints the three
-          squares in front of it. Run it in both rooms.
-        </p>
-        <pre><code>robot.turnRight();
+        <pre><code>if (hasKey) {
+  openTheDoor();
+} else {
+  knock();
+}</code></pre>
+        <ul class="steps">
+          <li>The question goes in <b>round brackets</b>, right after <code>if</code>.</li>
+          <li>Each block goes in <b>curly braces</b>. No <code>then</code>, no colon.</li>
+          <li><code>else</code> sits on the same line as the <code>}</code> that closed the first block.</li>
+          <li>The question has to be <b>true</b> or <b>false</b>. A value that is only ever one of those two is called a <b>boolean</b>.</li>
+          <li>To ask whether two values are the same, write <code>===</code>. One <code>=</code> means something else, and TypeScript will tell you so.</li>
+        </ul>
+        <p>Now here is something to spend it on.</p>
+        <button id="to-room" class="primary" type="button">The room</button>
+
+        <div id="room-part" hidden>
+          <h2>The room</h2>
+          <p>
+            One shelf to paint. Half the time the door is in the left wall,
+            half the time in the right, and you do not get to choose. Either
+            way the robot walks in standing on the door, facing down the page.
+          </p>
+          <div class="rooms">
+            <figure>
+              <canvas id="room-left"></canvas>
+              <figcaption id="cap-left">door on the left</figcaption>
+            </figure>
+            <figure>
+              <canvas id="room-right"></canvas>
+              <figcaption id="cap-right">door on the right</figcaption>
+            </figure>
+          </div>
+          <p>
+            Here is a move that turns right, then paints three squares in a
+            row. Try it in both rooms.
+          </p>
+          <pre><code>robot.turnRight();
 robot.paint();
 robot.walk(1);
 robot.paint();
 robot.walk(1);
 robot.paint();</code></pre>
-        <button id="run-same" class="primary" type="button">Run this move in both rooms</button>
+          <button id="run-same" class="primary" type="button">Run this move in both rooms</button>
+        </div>
 
         <div id="ask-it" hidden>
           <p>
-            The same move, and only one room survives it. Turning right is
-            right half the time. Writing more calls will not help: the code has
-            to <b>look</b> first.
+            One room painted, one crash. The two rooms need two different
+            turns, and this code cannot tell the rooms apart.
           </p>
           <p>
-            So the robot gets one question.
-            <code>robot.wallOnLeft();</code> hands back a value that is only
-            ever <b>true</b> or <b>false</b>. That kind of value is a
-            <b>boolean</b>. Ask it in each room.
+            So the robot gets a question.
+            <code>robot.wallOnLeft();</code> hands back a boolean: true when
+            the square on the robot's left is a wall, false when it is open
+            floor. Ask it in each room.
           </p>
           <button id="ask" class="call" type="button">robot.wallOnLeft();</button>
           <div id="ask-log" class="console-log"></div>
@@ -289,15 +310,9 @@ robot.paint();</code></pre>
 
         <div id="branch" hidden>
           <p>
-            Two rooms, two answers, and now the code can tell them apart.
-            <b>if</b> runs the block after it only when the answer is true.
-            <b>else</b> names the block to run instead.
+            Two rooms, two answers. That question is a boolean, so it goes
+            straight in the round brackets of an <code>if</code>.
           </p>
-          <pre><code>if (robot.wallOnLeft()) {
-  robot.turnRight();
-} else {
-  robot.turnLeft();
-}</code></pre>
           <button id="to-build" class="primary" type="button">Paint the shelf</button>
         </div>
       </section>
@@ -308,34 +323,30 @@ robot.paint();</code></pre>
         <h2>Paint the shelf</h2>
         <p>
           <code>src/exercise.ts</code> is open on the left.
-          <code>paintShelf</code> is written for you. Your work is the
-          <b>else</b> in <code>faceTheRoom</code>.
+          <code>paintShelf</code> is written for you, and so is the
+          <code>if</code>. Your job is the <code>else</code>.
         </p>
-        <ol class="steps">
-          <li><b>Step 2:</b> after the closing bracket of the <code>if</code>, write <code>else {</code>, turn the robot the other way, and close the bracket.</li>
-        </ol>
         <p>
-          Press the button below to flip the coin. You get one of the two
-          rooms, at random, and your code has to survive whichever one it is.
+          Press the button to flip the coin. You get one of the two rooms at
+          random, so both are marked below every time you save.
         </p>
         <canvas id="lesson-canvas"></canvas>
         <p id="lesson-verdict" class="verdict"></p>
         <div class="controls">
           <button id="flip" class="primary" type="button">Flip the coin and open the door</button>
         </div>
-        <p>Both rooms, every time you save:</p>
         <div id="both" class="anywhere"></div>
 
         <div id="lesson-done" hidden>
           <p class="celebrate">Well done! Your code looks before it turns.</p>
           <p>
-            One shelf, two rooms, one piece of code. Flip the coin as many
-            times as you like: it holds.
+            One shelf, two rooms, one piece of code. Flip the coin as often as
+            you like: it holds.
           </p>
           <p>
             Next, the drills in the <code>drills/</code> folder on the left.
-            Start at <code>01</code> and work down; each one has a
-            <code>readme.md</code>. They have no robot in them. Come back here
+            Start at <code>01</code> and work down. Each one has a
+            <code>readme.md</code>. There is no robot in them. Come back here
             for the card when you are through.
           </p>
           <button id="to-card" class="primary" type="button">What you just learned</button>
