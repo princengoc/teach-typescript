@@ -31,4 +31,4 @@ your teacher what `let` gives you that `const` did not, then open lesson 6.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/05-the-staircase?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/8b56686b7ac872f8164bfc5e44e7e10b62b611d8/lessons/05-the-staircase?file=src%2Fexercise.ts
