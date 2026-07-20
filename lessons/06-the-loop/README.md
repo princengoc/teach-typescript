@@ -37,4 +37,4 @@ tell your teacher which of the two ways you liked, and why.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/06-the-loop?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/1c174f4f959bd22182939f905a176cfac040bb24/lessons/06-the-loop?file=src%2Fexercise.ts
