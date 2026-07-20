@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lesson 04: the coin-flip door</title>
+    <title>Lesson 05: the staircase</title>
     <style>
       :root {
         color-scheme: light;
@@ -243,127 +243,121 @@
     <div class="wrap">
       <!-- LEARN -->
       <section id="learn">
-        <h1>Lesson 4: the coin-flip door</h1>
+        <h1>Lesson 5: the staircase</h1>
         <p>
-          You know what an if and an else do. This lesson is how TypeScript
-          spells them.
+          Every value so far kept its name for one thing and never budged.
+          Here is one that changes.
         </p>
-        <pre><code>if (hasKey) {
-  openTheDoor();
-} else {
-  knock();
-}</code></pre>
-        <ul class="steps">
-          <li>The question goes in <b>round brackets</b>. It has to be a <b>boolean</b>: a value that is only ever <code>true</code> or <code>false</code>.</li>
-          <li>Each block goes in <b>curly braces</b>. No <code>then</code>, no colon.</li>
-          <li><code>else</code> sits on the line that closed the first block.</li>
-        </ul>
+        <pre><code>let height = 1;
+height += 1;   // now height is 2
+height += 1;   // now height is 3</code></pre>
+        <p>
+          <code>let</code> makes a name you can hand a new value later.
+          <code>height += 1</code> reads what it holds and puts back one more.
+          Press the button and watch it climb.
+        </p>
+        <div id="count-log" class="console-log"></div>
+        <div class="controls">
+          <button id="bump" class="call" type="button">height += 1;</button>
+          <button id="reset" type="button">reset</button>
+        </div>
         <p>Now here is something to spend it on.</p>
-        <button id="to-room" class="primary" type="button">The room</button>
+        <button id="to-room" class="primary" type="button">The staircase</button>
 
         <div id="room-part" hidden>
-          <h2>The room</h2>
+          <h2>The staircase</h2>
           <p>
-            One shelf to paint. Half the time the door is in the left wall,
-            half the time in the right, and you do not get to choose. Either
-            way the robot walks in standing on the door, facing down the page.
+            Three bars in a row, each one taller than the last. But the first
+            bar's height is not yours to pick: the room sets it, and two rooms
+            set it differently.
           </p>
           <div class="rooms">
             <figure>
-              <canvas id="room-left"></canvas>
-              <figcaption id="cap-left">door on the left</figcaption>
+              <canvas id="room-a"></canvas>
+              <figcaption id="cap-a">first bar 2</figcaption>
             </figure>
             <figure>
-              <canvas id="room-right"></canvas>
-              <figcaption id="cap-right">door on the right</figcaption>
+              <canvas id="room-b"></canvas>
+              <figcaption id="cap-b">first bar 3</figcaption>
             </figure>
           </div>
           <p>
-            Here is a move that turns right, then paints three squares in a
-            row. Try it in both rooms.
+            Here is a move with the heights typed straight in. Try it in both
+            rooms.
           </p>
-          <pre><code>robot.turnRight();
-robot.paint();
-robot.walk(1);
-robot.paint();
-robot.walk(1);
-robot.paint();</code></pre>
+          <pre><code>paintBar(2);
+goToNextBar();
+paintBar(3);
+goToNextBar();
+paintBar(4);</code></pre>
           <button id="run-same" class="primary" type="button">Run this move in both rooms</button>
         </div>
 
         <div id="ask-it" hidden>
           <p>
-            One room painted, one crash. The two rooms need two different
-            turns, and this code cannot tell the rooms apart.
+            One room right, one wrong. Typed-in heights fit the room you typed
+            them for and no other.
           </p>
           <p>
             So the robot gets a question.
-            <code>robot.wallOnLeft();</code> hands back a boolean: true when
-            the square on the robot's left is a wall, false when it is open
-            floor. Ask it in each room.
+            <code>robot.startHeight();</code> hands back this room's first-bar
+            height, a plain number. Ask it in each room.
           </p>
-          <button id="ask" class="call" type="button">robot.wallOnLeft();</button>
+          <button id="ask" class="call" type="button">robot.startHeight();</button>
           <div id="ask-log" class="console-log"></div>
         </div>
 
         <div id="branch" hidden>
           <p>
-            Two rooms, two answers. That question is a boolean, so it goes
-            straight in the round brackets of an <code>if</code>.
+            Two rooms, two numbers. Read it into a <code>let</code>, and
+            <code>+= 1</code> your way up the stairs.
           </p>
-          <button id="to-build" class="primary" type="button">Paint the shelf</button>
+          <button id="to-build" class="primary" type="button">Build the staircase</button>
         </div>
       </section>
 
       <!-- LESSON -->
       <section id="lesson" hidden>
         <button class="back" data-back-learn type="button">&larr; The two rooms</button>
-        <h2>Paint the shelf</h2>
+        <h2>Build the staircase</h2>
         <p>
-          <code>src/exercise.ts</code> is open on the left.
-          <code>paintShelf</code> is written for you. Your job is
-          <code>faceTheRoom</code>: ask the question, then turn the robot the
-          right way for each answer.
+          <code>src/exercise.ts</code> is open on the left. The first bar is
+          done. Your job is the two taller ones: give the height a name you
+          can change, and grow it by one for each.
         </p>
         <p>
-          Press the button to flip the coin. You get one of the two rooms at
-          random, so both are marked below every time you save.
+          Press the button to get one of the two rooms at random, so both are
+          marked below every time you save.
         </p>
         <canvas id="lesson-canvas"></canvas>
         <p id="lesson-verdict" class="verdict"></p>
         <div class="controls">
-          <button id="flip" class="primary" type="button">Flip the coin and open the door</button>
+          <button id="build" class="primary" type="button">Pick a room and build</button>
         </div>
         <div id="both" class="anywhere"></div>
 
         <div id="lesson-done" hidden>
-          <p class="celebrate">Well done! Your code looks before it turns.</p>
+          <p class="celebrate">Well done! One value, changed three times.</p>
           <p>
-            One shelf, two rooms, one piece of code. Flip the coin as often as
-            you like: it holds.
+            Same code, every room. The height reads itself and climbs, so the
+            staircase fits whatever the room asks for.
           </p>
-          <p>
-            Next, the drills in the <code>drills/</code> folder on the left.
-            Start at <code>01</code> and work down. Each one has a
-            <code>readme.md</code>. There is no robot in them. Come back here
-            for the card when you are through.
-          </p>
+          <p>Come back here for the card.</p>
           <button id="to-card" class="primary" type="button">What you just learned</button>
         </div>
 
         <div class="legend">
-          <span class="swatch ghost"></span><span>a square the shelf needs painted</span>
+          <span class="swatch ghost"></span><span>a square the staircase needs painted</span>
           <span class="swatch painted"></span><span>a square you painted</span>
-          <span class="swatch door"></span><span>the door the robot came in by</span>
           <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
         </div>
       </section>
 
       <!-- CARD -->
       <section id="card" hidden>
-        <button class="back" data-back-lesson type="button">&larr; The shelf</button>
+        <button class="back" data-back-lesson type="button">&larr; The staircase</button>
         <div id="card-body" class="card"></div>
-        <p class="next-lesson">Now open lesson 5.</p>
+        <p class="next-lesson">Now open lesson 6.</p>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

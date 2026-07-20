@@ -9,8 +9,9 @@ spells them, and a room that makes you need one.
    door is in the left wall, half the time in the right. Run the same move in
    both and see it paint one and crash the other. Then ask the robot
    `robot.wallOnLeft();` in each room.
-2. **Paint the shelf**, by finishing `faceTheRoom` in `src/exercise.ts` (open
-   on the left). The `if` is written for you. Your job is the `else`. Save,
+2. **Paint the shelf**, by writing `faceTheRoom` in `src/exercise.ts` (open on
+   the left). Ask `robot.wallOnLeft()`, then turn the robot the right way for
+   each answer: right when the wall is on its left, left when it is not. Save,
    then press "Flip the coin and open the door" as often as you like.
 
 The verdict turns green and reads `PASS` when both rooms work. You do not need

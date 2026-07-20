@@ -11,6 +11,12 @@ The lead teacher checks criteria, not code.
 The kid never opens this repo and never talks to a bot. They open a StackBlitz web IDE link,
 turn a failing test green, and watch the preview render. This repo serves the authoring side.
 
+## Drafts
+
+Draft straight into the file it belongs in; never leave a draft only in chat. The lead teacher
+reviews the diff and edits the file. Do not make separate draft files. Plan mode is for plans that
+need approval, not a place to park text.
+
 ## Stack
 
 | Concern | Choice |
@@ -34,6 +40,12 @@ intent is non-obvious. Two-space indent, single quotes, semicolons.
 
 Lesson code the kid reads is held higher: one concept per lesson, names a ten-year-old can read,
 no syntax the lesson has not introduced.
+
+Scaffolding shrinks as the course goes on. Each lesson hands the kid less finished code and asks
+for more of their own than the one before. Early on the kid fills in a value or a single line; by
+the end the kid writes a whole function. Never scaffold a later lesson more heavily than an earlier
+one. Lesson 05 asks for more than lesson 04: the kid declares the `let`, writes the reassignment,
+and repeats the move by hand, so lesson 06's `for` folds up code the kid wrote, not code we gave.
 
 ## Writing style
 
