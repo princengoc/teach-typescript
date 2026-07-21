@@ -16,10 +16,10 @@ for (let i = 0; i < n; i += 1) {
 climb(height + 1, barsLeft - 1);
 ```
 
-**A base case stops it: when nothing is left, `return` before it calls itself again.**
+**A base case stops it: when nothing is left, `return` before it calls itself again. What counts as nothing left can be a wall the robot feels, not only a number.**
 
 ```ts
-if (barsLeft === 0) return;
+if (robot.wallAhead()) return;
 ```
 
 ## For Racket hands

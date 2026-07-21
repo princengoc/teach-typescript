@@ -33,3 +33,12 @@ export function paintStaircaseLoop(): void {
 export function paintStaircaseRec(): void {
   paintBar(1);
 }
+
+// RUNG 5 -- the blind square. The same square as rung 1, but the side is
+// hidden: a ? where the number was, a new size every run. paintSide needs a
+// length you are not given. One new tool: robot.wallAhead() is true when the
+// next step lands on a wall. Paint the whole square with recursion. It must
+// work for every side.
+export function paintSquareBlind(): void {
+  robot.paint();
+}

@@ -37,3 +37,17 @@ function climb(height: number, barsLeft: number): void {
 export function paintStaircaseRec(): void {
   climb(1, robot.barCount());
 }
+
+function paintLine(): void {
+  robot.paint();
+  if (robot.wallAhead()) return;
+  robot.walk(1);
+  paintLine();
+}
+
+export function paintSquareBlind(): void {
+  for (let i = 0; i < 4; i += 1) {
+    paintLine();
+    robot.turnRight();
+  }
+}

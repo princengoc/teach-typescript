@@ -2,6 +2,7 @@ import cardSource from '../card.md?raw';
 import {
   paintRectangle,
   paintSquare,
+  paintSquareBlind,
   paintStaircaseLoop,
   paintStaircaseRec,
 } from './exercise';
@@ -10,6 +11,8 @@ import { paintSide } from './harness/moves';
 import { drawWorld } from './harness/render';
 import { runProgram } from './harness/robot';
 import {
+  blindSquareVariant,
+  blindVariants,
   judge,
   judgeRung,
   rectVariants,
@@ -143,7 +146,38 @@ const RUNGS: Rung[] = [
     program: paintStaircaseRec,
     variants: stairVariants,
   },
+  {
+    key: 'blind',
+    title: '5. Blind square, side hidden',
+    program: paintSquareBlind,
+    variants: blindVariants,
+  },
 ];
+
+// A random room, redrawn each run, to prove the code reads no number. It grades
+// but does not gate the rung: the fixed rooms above decide PASS.
+function renderMystery(program: () => void): HTMLElement {
+  const side = 3 + Math.floor(Math.random() * 4);
+  const variant = blindSquareVariant(side);
+  const box = document.createElement('div');
+  const label = document.createElement('p');
+  label.textContent = 'A surprise room, a new size each run:';
+  label.style.margin = '0.4rem 0 0.2rem';
+  const figs = document.createElement('div');
+  figs.className = 'figs';
+  const figure = document.createElement('figure');
+  const canvas = document.createElement('canvas');
+  const caption = document.createElement('p');
+  const solved = drawResult(canvas, variant, program);
+  caption.textContent = `side ?: ${solved ? 'PASS' : 'FAIL'}`;
+  caption.className = solved ? 'verdict' : 'verdict fail';
+  caption.style.textAlign = 'center';
+  caption.style.color = solved ? '#2e7d32' : '#c62828';
+  figure.append(canvas, caption);
+  figs.append(figure);
+  box.append(label, figs);
+  return box;
+}
 
 function renderRung(rung: Rung): HTMLElement {
   const block = document.createElement('div');
@@ -166,6 +200,8 @@ function renderRung(rung: Rung): HTMLElement {
     figs.append(figure);
   }
   block.append(figs);
+
+  if (rung.key === 'blind') block.append(renderMystery(rung.program));
 
   const verdict = document.createElement('p');
   verdict.className = 'verdict';

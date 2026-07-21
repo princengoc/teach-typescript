@@ -1,5 +1,5 @@
 import type { Command, World } from './types';
-import { step as stepWorld } from './world';
+import { wallAhead as senseWallAhead, step as stepWorld } from './world';
 
 // The live facade. The kid's code asks the robot for the room's numbers, and
 // the answers depend on the room. So the robot acts as it is called, against
@@ -41,6 +41,11 @@ export const robot = {
   },
   barCount(): number {
     return current ? current.dims.barCount : 0;
+  },
+  // A sensor, not a number: true when the next step lands on a wall. The blind
+  // square never learns its side; it feels for the wall instead.
+  wallAhead(): boolean {
+    return current ? senseWallAhead(current) : true;
   },
 };
 

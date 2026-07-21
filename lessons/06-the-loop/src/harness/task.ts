@@ -62,6 +62,7 @@ export interface Variant {
   start: { x: number; y: number; facing: Direction };
   dims: Dims;
   target: Cell[];
+  walls?: Cell[];
 }
 
 function squareVariant(side: number): Variant {
@@ -91,14 +92,50 @@ function stairVariant(barCount: number): Variant {
   };
 }
 
+// The walls that box a side-by-side square anchored at the top-left corner:
+// one column just past its right edge, one row just past its foot. The other
+// two edges are the grid itself. So the robot, walking a side, meets a wall
+// exactly at the corner, whatever the side. Nothing tells it the number.
+function squareWalls(side: number): Cell[] {
+  const cells: Cell[] = [];
+  for (let y = 0; y < side; y += 1) cells.push({ x: side, y });
+  for (let x = 0; x < side; x += 1) cells.push({ x, y: side });
+  return cells.filter((cell) => cell.x < WIDTH && cell.y < HEIGHT);
+}
+
+// A square whose side the kid is never told: no dim to read, walls at its edge.
+// The label stays `?` so the number never shows on screen to be copied.
+export function blindSquareVariant(side: number): Variant {
+  return {
+    label: 'side ?',
+    start: { x: 0, y: 0, facing: 'east' },
+    dims: zeroDims(),
+    target: borderCells(side, side),
+    walls: squareWalls(side),
+  };
+}
+
 // Each rung is graded in two rooms, so code that nails the numbers down passes
 // one and misses the other.
 export const squareVariants: Variant[] = [squareVariant(3), squareVariant(4)];
 export const rectVariants: Variant[] = [rectVariant(4, 2), rectVariant(3, 4)];
 export const stairVariants: Variant[] = [stairVariant(3), stairVariant(5)];
+// One room with interior walls, one that fills the grid, so the base case must
+// stop on a real wall and on the grid edge alike.
+export const blindVariants: Variant[] = [
+  blindSquareVariant(4),
+  blindSquareVariant(6),
+];
 
 export function startWorld(variant: Variant): World {
-  return makeWorld(WIDTH, HEIGHT, { ...variant.start }, variant.dims);
+  const world = makeWorld(WIDTH, HEIGHT, { ...variant.start }, variant.dims);
+  if (!variant.walls) return world;
+  const blocked = world.blocked.map((row) => [...row]);
+  for (const cell of variant.walls) {
+    const line = blocked[cell.y];
+    if (line) line[cell.x] = true;
+  }
+  return { ...world, blocked };
 }
 
 // A world with the target already painted, for the ghost outline in the preview.

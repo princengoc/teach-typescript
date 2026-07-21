@@ -2,10 +2,12 @@ import { expect, test } from 'vitest';
 import {
   paintRectangle,
   paintSquare,
+  paintSquareBlind,
   paintStaircaseLoop,
   paintStaircaseRec,
 } from './exercise';
 import {
+  blindVariants,
   judge,
   rectVariants,
   squareVariants,
@@ -33,5 +35,11 @@ test('the for-loop staircase stands in both rooms', () => {
 test('the recursive staircase stands in both rooms', () => {
   for (const variant of stairVariants) {
     expect(judge(variant, paintStaircaseRec).solved).toBe(true);
+  }
+});
+
+test('the blind square stands in every room, side never told', () => {
+  for (const variant of blindVariants) {
+    expect(judge(variant, paintSquareBlind).solved).toBe(true);
   }
 });

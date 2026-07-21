@@ -10,12 +10,16 @@ and recursion. The room picks the size, so copy-paste cannot win.
    worked recursion counting down to its base case, and a move with the size
    typed in that fits one room and misses another. Copy the shape, not the
    numbers.
-2. **Climb the ladder**, by filling four functions in `src/exercise.ts` (open on
-   the left), top to bottom, each one a loop:
+2. **Climb the ladder**, by filling five functions in `src/exercise.ts` (open on
+   the left), top to bottom:
    - `paintSquare` -- `paintSide` four times.
    - `paintRectangle` -- a long side then a short one, twice round.
    - `paintStaircaseLoop` -- the staircase, with a `for` loop.
    - `paintStaircaseRec` -- the same staircase, with a function that calls itself.
+   - `paintSquareBlind` -- a square whose side is hidden. You are not told the
+     number and it changes every run. `paintSide` needs a length you do not
+     have. `robot.wallAhead()` is true when the next step lands on a wall. Paint
+     the whole square with recursion; it must work for every side.
 
    Save. The panel marks every rung in every room. Each function paints one
    thing once to start; turn it into the whole figure.
@@ -33,6 +37,8 @@ tell your teacher which of the two ways you liked, and why.
 - Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
 - `paintSide`, `paintBar`, and `stepToNextBar` are done for you. Spend them; do
   not open them.
+- `robot.wallAhead()` is a sensor: it hands back `true` when the next step lands
+  on a wall. The blind square is the only rung that needs it.
 - `wordbook.md` lists every word so far. Look there before asking.
 
 ## The StackBlitz link

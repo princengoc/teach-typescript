@@ -48,13 +48,19 @@ test('the fixed move fits one room and misses the other', () => {
   expect(b).toContain('wrong');
 });
 
-test('the build view lists four rungs, each graded in two rooms', () => {
+test('the build view lists five rungs, each graded in two rooms', () => {
   document.querySelector<HTMLElement>('#to-build')?.click();
   expect(document.querySelector<HTMLElement>('#build')?.hidden).toBe(false);
   const rungs = document.querySelectorAll('#rungs .rung');
-  expect(rungs.length).toBe(4);
+  expect(rungs.length).toBe(5);
   const captions = document.querySelectorAll('#rungs figcaption');
-  expect(captions.length).toBe(8);
+  expect(captions.length).toBe(10);
+});
+
+test('the blind rung adds a surprise room labelled with a hidden side', () => {
+  const blind = document.querySelectorAll('#rungs .rung')[4];
+  expect(blind?.textContent).toContain('A surprise room');
+  expect(blind?.textContent).toContain('side ?');
 });
 
 test('the card view renders card.md, not raw markdown', () => {

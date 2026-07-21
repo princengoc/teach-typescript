@@ -26,4 +26,5 @@ that defines it. When you forget a word, look here first.
 | the block `{ }` | the lines a loop or `if` runs each time | 06 |
 | recursion | a function that calls itself to do the rest | 06 |
 | base case | the test that stops a recursion; `return` when nothing is left | 06 |
+| `robot.wallAhead()` | a sensor: `true` when the next step lands on a wall, so a base case can read the room instead of counting | 06 |
 | `+ 1`, `- 1` | make a new number without changing the old one | 06 |

@@ -103,6 +103,13 @@ export function wallOnLeft(world: World): boolean {
   return !cellOpen(world, world.robot.x + delta.dx, world.robot.y + delta.dy);
 }
 
+// True when the next step forward lands on a wall or off the grid. The blind
+// square asks this instead of counting: it walks until the answer is yes.
+export function wallAhead(world: World): boolean {
+  const delta = DELTA[world.robot.facing];
+  return !cellOpen(world, world.robot.x + delta.dx, world.robot.y + delta.dy);
+}
+
 export function paintedCells(world: World): string[] {
   const cells: string[] = [];
   world.painted.forEach((row, y) => {
