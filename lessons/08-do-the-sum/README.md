@@ -43,4 +43,4 @@ tell your teacher where else a yes-or-no rule would save you from typing a list.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/5b148db5478a74d002f2dc4ec5d375974d9a0132/lessons/08-do-the-sum?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/c41aba6448a14384ce2466508782893fa0e5611a/lessons/08-do-the-sum?file=src%2Fexercise.ts
