@@ -16,3 +16,5 @@ test go green.
 6. **[the loop](https://stackblitz.com/github/princengoc/teach-typescript/tree/1c174f4f959bd22182939f905a176cfac040bb24/lessons/06-the-loop?file=src%2Fexercise.ts)**
    -- say a block once and run it many times, with a `for` loop and with
    recursion.
+7. **[how far?](https://stackblitz.com/github/princengoc/teach-typescript/tree/bfe3c510107a188be9688ed59a19dbc6d13f63f9/lessons/07-how-far?file=src%2Fexercise.ts)**
+   -- write a function that measures a number and hands it back, then spend it.

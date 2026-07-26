@@ -1,8 +1,43 @@
 # Todo
 
-Lessons 01-06 built, green under `npm run check`, each with a preview and a
+Lessons 01-07 built, green under `npm run check`, each with a preview and a
 solutions deck. The robot has taught: read a field, call in order, name a move,
-`if`/`else`, `let`/`+=`, `for` and recursion. That is control flow, whole.
+`if`/`else`, `let`/`+=`, `for`, recursion, and (07) a function that returns a
+number the caller captures and spends.
+
+## For the next agent: build lesson 08
+
+Your job: design and build **lesson 08, "do the sum yourself"** (see its bullet
+below for the concept and exercises). Then verify, commit, and pin.
+
+- **How.** Invoke the `design-lesson` skill: frame Goal / Objective / Done-when,
+  let the lead teacher edit the done-when, then build under `lessons/08-<slug>/`
+  with a solution mirror at `solutions/08-<slug>/src/exercise.ts`.
+- **Copy lesson 07 as the template.** `lessons/07-how-far/` is the newest, cleanest
+  example of every harness file: `world.ts`, `robot.ts` (trimmed facade -- numbers
+  are felt, not read), `render.ts` (draws walls as slate blocks), `task.ts`
+  (Variant + factories + judge/judgeRung), `moves.ts` (given moves), `exercise.ts`
+  (starter red / solution green), `main.ts` (hash-routed intro + rungs + card),
+  `index.html`, `card.md`, `wordbook.md`, `README.md`.
+- **Syntax the kid already has** (through `07-how-far/wordbook.md`): `return` a
+  value, `: number`, `+ 1`/`- 1`, `+= 1`, `< > ===`, `!`, `if`/`else`, `let`,
+  `for`, recursion, capture-a-value. Lesson 08 introduces the NEW tokens: `%`,
+  general `+ - * /` on data, `<= >= !==`, and a function that returns a boolean.
+  Introduce exactly one concept's worth; no arrays, no `while`.
+- **Single-source rule (hard-won, keep it).** The picture and the world the
+  robot runs against must come from ONE source. `render.ts` derives every
+  dimension from the `World` it is handed; each rung reads one `Variant`; the
+  intro reads numbers off the variant's `hidden` field. Never write a dimension
+  literal twice, in code or in HTML prose -- the words must not drift from the
+  pictures.
+- **Scaffolding shrinks:** 08 asks more of the kid than 07.
+- **Verify:** `npm run check` at repo root (typecheck + biome + `verify-lessons`
+  asserting starter RED / solution GREEN), and `vite build` the lesson.
+- **Commit and pin, ON MAIN.** Commit to `main`, not a feature branch:
+  StackBlitz clones by commit SHA and can only resolve commits reachable from the
+  default branch (we hit this and had to fast-forward `main`). After committing,
+  pin the lesson's `README.md` StackBlitz link to the commit SHA on `main`, and
+  add the lesson to `lessons/README.md`.
 
 ## Next robot lessons: the arc to the finale
 
@@ -18,16 +53,13 @@ and 09 (returned counts bound the loops). The per-cell predicate (08) is the
 decision reused inside 09's nested loop and in 10. 09's nested loop is the
 finale's skeleton. Nobody meets an idea cold in 10.
 
-- [ ] **07 give a value back (`return`).** A function returns a value (a
-      number), spent by its caller -- not `void`. New concept, exactly one: this
-      is the biggest gap. Spine (A) measure-then-loop: a helper measures an
-      unknown wall distance and returns the count; the caller spends it to bound
-      a loop and paint the row. The sequel to 06's blind square -- there
-      recursion DODGED naming the length; here the kid names it and returns it.
-      Drill (B) count-the-climb, return it, walk home: a value one pass produces
-      and another spends, so `return` is forced. Syntax floor: reuse recursion
-      from 06, now returning a number not `void` -- do NOT introduce `while`.
-      Keep `+= 1` (lesson 05); no new operators. Being designed now.
+- [x] **07 give a value back (`return`).** Built as `lessons/07-how-far/`. Three
+      rungs, each forcing the return because the next move has nothing to feel:
+      measure a gap and paint a floating row (spend once); a given `buildFirstBar`
+      returns a height, match more bars where there is no ceiling (spend many);
+      count a climb and lay a floor as long (produce in one pass, carry to
+      another). Returning recursion, base case returns `1`, step `1 + call`; no
+      `while`. Numbers are felt, not read.
 - [ ] **08 do the sum yourself (compare and compute).** Operators on the kid's
       own values: comparison `< > === !==` and arithmetic `+ - * / %`, plus a
       function that returns a BOOLEAN. Exercises:
