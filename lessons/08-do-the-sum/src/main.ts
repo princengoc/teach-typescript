@@ -1,8 +1,7 @@
 import cardSource from '../card.md?raw';
 import { paintBackHalf, paintBand, paintStripes } from './exercise';
 import { renderMarkdown } from './harness/markdown';
-import { next, paint } from './harness/moves';
-import { drawWorld, replay } from './harness/render';
+import { drawWorld } from './harness/render';
 import { runProgram } from './harness/robot';
 import {
   backHalfVariant,
@@ -19,6 +18,7 @@ import {
   type Variant,
 } from './harness/task';
 import type { Room } from './harness/types';
+import { step } from './harness/world';
 
 type View = 'learn' | 'build' | 'card';
 const VIEWS: View[] = ['learn', 'build', 'card'];
@@ -28,62 +28,58 @@ function el<T extends HTMLElement>(id: string): T | null {
   return document.querySelector<T>(`#${id}`);
 }
 
-// The one source for the intro's numbers: the two rooms rung 1 is graded in.
-// The worked demo runs in the first; the why-a-rule demo runs in both.
+// The one source for the intro's numbers: the first room rung 1 is graded in.
+// The worked loop traces itself square by square in this same lane.
 const ROOM_A = backHalfVariants[0];
-const ROOM_B = backHalfVariants[1];
-if (!ROOM_A || !ROOM_B)
-  throw new Error('lesson 08: no back-half rooms defined');
-const GUESS = 3;
+if (!ROOM_A) throw new Error('lesson 08: no back-half rooms defined');
 
-// The worked rule: paint a square when it is in the back half of the lane.
-function backHalfDemo(room: Room): void {
-  for (let i = 0; i < room.len; i += 1) {
-    if (i >= room.len / 2) paint();
-    next();
-  }
-}
+const TRACE_MS = 750;
 
-// The hardcoded guess: paint from square GUESS on. It fits the lane it was
-// typed for and no other, because it reads no length.
-function guessDemo(room: Room): void {
-  for (let i = 0; i < room.len; i += 1) {
-    if (i >= GUESS) paint();
-    next();
-  }
+// The rule the worked loop runs, spelled out for the trace: is this square at
+// least halfway along?
+function decisionLine(i: number, len: number): string {
+  const yes = i >= len / 2;
+  const pad = i < 10 ? ' ' : '';
+  return `i = ${i}${pad}:  is ${i} >= ${len} / 2 ?  ${yes ? 'yes -> paint' : 'no  -> skip '}`;
 }
 
 let cancelDemo: (() => void) | null = null;
 
-function ruleText(len: number, done: boolean): string {
-  const line = `the rule:  paint square i when  i >= ${len} / 2`;
-  if (done)
-    return `${line}\nlane done: every square in the back half is painted.`;
-  return line;
-}
-
-// The intro animation: the robot walks the lane while the rule is tested at
-// each square, so the painted squares are the ones the rule said yes to.
+// The intro animation runs the loop one square at a time: the question asked,
+// the answer, and the paint, all lined up with the robot's move. This is the
+// shape the kid writes three times over.
 function runDemoAnim(): void {
   const canvas = el<HTMLCanvasElement>('demo-canvas');
   const log = el('demo-log');
   if (!canvas || !ROOM_A || !log) return;
   cancelDemo?.();
-  const start = startWorld(ROOM_A);
-  const room = toRoom(ROOM_A);
-  const { commands } = runProgram(start, () => backHalfDemo(room));
   const len = ROOM_A.len;
-  log.textContent = ruleText(len, false);
-  cancelDemo = replay({
-    canvas,
-    start: startWorld(ROOM_A),
-    commands,
-    target: targetWorld(ROOM_A),
-    frameMs: 480,
-    onFinish: () => {
-      log.textContent = ruleText(len, true);
-    },
-  });
+  const target = targetWorld(ROOM_A);
+  let world = startWorld(ROOM_A);
+  const lines: string[] = [];
+  let i = 0;
+  let timer = 0;
+
+  drawWorld({ canvas, world, target, cell: CELL });
+  log.textContent = `the loop starts: i = 0, the first square of ${len}.`;
+
+  const tick = (): void => {
+    if (i >= len) {
+      lines.push('');
+      lines.push('loop done -- the back half is painted.');
+      log.textContent = lines.join('\n');
+      return;
+    }
+    if (i >= len / 2) world = step(world, { kind: 'paint' });
+    lines.push(decisionLine(i, len));
+    log.textContent = lines.join('\n');
+    drawWorld({ canvas, world, target, cell: CELL });
+    if (i < len - 1) world = step(world, { kind: 'step' });
+    i += 1;
+    timer = window.setTimeout(tick, TRACE_MS);
+  };
+  timer = window.setTimeout(tick, TRACE_MS);
+  cancelDemo = () => window.clearTimeout(timer);
 }
 
 function drawDemoRest(): void {
@@ -96,25 +92,16 @@ function drawDemoRest(): void {
     cell: CELL,
   });
   const log = el('demo-log');
-  if (log)
-    log.textContent = 'Press the button: watch the rule paint the back half.';
+  if (log) {
+    log.textContent =
+      'Press the button: watch the loop run the rule, one square at a time.';
+  }
 }
 
-// Every number the intro names comes from the rooms, so the words match the
-// pictures.
 function setIntroText(): void {
   const demoButton = el('demo-run');
   if (demoButton && ROOM_A) {
-    demoButton.textContent = `run the rule (lane ${ROOM_A.len})`;
-  }
-  const whyButton = el('why-run');
-  if (whyButton) whyButton.textContent = `Run the guess-${GUESS} in both`;
-  for (const [id, variant] of [
-    ['why-cap-a', ROOM_A],
-    ['why-cap-b', ROOM_B],
-  ] as const) {
-    const caption = el(id);
-    if (caption && variant) caption.textContent = variant.label;
+    demoButton.textContent = `run the loop (lane ${ROOM_A.len})`;
   }
 }
 
@@ -131,40 +118,6 @@ function drawResult(
     cell: CELL,
   });
   return judge(variant, program).solved;
-}
-
-// The why-a-rule demo: the fixed guess in two lanes, one right, one wrong.
-function runWhy(): void {
-  const rooms = [
-    { variant: ROOM_A, canvas: 'why-a', caption: 'why-cap-a' },
-    { variant: ROOM_B, canvas: 'why-b', caption: 'why-cap-b' },
-  ];
-  for (const room of rooms) {
-    const canvas = el<HTMLCanvasElement>(room.canvas);
-    const caption = el(room.caption);
-    if (!canvas || !room.variant) continue;
-    const solved = drawResult(canvas, room.variant, guessDemo);
-    if (caption) {
-      caption.textContent = `${room.variant.label}: ${solved ? 'PASS' : 'wrong'}`;
-      caption.className = solved ? '' : 'fail';
-    }
-  }
-}
-
-function drawWhyGhosts(): void {
-  for (const [id, variant] of [
-    ['why-a', ROOM_A],
-    ['why-b', ROOM_B],
-  ] as const) {
-    const canvas = el<HTMLCanvasElement>(id);
-    if (!canvas || !variant) continue;
-    drawWorld({
-      canvas,
-      world: startWorld(variant),
-      target: targetWorld(variant),
-      cell: CELL,
-    });
-  }
 }
 
 interface Rung {
@@ -292,7 +245,6 @@ function show(view: View): void {
   if (view === 'learn') {
     setIntroText();
     drawDemoRest();
-    drawWhyGhosts();
   }
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
@@ -310,7 +262,6 @@ function go(view: View): void {
 window.addEventListener('hashchange', () => show(currentView()));
 
 el('demo-run')?.addEventListener('click', runDemoAnim);
-el('why-run')?.addEventListener('click', runWhy);
 el('to-build')?.addEventListener('click', () => go('build'));
 el('run-build')?.addEventListener('click', renderBuild);
 el('to-card')?.addEventListener('click', () => go('card'));

@@ -204,58 +204,54 @@
       <section id="learn">
         <h1>Lesson 8: do the sum yourself</h1>
         <p>
-          Until now you told the robot each move. This lesson you write a
-          <b>rule</b>, and the robot follows it at every square. A rule is a
-          function that gives back <code>true</code> or <code>false</code>.
+          Until now you told the robot each move by hand. That does not scale: a
+          lane a hundred squares long would need a hundred lines. This lesson you
+          write a <b>rule</b> once, and a <b>loop</b> runs it at every square.
         </p>
 
-        <h3>A function that gives back yes or no</h3>
+        <h3>Part 1 &mdash; the rule</h3>
         <p>
-          The lane is some length. You want to paint its back half. The rule
-          takes a square's number <code>i</code> and the length, and works out
-          the answer with a comparison: is <code>i</code> at least halfway?
+          A rule is a function that gives back <code>true</code> or
+          <code>false</code>. This one paints the lane's back half: it takes a
+          square's number <code>i</code> and the lane's length, and answers one
+          comparison &mdash; is <code>i</code> at least halfway along?
         </p>
         <pre><code>function backHalf(i: number, len: number): boolean {
-  return i &gt;= len / 2;          // yes when i is at least halfway
-}
+  return i &gt;= len / 2;   // true when i is at least halfway
+}</code></pre>
+        <p>
+          <code>: boolean</code> promises the answer is a yes or no.
+          <code>&gt;=</code> means "at least"; <code>/</code> divides. By itself
+          the rule paints nothing &mdash; it only answers questions. Something has
+          to ask it, once for every square.
+        </p>
 
-for (let i = 0; i &lt; room.len; i += 1) {
-  if (backHalf(i, room.len)) paint();   // paint where the rule says yes
+        <h3>Part 2 &mdash; the loop that runs the rule</h3>
+        <p>
+          The loop counts <code>i</code> up the lane. At each square it does three
+          things: ask the rule, paint when the answer is yes, then step on.
+        </p>
+        <pre><code>for (let i = 0; i &lt; room.len; i += 1) {
+  if (backHalf(i, room.len)) paint();   // ask the rule; paint on yes
   next();                               // step to the next square
 }</code></pre>
         <p>
-          <code>: boolean</code> promises the function hands back a yes or no.
-          <code>&gt;=</code> means "at least"; <code>/</code> divides. Press the
-          button: the rule is tested at every square, and the ones it says yes to
-          get painted.
+          Read it as those three jobs. <code>for</code> visits every square, from
+          <code>0</code> to the last. <code>if (backHalf(...)) paint()</code> asks
+          the rule about <em>this</em> square and paints only when it says yes.
+          <code>next()</code> moves on. Press the button and watch one square at a
+          time: the question, the answer, the paint.
         </p>
         <canvas id="demo-canvas"></canvas>
         <div id="demo-log" class="console-log"></div>
         <div class="controls">
-          <button id="demo-run" class="call" type="button">run the rule</button>
+          <button id="demo-run" class="call" type="button">run the loop</button>
         </div>
 
-        <h3>Why a rule, not a list</h3>
         <p>
-          The lane picks its length, not you. A guess with the square numbers
-          typed in fits the lane you typed it for and no other. Here is one fixed
-          guess run in two lanes of different lengths.
+          Three rungs wait, each the same shape: write a rule, then a loop that
+          runs it. Go build.
         </p>
-        <div class="figs">
-          <figure>
-            <canvas id="why-a"></canvas>
-            <figcaption id="why-cap-a"></figcaption>
-          </figure>
-          <figure>
-            <canvas id="why-b"></canvas>
-            <figcaption id="why-cap-b"></figcaption>
-          </figure>
-        </div>
-        <div class="controls">
-          <button id="why-run" class="primary" type="button">Run the guess in both</button>
-        </div>
-
-        <p>Write the rule from the numbers and the same code fits every lane. Go build three.</p>
         <button id="to-build" class="primary" type="button">The ladder</button>
       </section>
 
