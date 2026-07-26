@@ -164,6 +164,9 @@
       .swatch.painted {
         background: #4caf50;
       }
+      .swatch.wall {
+        background: #546e7a;
+      }
       .swatch.robot {
         width: 0;
         height: 0;
@@ -283,6 +286,7 @@ paintCells(gap);                     // spend it</code></pre>
         <div class="legend">
           <span class="swatch ghost"></span><span>a square the figure needs painted</span>
           <span class="swatch painted"></span><span>a square you painted</span>
+          <span class="swatch wall"></span><span>a wall the robot can feel but not cross</span>
           <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
         </div>
       </section>

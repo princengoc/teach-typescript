@@ -14,7 +14,10 @@ function drawCells(
     for (let x = 0; x < world.width; x += 1) {
       const px = MARGIN + x * cell;
       const py = MARGIN + y * cell;
-      if (world.painted[y]?.[x]) {
+      if (world.blocked[y]?.[x]) {
+        ctx.fillStyle = '#546e7a';
+        ctx.fillRect(px, py, cell, cell);
+      } else if (world.painted[y]?.[x]) {
         ctx.fillStyle = '#4caf50';
         ctx.fillRect(px, py, cell, cell);
       } else if (target.painted[y]?.[x]) {

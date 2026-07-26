@@ -32,7 +32,7 @@ function el<T extends HTMLElement>(id: string): T | null {
 // `gap` squares in. Same wall the robot feels, same count it hands back.
 const MEASURE_GAP = 3;
 function measureWorld(): World {
-  const world = makeWorld(MEASURE_GAP + 2, 1, { x: 0, y: 0, facing: 'east' });
+  const world = makeWorld(MEASURE_GAP + 1, 1, { x: 0, y: 0, facing: 'east' });
   const blocked = world.blocked.map((row) => [...row]);
   const line = blocked[0];
   if (line) line[MEASURE_GAP] = true;
