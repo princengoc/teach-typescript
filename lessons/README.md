@@ -18,5 +18,5 @@ test go green.
    recursion.
 7. **[how far?](https://stackblitz.com/github/princengoc/teach-typescript/tree/bfe3c510107a188be9688ed59a19dbc6d13f63f9/lessons/07-how-far?file=src%2Fexercise.ts)**
    -- write a function that measures a number and hands it back, then spend it.
-8. **[do the sum yourself](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/08-do-the-sum?file=src%2Fexercise.ts)**
+8. **[do the sum yourself](https://stackblitz.com/github/princengoc/teach-typescript/tree/5b148db5478a74d002f2dc4ec5d375974d9a0132/lessons/08-do-the-sum?file=src%2Fexercise.ts)**
    -- write a rule that returns yes or no, and paint where it says yes.
