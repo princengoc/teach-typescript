@@ -2,8 +2,8 @@ import cardSource from '../card.md?raw';
 import { climbAndFloor, matchBars, paintFloatingRow } from './exercise';
 import { renderMarkdown } from './harness/markdown';
 import { goToBuildLane, paintCells } from './harness/moves';
-import { drawWorld } from './harness/render';
-import { runProgram } from './harness/robot';
+import { drawWorld, replay } from './harness/render';
+import { robot, runProgram } from './harness/robot';
 import {
   climbFloorVariant,
   climbFloorVariants,
@@ -17,6 +17,8 @@ import {
   targetWorld,
   type Variant,
 } from './harness/task';
+import type { World } from './harness/types';
+import { makeWorld } from './harness/world';
 
 type View = 'learn' | 'build' | 'card';
 const VIEWS: View[] = ['learn', 'build', 'card'];
@@ -26,29 +28,70 @@ function el<T extends HTMLElement>(id: string): T | null {
   return document.querySelector<T>(`#${id}`);
 }
 
-// The intro's trace: a returning recursion counting to a wall three squares
-// away, then unwinding one-plus-the-rest into the answer.
-function runMeasureTrace(): void {
-  const log = el('measure-log');
-  if (!log) return;
-  const gap = 3;
-  const lines: string[] = [];
-  for (let square = 0; square < gap - 1; square += 1) {
-    lines.push(
-      `square ${square}   wall ahead? no    walk on, then 1 + (the rest)`,
-    );
+// The intro's measuring room: one corridor, the robot at the left, a wall
+// `gap` squares in. Same wall the robot feels, same count it hands back.
+const MEASURE_GAP = 3;
+function measureWorld(): World {
+  const world = makeWorld(MEASURE_GAP + 2, 1, { x: 0, y: 0, facing: 'east' });
+  const blocked = world.blocked.map((row) => [...row]);
+  const line = blocked[0];
+  if (line) line[MEASURE_GAP] = true;
+  return { ...world, blocked };
+}
+
+// Walks to the wall, so the recorded steps can be replayed frame by frame.
+function measureWalk(): void {
+  while (!robot.wallAhead()) {
+    robot.walk(1);
   }
-  lines.push(`square ${gap - 1}   wall ahead? yes   return 1`);
-  lines.push('');
-  let running = 1;
-  const steps = ['1'];
-  for (let i = 1; i < gap; i += 1) {
-    running += 1;
-    steps.push(`1 + ${running - 1} = ${running}`);
+}
+
+let cancelMeasure: (() => void) | null = null;
+
+function countText(square: number, done: boolean): string {
+  const tally: string[] = [];
+  for (let i = 1; i <= square; i += 1) {
+    tally.push(`${i}`);
   }
-  lines.push(`unwinding:  ${steps.join('   ->   ')}`);
-  lines.push(`the number handed back:  ${gap}`);
-  log.textContent = lines.join('\n');
+  const line = `counting the squares:  ${tally.join('  ')}`;
+  if (done) {
+    return `${line}\nwall ahead -- return. the number handed back:  ${square}`;
+  }
+  return line;
+}
+
+// The intro's animation: the robot walks to the wall while the count ticks up,
+// one for each square, so the returned number is the squares you watched it
+// count.
+function runMeasureAnim(): void {
+  const canvas = el<HTMLCanvasElement>('measure-canvas');
+  const count = el('measure-count');
+  if (!canvas || !count) return;
+  cancelMeasure?.();
+  const { commands } = runProgram(measureWorld(), measureWalk);
+  count.textContent = countText(1, commands.length === 0);
+  cancelMeasure = replay({
+    canvas,
+    start: measureWorld(),
+    commands,
+    target: measureWorld(),
+    frameMs: 550,
+    onFrame: (index) => {
+      count.textContent = countText(index + 1, false);
+    },
+    onFinish: (final) => {
+      count.textContent = countText(final.robot.x + 1, true);
+    },
+  });
+}
+
+function drawMeasureRest(): void {
+  const canvas = el<HTMLCanvasElement>('measure-canvas');
+  if (!canvas) return;
+  const world = measureWorld();
+  drawWorld({ canvas, world, target: world, cell: CELL });
+  const count = el('measure-count');
+  if (count) count.textContent = 'Press the button: watch the robot count.';
 }
 
 // A guess with the gap nailed to 3. It fits the room it was typed for and no
@@ -223,7 +266,10 @@ function show(view: View): void {
     const section = el(id);
     if (section) section.hidden = id !== view;
   }
-  if (view === 'learn') drawWhyGhosts();
+  if (view === 'learn') {
+    drawMeasureRest();
+    drawWhyGhosts();
+  }
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
 }
@@ -239,7 +285,7 @@ function go(view: View): void {
 
 window.addEventListener('hashchange', () => show(currentView()));
 
-el('measure-run')?.addEventListener('click', runMeasureTrace);
+el('measure-run')?.addEventListener('click', runMeasureAnim);
 el('why-run')?.addEventListener('click', runWhy);
 el('to-build')?.addEventListener('click', () => go('build'));
 el('run-build')?.addEventListener('click', renderBuild);

@@ -222,9 +222,11 @@ const gap = measureGap();            // keep the number in a name
 paintCells(gap);                     // spend it</code></pre>
         <p>
           <code>: number</code> is a promise: this function hands back a number.
-          Watch it count to a wall three squares away and add itself up.
+          Watch the robot walk to a wall three squares away, counting one for
+          each square. The count it reaches is the number it returns.
         </p>
-        <div id="measure-log" class="console-log"></div>
+        <canvas id="measure-canvas"></canvas>
+        <div id="measure-count" class="console-log"></div>
         <div class="controls">
           <button id="measure-run" class="call" type="button">run measureGap (wall 3 away)</button>
         </div>
