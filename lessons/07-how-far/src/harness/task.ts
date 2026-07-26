@@ -7,6 +7,9 @@ import { makeWorld, paintedCells } from './world';
 // handed over: the robot feels the walls and counts.
 export interface Variant {
   label: string;
+  // The number the room hides -- the gap or the bar height. The robot must
+  // measure it; code that reads it here is a demo, not a solution.
+  hidden: number;
   width: number;
   height: number;
   start: { x: number; y: number; facing: Direction };
@@ -56,6 +59,7 @@ const ROW1_HEIGHT = 3;
 export function floatingRowVariant(gap: number): Variant {
   return {
     label: `gap ${gap}`,
+    hidden: gap,
     width: ROW1_WIDTH,
     height: ROW1_HEIGHT,
     start: { x: 0, y: 0, facing: 'east' },
@@ -77,6 +81,7 @@ export function matchBarsVariant(height: number): Variant {
   ]);
   return {
     label: `height ${height}`,
+    hidden: height,
     width: BARS_WIDTH,
     height: BARS_HEIGHT,
     start: { x: 0, y: base, facing: 'north' },
@@ -97,6 +102,7 @@ export function climbFloorVariant(height: number): Variant {
   ]);
   return {
     label: `height ${height}`,
+    hidden: height,
     width: CLIMB_WIDTH,
     height: CLIMB_HEIGHT,
     start: { x: 0, y: base, facing: 'north' },

@@ -28,9 +28,15 @@ function el<T extends HTMLElement>(id: string): T | null {
   return document.querySelector<T>(`#${id}`);
 }
 
+// The one source for the intro's number: the first room rung 1 is graded in.
+// The intro corridor, its button label, and the guess-demo all read this, so
+// the picture and the code can never quote different gaps.
+const FIRST_ROOM = floatingRowVariants[0];
+if (!FIRST_ROOM) throw new Error('lesson 07: no floating-row rooms defined');
+const MEASURE_GAP = FIRST_ROOM.hidden;
+
 // The intro's measuring room: one corridor, the robot at the left, a wall
-// `gap` squares in. Same wall the robot feels, same count it hands back.
-const MEASURE_GAP = 3;
+// `MEASURE_GAP` squares in. Same wall the robot feels, same count it hands back.
 function measureWorld(): World {
   const world = makeWorld(MEASURE_GAP + 1, 1, { x: 0, y: 0, facing: 'east' });
   const blocked = world.blocked.map((row) => [...row]);
@@ -94,11 +100,28 @@ function drawMeasureRest(): void {
   if (count) count.textContent = 'Press the button: watch the robot count.';
 }
 
-// A guess with the gap nailed to 3. It fits the room it was typed for and no
-// other, because no number is read.
-function guessThree(): void {
+// Every number the intro names comes from the rooms, so the words match the
+// pictures.
+function setIntroText(): void {
+  const measureButton = el('measure-run');
+  if (measureButton) {
+    measureButton.textContent = `run measureGap (wall ${MEASURE_GAP} away)`;
+  }
+  const whyButton = el('why-run');
+  if (whyButton) whyButton.textContent = `Run the guess-${MEASURE_GAP} in both`;
+  const captions = ['why-cap-a', 'why-cap-b'];
+  captions.forEach((id, index) => {
+    const caption = el(id);
+    const variant = floatingRowVariants[index];
+    if (caption && variant) caption.textContent = variant.label;
+  });
+}
+
+// A guess with the gap nailed to the first room's number. It fits the room it
+// was typed for and no other, because no number is measured.
+function guessFirstRoom(): void {
   goToBuildLane();
-  paintCells(3);
+  paintCells(MEASURE_GAP);
 }
 
 function drawResult(
@@ -126,7 +149,7 @@ function runWhy(): void {
     const canvas = el<HTMLCanvasElement>(room.canvas);
     const caption = el(room.caption);
     if (!canvas || !room.variant) continue;
-    const solved = drawResult(canvas, room.variant, guessThree);
+    const solved = drawResult(canvas, room.variant, guessFirstRoom);
     if (caption) {
       caption.textContent = `${room.variant.label}: ${solved ? 'PASS' : 'wrong'}`;
       caption.className = solved ? '' : 'fail';
@@ -267,6 +290,7 @@ function show(view: View): void {
     if (section) section.hidden = id !== view;
   }
   if (view === 'learn') {
+    setIntroText();
     drawMeasureRest();
     drawWhyGhosts();
   }

@@ -225,33 +225,33 @@ const gap = measureGap();            // keep the number in a name
 paintCells(gap);                     // spend it</code></pre>
         <p>
           <code>: number</code> is a promise: this function hands back a number.
-          Watch the robot walk to a wall three squares away, counting one for
-          each square. The count it reaches is the number it returns.
+          Watch the robot walk to the wall it cannot see, counting one for each
+          square. The count it reaches is the number it returns.
         </p>
         <canvas id="measure-canvas"></canvas>
         <div id="measure-count" class="console-log"></div>
         <div class="controls">
-          <button id="measure-run" class="call" type="button">run measureGap (wall 3 away)</button>
+          <button id="measure-run" class="call" type="button">run measureGap</button>
         </div>
 
         <h3>Why measure, not guess</h3>
         <p>
           The room picks the distance, not you. A guess with the number typed in
-          fits the room you typed it for and no other. Here is a guess of 3 run
-          in a gap-3 room and a gap-5 room.
+          fits the room you typed it for and no other. Here is the same guess run
+          in two rooms of different gaps.
         </p>
         <div class="figs">
           <figure>
             <canvas id="why-a"></canvas>
-            <figcaption id="why-cap-a">gap 3</figcaption>
+            <figcaption id="why-cap-a"></figcaption>
           </figure>
           <figure>
             <canvas id="why-b"></canvas>
-            <figcaption id="why-cap-b">gap 5</figcaption>
+            <figcaption id="why-cap-b"></figcaption>
           </figure>
         </div>
         <div class="controls">
-          <button id="why-run" class="primary" type="button">Run the guess-3 in both</button>
+          <button id="why-run" class="primary" type="button">Run the guess in both</button>
         </div>
 
         <p>Measure the number and the same code fits every room. Go build three.</p>
