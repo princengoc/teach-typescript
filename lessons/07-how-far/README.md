@@ -42,4 +42,4 @@ tell your teacher where else a function that gives a number back would save you.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/a9bfd60b91a8d22e9a05e30bc86d318644f99a68/lessons/07-how-far?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/1a40ec01c0591d70ba0a6aeb91e43d3df0462150/lessons/07-how-far?file=src%2Fexercise.ts
