@@ -20,3 +20,5 @@ test go green.
    -- write a function that measures a number and hands it back, then spend it.
 8. **[do the sum yourself](https://stackblitz.com/github/princengoc/teach-typescript/tree/c41aba6448a14384ce2466508782893fa0e5611a/lessons/08-do-the-sum?file=src%2Fexercise.ts)**
    -- write a rule that returns yes or no, and paint where it says yes.
+9. **[the grid](https://stackblitz.com/github/princengoc/teach-typescript/tree/0162ec49545050c3b9bf40b02f072bac8d784adf/lessons/09-the-grid?file=src%2Fexercise.ts)**
+   -- put a loop inside a loop, and walk a whole box.

@@ -42,4 +42,4 @@ tell your teacher which loop ran more times, and how many times over.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/09-the-grid?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/0162ec49545050c3b9bf40b02f072bac8d784adf/lessons/09-the-grid?file=src%2Fexercise.ts
