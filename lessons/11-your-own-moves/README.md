@@ -47,4 +47,4 @@ write: the mess in rung 3, or the move you cut out of it.
 
 ## The StackBlitz link
 
-Pinned once the lesson ships.
+https://stackblitz.com/github/princengoc/teach-typescript/tree/6957b5e9074a641d4e7c49e6050c1b44bca397bd/lessons/11-your-own-moves?file=src%2Fexercise.ts
