@@ -22,3 +22,5 @@ test go green.
    -- write a rule that returns yes or no, and paint where it says yes.
 9. **[the grid](https://stackblitz.com/github/princengoc/teach-typescript/tree/0162ec49545050c3b9bf40b02f072bac8d784adf/lessons/09-the-grid?file=src%2Fexercise.ts)**
    -- put a loop inside a loop, and walk a whole box.
+10. **[the list](https://stackblitz.com/github/princengoc/teach-typescript/tree/8a512a3d1f0ea03cf8b92d7bec629cc4a650e02a/lessons/10-the-list?file=src%2Fexercise.ts)**
+    -- walk a list of numbers with `for...of`, and let the data draw the chart.

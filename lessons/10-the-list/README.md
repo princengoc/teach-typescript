@@ -43,4 +43,4 @@ number to the list.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/10-the-list?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/8a512a3d1f0ea03cf8b92d7bec629cc4a650e02a/lessons/10-the-list?file=src%2Fexercise.ts
