@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson 11: your own moves</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        color: #263238;
+        background: #eceff1;
+      }
+      .wrap {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 1.25rem 1.25rem 2rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+        margin: 0 0 0.5rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.5rem;
+      }
+      h3 {
+        font-size: 1rem;
+        margin: 1.2rem 0 0.35rem;
+      }
+      p {
+        line-height: 1.45;
+      }
+      code {
+        background: #cfd8dc;
+        border-radius: 3px;
+        padding: 0 0.25rem;
+        font-size: 0.95em;
+      }
+      pre {
+        background: #263238;
+        color: #eceff1;
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        overflow-x: auto;
+        font-size: 0.95rem;
+      }
+      pre code {
+        background: none;
+        padding: 0;
+        color: inherit;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.45rem 1rem;
+        border: 1px solid #90a4ae;
+        border-radius: 5px;
+        background: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #f5f5f5;
+      }
+      button.primary {
+        background: #1565c0;
+        border-color: #1565c0;
+        color: #fff;
+      }
+      button.primary:hover {
+        background: #0d47a1;
+      }
+      button.call {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9rem;
+      }
+      .back {
+        background: none;
+        border: none;
+        color: #1565c0;
+        cursor: pointer;
+        padding: 0;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+      canvas {
+        display: block;
+        max-width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+      }
+      .console-log {
+        background: #263238;
+        color: #eceff1;
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        min-height: 3rem;
+        max-height: 18rem;
+        overflow-y: auto;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .rung {
+        margin: 0.6rem 0 1.4rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.6rem;
+      }
+      .rung h3 {
+        margin-top: 0.3rem;
+      }
+      .check {
+        font-family: ui-monospace, monospace;
+        font-size: 0.85rem;
+        margin: 0.15rem 0;
+      }
+      .figs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin: 0.5rem 0;
+      }
+      .figs figure {
+        margin: 0;
+      }
+      .figs figcaption {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #2e7d32;
+        text-align: center;
+        margin-top: 0.2rem;
+      }
+      .figs figcaption.fail {
+        color: #c62828;
+      }
+      .figs figcaption.plain {
+        color: #455a64;
+        font-family: ui-monospace, monospace;
+      }
+      .verdict {
+        font-weight: 700;
+        margin: 0.2rem 0;
+        min-height: 1.3em;
+      }
+      .celebrate {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+        border-radius: 6px;
+        padding: 0.5rem 0.8rem;
+        text-align: center;
+      }
+      .legend {
+        margin-top: 1.25rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.9rem;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+        align-items: center;
+      }
+      .swatch {
+        width: 20px;
+        height: 20px;
+      }
+      .swatch.ghost {
+        border: 2px dashed #9e9e9e;
+      }
+      .swatch.painted {
+        background: #4caf50;
+      }
+      .swatch.wall {
+        background: #546e7a;
+      }
+      .swatch.robot {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 18px solid #37474f;
+      }
+      .card h2 {
+        font-size: 1.3rem;
+        margin: 0 0 0.5rem;
+      }
+      .card h3 {
+        font-size: 1.05rem;
+        margin: 1.4rem 0 0.4rem;
+        color: #1565c0;
+      }
+      .card ul {
+        padding-left: 1.2rem;
+        line-height: 1.6;
+      }
+      .next-lesson {
+        margin-top: 1.5rem;
+        border-top: 1px solid #cfd8dc;
+        padding-top: 0.9rem;
+        font-weight: 700;
+      }
+      [hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- LEARN -->
+      <section id="learn">
+        <h1>Lesson 11: your own moves</h1>
+        <p>
+          For four lessons you have spent moves someone else wrote:
+          <code>paintCells</code>, <code>nextRow</code>. Today they are yours.
+        </p>
+
+        <h3>Part 1 &mdash; what a move is made of</h3>
+        <p>
+          Open <code>src/harness/moves.ts</code>. Almost nothing is left in it.
+          Here is the whole of <code>next</code>:
+        </p>
+        <pre><code>export function next(): void {
+  if (!robot.wallAhead()) {
+    robot.walk(1);
+  }
+}</code></pre>
+        <p>
+          That is all a move ever was: robot calls under a name.
+          <code>paintCells</code> and <code>nextRow</code> used to sit in that
+          file beside it. They are gone, and the pictures still have to come out.
+        </p>
+
+        <h3>Part 2 &mdash; one name, many calls</h3>
+        <p>
+          Here is the chart loop you already know, running on the list
+          <span data-intro-bars></span>. On the left, the move you called. On
+          the right, what the robot actually did.
+        </p>
+        <pre><code>for (const n of room.bars) {
+  paintCells(n);
+  nextRow();
+}</code></pre>
+        <div class="figs">
+          <figure>
+            <canvas id="demo-canvas"></canvas>
+            <figcaption class="plain" data-intro-bars></figcaption>
+          </figure>
+        </div>
+        <div id="demo-log" class="console-log"></div>
+        <div class="controls">
+          <button id="demo-run" class="call" type="button">
+            unfold the moves
+          </button>
+        </div>
+        <p>
+          <span data-intro-names></span> names carried
+          <span data-intro-calls></span> robot calls. That is what a name is
+          for: you say the short thing, the robot does the long thing.
+        </p>
+
+        <p>Three rungs. Every move in them is yours to write. Go build.</p>
+        <button id="to-build" class="primary" type="button">The ladder</button>
+      </section>
+
+      <!-- BUILD -->
+      <section id="build" hidden>
+        <button class="back" data-back-learn type="button">&larr; The intro</button>
+        <h2>The ladder</h2>
+        <p>
+          <code>src/exercise.ts</code> is open on the left. Fill it in, top to
+          bottom. Rung 1 you write <code>paintCells</code>. Rung 2 you write
+          <code>backToRowStart</code> and <code>nextRow</code>, and the chart
+          draws itself. Rung 3 a working mess is handed to you: cut it into a
+          move. Save and this panel marks every rung.
+        </p>
+        <p>
+          Rungs 2 and 3 also call your moves on their own, away from any
+          picture. A move that only works in one place is not a move yet.
+        </p>
+        <div class="controls">
+          <button id="run-build" class="primary" type="button">Run the ladder</button>
+        </div>
+        <div id="rungs"></div>
+
+        <div id="build-done" hidden>
+          <p class="celebrate">Well done! Every move in that picture is yours.</p>
+          <p>
+            Nobody handed you <code>paintCells</code> or <code>nextRow</code>
+            this time, and the last rung got shorter as you worked on it. That
+            is the trade: name a thing once, spend it anywhere.
+          </p>
+          <button id="to-card" class="primary" type="button">What you just learned</button>
+        </div>
+
+        <div class="legend">
+          <span class="swatch ghost"></span><span>a square the picture needs painted</span>
+          <span class="swatch painted"></span><span>a square you painted</span>
+          <span class="swatch robot"></span><span>the robot (the point shows the way it faces)</span>
+        </div>
+      </section>
+
+      <!-- CARD -->
+      <section id="card" hidden>
+        <button class="back" data-back-build type="button">&larr; The ladder</button>
+        <div id="card-body" class="card"></div>
+        <p class="next-lesson">Next: lesson 12, the finale, where everything you have written comes out at once.</p>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
