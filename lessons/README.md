@@ -26,3 +26,6 @@ test go green.
     -- walk a list of numbers with `for...of`, and let the data draw the chart.
 11. **[your own moves](https://stackblitz.com/github/princengoc/teach-typescript/tree/6957b5e9074a641d4e7c49e6050c1b44bca397bd/lessons/11-your-own-moves?file=src%2Fexercise.ts)**
     -- write the moves you have been spending, and cut a mess into one of them.
+12. **[the finale](https://stackblitz.com/github/princengoc/teach-typescript/tree/3f418db792de4ebe8fd94ad584c1c55460ab0118/lessons/12-the-finale?file=src%2Fexercise.ts)**
+    -- one walk over the whole box, one rule about each square, and every
+    picture you can write a rule for.

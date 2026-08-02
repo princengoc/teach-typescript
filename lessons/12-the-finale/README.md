@@ -49,4 +49,4 @@ to change to make the same walk draw a letter of your name.
 
 ## The StackBlitz link
 
-Pinned once this lesson ships.
+https://stackblitz.com/github/princengoc/teach-typescript/tree/3f418db792de4ebe8fd94ad584c1c55460ab0118/lessons/12-the-finale?file=src%2Fexercise.ts
