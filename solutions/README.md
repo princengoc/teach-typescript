@@ -6,6 +6,11 @@ The **mirror** -- `solutions/NN-slug/`, file for file against the lesson -- is t
 key. It holds the kid-edited files finished, every drill `test.skip` unskipped, green under
 `npm run check`. Use it to confirm a lesson can be solved and to diff against a stuck kid.
 
+`npm run check` marks four criteria per lesson. The mirror names only files the lesson has.
+The shipped starter is red. The mirror is green with nothing skipped. And the mirror
+compiles -- drills included, which the lesson `tsconfig.json` leaves out on purpose so a
+fix-the-compiler drill can fail `tsc` without failing the gate.
+
 This **deck** is the other thing. For the lessons where there is craft to argue about, it
 shows how a pro writes the answer and, when the concepts so far allow more than one honest
 way, both. Nothing here uses a tool the lesson has not handed the kid yet.
