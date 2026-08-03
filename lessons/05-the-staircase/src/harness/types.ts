@@ -18,7 +18,6 @@ export interface World {
   painted: boolean[][];
   robot: Robot;
   crashed: boolean;
-  startHeight: number;
 }
 
 export type Command =
@@ -26,8 +25,9 @@ export type Command =
   | { kind: 'turn'; hand: 'left' | 'right' }
   | { kind: 'paint' };
 
-export interface Task {
-  start: World;
-  targetPainted: boolean[][];
-  goal?: { x: number; y: number };
+// The one number a room hands the kid's code. Every room picks its own, so the
+// staircase has to read it rather than guess it.
+export interface Room {
+  // How many squares long the first row is.
+  len: number;
 }

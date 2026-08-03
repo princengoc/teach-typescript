@@ -23,7 +23,7 @@ red-to-green exercise plus a rendering preview, each criterion marked PASS or FA
 
 ```
 lessons/NN-slug/   one self-contained Vite + Vitest lesson (built later)
-scripts/           repo tooling (typecheck fan-out)
+scripts/           repo tooling (typecheck fan-out, kit generator)
 .claude/           harness: skill, settings, lint hook
 CLAUDE.md          working protocol, stack, code and writing style
 todolist.md        what to build next

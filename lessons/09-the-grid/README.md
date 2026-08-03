@@ -31,15 +31,19 @@ tell your teacher which loop ran more times, and how many times over.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
-- The moves you spend -- `paint`, `next` and `nextRow` -- are done for you.
-  `paint` colours the square the robot stands on; `next` steps to the following
-  one and stops safely at the end of a row; `nextRow` carries the robot to the
-  first square of the row below.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass.
+- Read anything you like. The three moves you spend are in
+  `src/harness/moves.ts`: `paint` colours the square the robot stands on, `next`
+  steps to the following one and stops safely at the end of a row, and `nextRow`
+  carries the robot to the first square of the row below. Open `nextRow` -- it
+  is turns, steps and a recursion you have written yourself.
 - The room hands you its numbers: `room.width` and `room.height`. Read them; do
   not type numbers in.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every move and every
+  number the room hands you, with what each one does and which file it lives in.
+  `kit.md` and `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/0162ec49545050c3b9bf40b02f072bac8d784adf/lessons/09-the-grid?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/09-the-grid?file=src%2Fexercise.ts

@@ -45,8 +45,10 @@ to change to make the same walk draw a letter of your name.
   `room.midY`, `room.reach`, `room.marks`. Read them; do not type numbers in.
 - A rule is an answer about one square, and it has to be right about every
   square. The panel asks yours about all of them.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every move and every
+  number the room hands you, with what each one does and which file it lives in.
+  `kit.md` and `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/3f418db792de4ebe8fd94ad584c1c55460ab0118/lessons/12-the-finale?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/12-the-finale?file=src%2Fexercise.ts

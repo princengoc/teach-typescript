@@ -24,3 +24,7 @@ export type Command =
   | { kind: 'step' }
   | { kind: 'turn'; hand: 'left' | 'right' }
   | { kind: 'paint' };
+
+// There is no Room in this lesson, and that is the lesson. Every other room
+// hands its numbers over; this one hides them, so the only way to a number is
+// to feel for the wall and count.

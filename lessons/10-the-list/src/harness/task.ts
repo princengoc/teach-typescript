@@ -9,6 +9,9 @@ export interface Variant {
   label: string;
   bars: number[];
   min: number;
+  // How deep the box is. A chart is as deep as its list is long; the tallest
+  // bar is one row, however long the list that decided it.
+  rows: number;
   start: { x: number; y: number; facing: Direction };
   target: Cell[];
 }
@@ -56,20 +59,39 @@ function variant(
     label: `[${bars.join(', ')}]`,
     bars,
     min,
+    rows: bars.length,
     start: { x: 0, y: 0, facing: 'east' },
     target: chartCells(bars, wanted),
   };
 }
 
-// RUNGS 1 and 2. Every number in the list gets its bar.
+// RUNG 1. Every number in the list gets its bar.
 export function chartVariant(bars: number[], min: number): Variant {
   return variant(bars, min, () => true);
 }
 
-// RUNG 3. Only the bars that reach the mark are painted; the short ones keep
+// RUNG 2. Only the bars that reach the mark are painted; the short ones keep
 // their row and leave it empty.
 export function tallVariant(bars: number[], min: number): Variant {
   return variant(bars, min, (n) => n >= min);
+}
+
+// RUNG 3. One row, as long as the longest bar in the list. Nothing on the
+// picture says which number that was: the loop has to carry the answer.
+export function tallestVariant(bars: number[]): Variant {
+  const best = widest(bars);
+  const target: Cell[] = [];
+  for (let x = 0; x < best; x += 1) {
+    target.push({ x, y: 0 });
+  }
+  return {
+    label: `[${bars.join(', ')}]`,
+    bars,
+    min: 0,
+    rows: 1,
+    start: { x: 0, y: 0, facing: 'east' },
+    target,
+  };
 }
 
 // Each rung is graded in two rooms whose lists differ in length and in numbers,
@@ -78,13 +100,15 @@ export const chartVariants: Variant[] = [
   chartVariant([4, 2, 5, 3], 3),
   chartVariant([3, 6, 2], 2),
 ];
-export const byHandVariants: Variant[] = [
-  chartVariant([2, 5, 3], 2),
-  chartVariant([6, 1, 4, 2], 4),
-];
 export const tallVariants: Variant[] = [
   tallVariant([4, 1, 5, 2], 4),
   tallVariant([2, 6, 3, 5, 1], 3),
+];
+// The longest bar sits in a different place in each list, so code that keeps
+// the first number, or the last, passes one room and fails the other.
+export const tallestVariants: Variant[] = [
+  tallestVariant([2, 5, 3, 1]),
+  tallestVariant([6, 2, 4]),
 ];
 
 function randomInt(min: number, span: number): number {
@@ -118,8 +142,21 @@ export function randomTallVariant(): Variant {
   return tallVariant(bars, longest - 2);
 }
 
+// The surprise list for rung 3. The longest bar lands anywhere in the list, so
+// a loop that keeps the wrong one shows it.
+export function randomTallestVariant(): Variant {
+  const count = randomInt(3, 3);
+  const longest = randomInt(4, 3);
+  const at = randomInt(0, count);
+  const bars: number[] = [];
+  for (let i = 0; i < count; i += 1) {
+    bars.push(i === at ? longest : randomInt(1, longest - 1));
+  }
+  return tallestVariant(bars);
+}
+
 export function startWorld(variant: Variant): World {
-  return makeWorld(widest(variant.bars), variant.bars.length, {
+  return makeWorld(widest(variant.bars), variant.rows, {
     ...variant.start,
   });
 }

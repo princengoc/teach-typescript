@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
-import { paintBackHalf, paintBand, paintStripes } from './exercise';
+import { paintBackHalf, paintBandRows, paintStripes } from './exercise';
 import {
   backHalfVariants,
-  bandVariants,
+  bandRowsVariants,
   judge,
   stripeVariants,
 } from './harness/task';
@@ -19,8 +19,8 @@ test('rung 2: every other square lights, in both rooms', () => {
   }
 });
 
-test('rung 3: the band lights, ends included, in both rooms', () => {
-  for (const variant of bandVariants) {
-    expect(judge(variant, paintBand).solved).toBe(true);
+test('rung 3: the band of rows lights, ends included, in both rooms', () => {
+  for (const variant of bandRowsVariants) {
+    expect(judge(variant, paintBandRows).solved).toBe(true);
   }
 });

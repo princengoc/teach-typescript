@@ -1,41 +1,58 @@
-import { paintBar, paintSide, stepToNextBar } from './harness/moves';
+import { nextRow, paintCells } from './harness/moves';
 import { robot } from './harness/robot';
+import type { Room } from './harness/types';
 
-export function paintSquare(): void {
-  const side = robot.squareSide();
+// --- your kit ---
+// Everything you can call this lesson. The "Your kit" button in the
+// preview says more about each one.
+//   paintCells(n)      paints `n` squares in a row, starting on the square...
+//   nextRow()          carries the robot to the first square of the row...
+//   robot.paint()      paints the square the robot stands on
+//   robot.step()       moves the robot one square forward
+//   robot.walk(steps)  walks the robot `steps` squares forward
+//   robot.turnLeft()   turns the robot a quarter turn to the left
+//   robot.turnRight()  turns the robot a quarter turn to the right
+//   robot.wallAhead()  a sensor: true when the next step lands on a wall
+//   room.side          how long one side of this room's square is
+//   room.width         how many squares across the box reaches
+//   room.height        how many rows down the box reaches
+//   room.len           how many squares long the first row is
+// --- end of your kit ---
+
+export function paintSquare(room: Room): void {
   for (let i = 0; i < 4; i += 1) {
-    paintSide(side);
+    paintCells(room.side);
+    robot.turnRight();
   }
 }
 
-export function paintRectangle(): void {
-  const width = robot.rectWidth();
-  const height = robot.rectHeight();
+export function paintRectangle(room: Room): void {
   for (let i = 0; i < 2; i += 1) {
-    paintSide(width);
-    paintSide(height);
+    paintCells(room.width);
+    robot.turnRight();
+    paintCells(room.height);
+    robot.turnRight();
   }
 }
 
-export function paintStaircaseLoop(): void {
-  const barCount = robot.barCount();
-  let height = 1;
-  for (let i = 0; i < barCount; i += 1) {
-    paintBar(height);
-    stepToNextBar();
-    height += 1;
+export function paintStaircaseLoop(room: Room): void {
+  let len = room.len;
+  for (let i = 0; i < room.height; i += 1) {
+    paintCells(len);
+    nextRow();
+    len += 1;
   }
 }
 
-function climb(height: number, barsLeft: number): void {
-  if (barsLeft === 0) return;
-  paintBar(height);
-  stepToNextBar();
-  climb(height + 1, barsLeft - 1);
+function stairsFrom(len: number, rowsLeft: number): void {
+  if (rowsLeft === 0) return;
+  paintCells(len);
+  nextRow();
+  stairsFrom(len + 1, rowsLeft - 1);
 }
 
-export function paintStaircaseRec(): void {
-  climb(1, robot.barCount());
+export function paintStaircaseRec(room: Room): void {
+  stairsFrom(room.len, room.height);
 }
 
 function paintLine(): void {

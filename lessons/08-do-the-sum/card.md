@@ -5,8 +5,8 @@ You wrote three rules. Each is a function that gives back `true` or `false`, and
 **A comparison hands back a boolean -- yes or no. `: boolean` promises one.**
 
 ```ts
-function backHalf(i: number, len: number): boolean {
-  return i >= len / 2;
+function backHalf(i: number, width: number): boolean {
+  return i >= width / 2;
 }
 ```
 
@@ -19,7 +19,7 @@ return i % 2 === 0;
 **`&&` joins two tests: it is `true` only when both sides are.**
 
 ```ts
-return i >= lo && i <= hi;
+return y >= room.lo && y <= room.hi;
 ```
 
 ## For Racket hands

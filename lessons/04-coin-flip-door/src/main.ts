@@ -1,4 +1,6 @@
 import cardSource from '../card.md?raw';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
 import { paintTheRoom } from './exercise';
 import { renderMarkdown } from './harness/markdown';
 import { drawWorld, replay } from './harness/render';
@@ -15,8 +17,8 @@ import {
 } from './harness/task';
 import type { Cell } from './harness/types';
 
-type View = 'learn' | 'lesson' | 'card';
-const VIEWS: View[] = ['learn', 'lesson', 'card'];
+type View = 'learn' | 'lesson' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'lesson', 'card', 'kit'];
 
 const TONE_COLOR = {
   todo: '#c62828',
@@ -165,6 +167,17 @@ function flip(): void {
   renderLesson();
 }
 
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
+}
+
 function renderCard(): void {
   const body = el('card-body');
   if (body) body.innerHTML = renderMarkdown(cardSource);
@@ -178,6 +191,7 @@ function show(view: View): void {
   if (view === 'learn') drawDemoRooms();
   if (view === 'lesson') renderLesson();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -211,5 +225,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('lesson'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

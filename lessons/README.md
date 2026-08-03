@@ -3,6 +3,11 @@
 Click a lesson. Wait for it to load. Open `src/exercise.ts`, and make the red
 test go green.
 
+Forgotten a call? Every lesson from the second on has a **Your kit** button in
+the preview: every move, every robot call, and every number the room hands you,
+with what each one does, and the wordbook under it. The same list sits at the
+top of `src/exercise.ts`, one line each.
+
 1. **[fix the start](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/01-fix-the-start?file=src%2Fexercise.ts)**
    -- read values off an object to build the room.
 2. **[paint the L](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/02-paint-the-l?file=src%2Fexercise.ts)**
@@ -11,21 +16,21 @@ test go green.
    -- give a list of calls one name, and spend it again.
 4. **[the coin-flip door](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/04-coin-flip-door?file=src%2Fexercise.ts)**
    -- pick which lines run with `if` and `else`.
-5. **[the staircase](https://stackblitz.com/github/princengoc/teach-typescript/tree/8b56686b7ac872f8164bfc5e44e7e10b62b611d8/lessons/05-the-staircase?file=src%2Fexercise.ts)**
+5. **[the staircase](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/05-the-staircase?file=src%2Fexercise.ts)**
    -- keep a number in a `let` and grow it with `height += 1`.
-6. **[the loop](https://stackblitz.com/github/princengoc/teach-typescript/tree/1c174f4f959bd22182939f905a176cfac040bb24/lessons/06-the-loop?file=src%2Fexercise.ts)**
+6. **[the loop](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/06-the-loop?file=src%2Fexercise.ts)**
    -- say a block once and run it many times, with a `for` loop and with
    recursion.
-7. **[how far?](https://stackblitz.com/github/princengoc/teach-typescript/tree/bfe3c510107a188be9688ed59a19dbc6d13f63f9/lessons/07-how-far?file=src%2Fexercise.ts)**
+7. **[how far?](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/07-how-far?file=src%2Fexercise.ts)**
    -- write a function that measures a number and hands it back, then spend it.
-8. **[do the sum yourself](https://stackblitz.com/github/princengoc/teach-typescript/tree/c41aba6448a14384ce2466508782893fa0e5611a/lessons/08-do-the-sum?file=src%2Fexercise.ts)**
+8. **[do the sum yourself](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/08-do-the-sum?file=src%2Fexercise.ts)**
    -- write a rule that returns yes or no, and paint where it says yes.
-9. **[the grid](https://stackblitz.com/github/princengoc/teach-typescript/tree/0162ec49545050c3b9bf40b02f072bac8d784adf/lessons/09-the-grid?file=src%2Fexercise.ts)**
+9. **[the grid](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/09-the-grid?file=src%2Fexercise.ts)**
    -- put a loop inside a loop, and walk a whole box.
-10. **[the list](https://stackblitz.com/github/princengoc/teach-typescript/tree/8a512a3d1f0ea03cf8b92d7bec629cc4a650e02a/lessons/10-the-list?file=src%2Fexercise.ts)**
+10. **[the list](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/10-the-list?file=src%2Fexercise.ts)**
     -- walk a list of numbers with `for...of`, and let the data draw the chart.
-11. **[your own moves](https://stackblitz.com/github/princengoc/teach-typescript/tree/6957b5e9074a641d4e7c49e6050c1b44bca397bd/lessons/11-your-own-moves?file=src%2Fexercise.ts)**
+11. **[your own moves](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/11-your-own-moves?file=src%2Fexercise.ts)**
     -- write the moves you have been spending, and cut a mess into one of them.
-12. **[the finale](https://stackblitz.com/github/princengoc/teach-typescript/tree/3f418db792de4ebe8fd94ad584c1c55460ab0118/lessons/12-the-finale?file=src%2Fexercise.ts)**
+12. **[the finale](https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/12-the-finale?file=src%2Fexercise.ts)**
     -- one walk over the whole box, one rule about each square, and every
     picture you can write a rule for.

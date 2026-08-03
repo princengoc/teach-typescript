@@ -7,8 +7,8 @@ import { makeWorld, paintedCells } from './world';
 // handed over: the robot feels the walls and counts.
 export interface Variant {
   label: string;
-  // The number the room hides -- the gap or the bar height. The robot must
-  // measure it; code that reads it here is a demo, not a solution.
+  // The number the room hides. The robot must measure it; code that reads it
+  // here is a demo, not a solution.
   hidden: number;
   width: number;
   height: number;
@@ -21,94 +21,59 @@ function key(cell: Cell): string {
   return `${cell.x},${cell.y}`;
 }
 
-// A row of `len` squares along row `y`, starting at column `x0`.
-function rowCells(y: number, x0: number, len: number): Cell[] {
+// A row of `len` squares along row `y`, starting at column 0.
+function rowCells(y: number, len: number): Cell[] {
   const cells: Cell[] = [];
   for (let i = 0; i < len; i += 1) {
-    cells.push({ x: x0 + i, y });
+    cells.push({ x: i, y });
   }
   return cells;
 }
 
-// A bar of `height` squares in column `x`, growing up from the base row.
-function colCells(x: number, baseRow: number, height: number): Cell[] {
-  const cells: Cell[] = [];
-  for (let i = 0; i < height; i += 1) {
-    cells.push({ x, y: baseRow - i });
-  }
-  return cells;
-}
+// Every room is the same shape: a measuring row along the top with a wall `gap`
+// squares in, and open rows below that no wall stops. The number lives in the
+// top row and must be carried down.
+const WIDTH = 7;
 
-function dedupe(cells: Cell[]): Cell[] {
-  const seen = new Set<string>();
-  const out: Cell[] = [];
-  for (const cell of cells) {
-    if (!seen.has(key(cell))) {
-      seen.add(key(cell));
-      out.push(cell);
-    }
-  }
-  return out;
-}
-
-// RUNG 1. A measuring lane along the top with a wall `gap` squares in, and a
-// clear build lane along the bottom that no wall stops. Measure the gap, then
-// paint that many squares down below.
-const ROW1_WIDTH = 7;
-const ROW1_HEIGHT = 3;
-export function floatingRowVariant(gap: number): Variant {
+function room(
+  gap: number,
+  rows: number,
+  target: Cell[],
+  label: string,
+): Variant {
   return {
-    label: `gap ${gap}`,
+    label,
     hidden: gap,
-    width: ROW1_WIDTH,
-    height: ROW1_HEIGHT,
+    width: WIDTH,
+    height: rows,
     start: { x: 0, y: 0, facing: 'east' },
-    target: rowCells(ROW1_HEIGHT - 1, 0, gap),
+    target,
     walls: [{ x: gap, y: 0 }],
   };
 }
 
-// RUNG 2. The first column is a bar with a ceiling to feel; the columns after
-// it have none. Measure the first, build the rest to match.
-const BARS_WIDTH = 3;
-const BARS_HEIGHT = 6;
-export function matchBarsVariant(height: number): Variant {
-  const base = BARS_HEIGHT - 1;
-  const target = dedupe([
-    ...colCells(0, base, height),
-    ...colCells(1, base, height),
-    ...colCells(2, base, height),
-  ]);
-  return {
-    label: `height ${height}`,
-    hidden: height,
-    width: BARS_WIDTH,
-    height: BARS_HEIGHT,
-    start: { x: 0, y: base, facing: 'north' },
-    target,
-    walls: [{ x: 0, y: base - height }],
-  };
+// RUNG 1. Measure the gap along the top, then paint a row that long underneath,
+// where nothing stops you at the right place.
+export function floatingRowVariant(gap: number): Variant {
+  return room(gap, 2, rowCells(1, gap), `gap ${gap}`);
 }
 
-// RUNG 3. A bar with a ceiling in the first column, and an open floor. Climb
-// and count the bar, then walk home and lay a floor of the same length.
-const CLIMB_WIDTH = 7;
-const CLIMB_HEIGHT = 6;
-export function climbFloorVariant(height: number): Variant {
-  const base = CLIMB_HEIGHT - 1;
-  const target = dedupe([
-    ...colCells(0, base, height),
-    ...rowCells(base, 0, height),
-  ]);
-  return {
-    label: `height ${height}`,
-    hidden: height,
-    width: CLIMB_WIDTH,
-    height: CLIMB_HEIGHT,
-    start: { x: 0, y: base, facing: 'north' },
-    target,
-    walls: [{ x: 0, y: base - height }],
-  };
+// RUNG 2. The same gap, spent three times: three rows below, all matching, and
+// only the top row has a wall to feel.
+export function matchRowsVariant(gap: number): Variant {
+  const target = [
+    ...rowCells(1, gap),
+    ...rowCells(2, gap),
+    ...rowCells(3, gap),
+  ];
+  return room(gap, 4, target, `gap ${gap}`);
+}
+
+// RUNG 3. Paint the top row as you count it, then match it below. The count is
+// produced in one pass and spent in another.
+export function paintAndMatchVariant(gap: number): Variant {
+  const target = [...rowCells(0, gap), ...rowCells(1, gap)];
+  return room(gap, 2, target, `gap ${gap}`);
 }
 
 // Each rung is graded in two rooms, so code that nails a number down passes one
@@ -117,13 +82,13 @@ export const floatingRowVariants: Variant[] = [
   floatingRowVariant(3),
   floatingRowVariant(5),
 ];
-export const matchBarsVariants: Variant[] = [
-  matchBarsVariant(3),
-  matchBarsVariant(4),
+export const matchRowsVariants: Variant[] = [
+  matchRowsVariant(3),
+  matchRowsVariant(4),
 ];
-export const climbFloorVariants: Variant[] = [
-  climbFloorVariant(3),
-  climbFloorVariant(5),
+export const paintAndMatchVariants: Variant[] = [
+  paintAndMatchVariant(3),
+  paintAndMatchVariant(5),
 ];
 
 export function startWorld(variant: Variant): World {
@@ -163,7 +128,7 @@ export function judge(variant: Variant, program: () => void): Verdict {
   if (world.crashed) {
     return {
       solved: false,
-      message: 'The robot walked off the grid.',
+      message: 'The robot walked into the wall.',
       tone: 'todo',
     };
   }

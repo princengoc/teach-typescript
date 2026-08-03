@@ -1,40 +1,36 @@
 import { robot } from './robot';
 
-// Moves from earlier lessons, handed to you ready-made. You do not open them;
-// you spend them inside your loops.
+// Two moves from lesson 05, handed to you ready-made. You spend them; you may
+// also open them. Nothing in here is magic -- it is robot calls under a name,
+// and every line of it is a call you have made yourself since lesson 02.
 
-// Paints one side of a shape, `len` squares long, starting from the square the
-// robot stands on and going forward. It ends turned right, at the foot of the
-// next side, so the same move paints the side after it.
-export function paintSide(len: number): void {
+// Paints `n` squares in a row, starting on the square the robot stands on and
+// going forward. It paints exactly `n` -- no wall stops it, so `n` is the only
+// thing that can.
+export function paintCells(n: number): void {
   robot.paint();
-  for (let i = 1; i < len; i += 1) {
+  for (let i = 1; i < n; i += 1) {
     robot.walk(1);
     robot.paint();
   }
-  robot.turnRight();
 }
 
-// Paints one bar, `height` squares tall, from the square the robot stands on
-// and going up. It leaves the robot back where it began, facing the same way,
-// so the next move starts from a known spot.
-export function paintBar(height: number): void {
-  robot.paint();
-  for (let i = 1; i < height; i += 1) {
-    robot.walk(1);
-    robot.paint();
-  }
-  robot.turnLeft();
-  robot.turnLeft();
-  robot.walk(height - 1);
-  robot.turnLeft();
-  robot.turnLeft();
-}
-
-// Moves the robot to the foot of the next bar, one column to the right, facing
-// up again, ready for another paintBar.
-export function stepToNextBar(): void {
-  robot.turnRight();
+// Walks back to the first square of the row, one square at a time, until the
+// wall stops it.
+function backToRowStart(): void {
+  if (robot.wallAhead()) return;
   robot.walk(1);
+  backToRowStart();
+}
+
+// Carries the robot to the first square of the row below, facing along it. It
+// is turns and steps you have spent since lesson 02, under one name. On the
+// bottom row there is no row below, so it stays where it is.
+export function nextRow(): void {
+  robot.turnLeft();
+  robot.turnLeft();
+  backToRowStart();
+  robot.turnLeft();
+  if (!robot.wallAhead()) robot.walk(1);
   robot.turnLeft();
 }

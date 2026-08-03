@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { next, nextRow, paintCells } from './moves';
+import { next, nextRow, paint } from './moves';
 import { runProgram } from './robot';
 import { makeWorld, paintedCells } from './world';
 
@@ -7,21 +7,20 @@ function box(): ReturnType<typeof makeWorld> {
   return makeWorld(5, 3, { x: 0, y: 0, facing: 'east' });
 }
 
-test('paintCells paints exactly n squares from where the robot stands', () => {
-  const { world } = runProgram(box(), () => paintCells(3));
-  expect(paintedCells(world)).toEqual(['0,0', '1,0', '2,0']);
-  expect(world.crashed).toBe(false);
-});
-
-test('paintCells fills the row when n is the whole width', () => {
-  const { world } = runProgram(box(), () => paintCells(5));
-  expect(paintedCells(world)).toEqual(['0,0', '1,0', '2,0', '3,0', '4,0']);
+test('paint marks the square the robot stands on', () => {
+  const { world } = runProgram(box(), () => {
+    paint();
+    next();
+    paint();
+  });
+  expect(paintedCells(world)).toEqual(['0,0', '1,0']);
   expect(world.crashed).toBe(false);
 });
 
 test('nextRow lands on the first square of the row below, facing along it', () => {
   const { world } = runProgram(box(), () => {
-    paintCells(3);
+    next();
+    next();
     nextRow();
   });
   expect(world.robot).toEqual({ x: 0, y: 1, facing: 'east' });

@@ -1,9 +1,9 @@
 import type { Command, World } from './types';
-import { step as stepWorld } from './world';
+import { wallAhead as senseWallAhead, step as stepWorld } from './world';
 
-// The live facade. The kid's code asks the robot how tall the first bar is,
-// and the answer depends on the room. So the robot acts as it is called,
-// against whichever room the harness handed it.
+// The live facade. The kid's code walks the robot around a room, and where the
+// walls are depends on the room. So the robot acts as it is called, against
+// whichever room the harness handed it.
 let current: World | null = null;
 let recorded: Command[] = [];
 
@@ -14,26 +14,36 @@ function apply(command: Command): void {
 }
 
 export const robot = {
+  // Paints the square the robot stands on.
   paint(): void {
     apply({ kind: 'paint' });
   },
+  // Moves the robot one square forward.
+  step(): void {
+    apply({ kind: 'step' });
+  },
+  // Walks the robot `steps` squares forward.
   walk(steps: number): void {
     for (let i = 0; i < steps; i += 1) {
       apply({ kind: 'step' });
     }
   },
+  // Turns the robot a quarter turn to the left.
   turnLeft(): void {
     apply({ kind: 'turn', hand: 'left' });
   },
+  // Turns the robot a quarter turn to the right.
   turnRight(): void {
     apply({ kind: 'turn', hand: 'right' });
   },
-  // How tall the first bar of this room's staircase is. Different rooms give
-  // different answers, so read it; you cannot guess the number.
-  startHeight(): number {
-    return current ? current.startHeight : 1;
-  },
 };
+
+// The sensor the moves feel their way with. It sits outside the facade on
+// purpose: this lesson's moves use it, and lesson 06 is where the kid gets to
+// ask it.
+export function wallAhead(): boolean {
+  return current ? senseWallAhead(current) : true;
+}
 
 export interface Run {
   world: World;

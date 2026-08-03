@@ -1,20 +1,25 @@
 import cardSource from '../card.md?raw';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
 import { paintStaircase } from './exercise';
 import { renderMarkdown } from './harness/markdown';
-import { goToNextBar, paintBar } from './harness/moves';
+import { nextRow, paintCells } from './harness/moves';
 import { drawWorld, replay } from './harness/render';
-import { robot, runProgram } from './harness/robot';
+import { runProgram } from './harness/robot';
 import {
   judge,
   judgeAll,
-  roomName,
+  longRoom,
   rooms,
+  shortRoom,
   startWorld,
   targetWorld,
+  toRoom,
+  type Variant,
 } from './harness/task';
 
-type View = 'learn' | 'lesson' | 'card';
-const VIEWS: View[] = ['learn', 'lesson', 'card'];
+type View = 'learn' | 'lesson' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'lesson', 'card', 'kit'];
 
 const TONE_COLOR = {
   todo: '#c62828',
@@ -28,35 +33,35 @@ function el<T extends HTMLElement>(id: string): T | null {
 
 // The taught part: a value that changes. The button bumps one variable and
 // prints it, so `let` and `+= 1` are a thing the kid watched move.
-let demoHeight = 1;
-function showDemoHeight(): void {
+let demoLen = 1;
+function showDemoLen(): void {
   const log = el('count-log');
-  if (log) log.textContent = `height  ->  ${demoHeight}`;
+  if (log) log.textContent = `len  ->  ${demoLen}`;
 }
-function bumpDemoHeight(): void {
-  demoHeight += 1;
-  showDemoHeight();
+function bumpDemoLen(): void {
+  demoLen += 1;
+  showDemoLen();
 }
-function resetDemoHeight(): void {
-  demoHeight = 1;
-  showDemoHeight();
+function resetDemoLen(): void {
+  demoLen = 1;
+  showDemoLen();
 }
 
-// The two rooms the demo contrasts: they want different first bars, so a move
-// with the heights nailed in cannot fit both.
-const DEMO: { startHeight: number; canvas: string; caption: string }[] = [
-  { startHeight: rooms[0] ?? 2, canvas: 'room-a', caption: 'cap-a' },
-  { startHeight: rooms[1] ?? 3, canvas: 'room-b', caption: 'cap-b' },
+// The two rooms the demo contrasts: they want different first rows, so a
+// staircase with the lengths nailed in cannot fit both.
+const DEMO: { variant: Variant; canvas: string; caption: string }[] = [
+  { variant: shortRoom, canvas: 'room-a', caption: 'cap-a' },
+  { variant: longRoom, canvas: 'room-b', caption: 'cap-b' },
 ];
 
-// Heights nailed to the first room, shown in the taught part as the move that
+// Lengths nailed to the first room, shown in the taught part as the code that
 // looks right but only fits one room.
-function fixedHeights(): void {
-  paintBar(rooms[0] ?? 2);
-  goToNextBar();
-  paintBar((rooms[0] ?? 2) + 1);
-  goToNextBar();
-  paintBar((rooms[0] ?? 2) + 2);
+function fixedLengths(): void {
+  paintCells(shortRoom.len);
+  nextRow();
+  paintCells(shortRoom.len + 1);
+  nextRow();
+  paintCells(shortRoom.len + 2);
 }
 
 function drawDemoRooms(): void {
@@ -65,8 +70,8 @@ function drawDemoRooms(): void {
     if (!canvas) continue;
     drawWorld({
       canvas,
-      world: startWorld(room.startHeight),
-      target: targetWorld(room.startHeight),
+      world: startWorld(room.variant),
+      target: targetWorld(room.variant),
       cell: 26,
     });
   }
@@ -76,9 +81,9 @@ function runDemo(): void {
   for (const room of DEMO) {
     const canvas = el<HTMLCanvasElement>(room.canvas);
     const caption = el(room.caption);
-    const verdict = judge(room.startHeight, fixedHeights);
+    const verdict = judge(room.variant, fixedLengths);
     if (caption) {
-      caption.textContent = `${roomName(room.startHeight)}: ${
+      caption.textContent = `${room.variant.label}: ${
         verdict.solved ? 'PASS' : 'wrong'
       }`;
       caption.style.color = TONE_COLOR[verdict.tone];
@@ -86,9 +91,9 @@ function runDemo(): void {
     if (!canvas) continue;
     replay({
       canvas,
-      start: startWorld(room.startHeight),
-      commands: runProgram(startWorld(room.startHeight), fixedHeights).commands,
-      target: targetWorld(room.startHeight),
+      start: startWorld(room.variant),
+      commands: runProgram(startWorld(room.variant), fixedLengths).commands,
+      target: targetWorld(room.variant),
       frameMs: 180,
     });
   }
@@ -96,33 +101,23 @@ function runDemo(): void {
   if (askIt) askIt.hidden = false;
 }
 
-// The sensor console: one call, one answer, in each room. Different numbers
-// side by side are why you read the height instead of typing it.
+// The room console: the same field read, one answer per room. Different
+// numbers side by side are why you read the length instead of typing it.
 function ask(): void {
   const log = el('ask-log');
   if (!log) return;
   log.textContent = DEMO.map(
     (room) =>
-      `// ${roomName(room.startHeight)}\nrobot.startHeight();  ->  ${sense(
-        room.startHeight,
-      )}`,
+      `// ${room.variant.label}\nroom.len  ->  ${toRoom(room.variant).len}`,
   ).join('\n\n');
   const branch = el('branch');
   if (branch) branch.hidden = false;
 }
 
-function sense(startHeight: number): number {
-  let answer = 0;
-  runProgram(startWorld(startHeight), () => {
-    answer = robot.startHeight();
-  });
-  return answer;
-}
-
 // The build view. A press picks a room at random; the two tiles underneath
 // always report every room, so code that fits only one cannot look finished.
 let stopReplay: (() => void) | null = null;
-let picked: number = rooms[0] ?? 2;
+let picked: Variant = shortRoom;
 
 function renderLesson(): void {
   const canvas = el<HTMLCanvasElement>('lesson-canvas');
@@ -134,15 +129,17 @@ function renderLesson(): void {
   verdict.style.color = '#37474f';
   if (done) done.hidden = true;
   renderBoth();
+  const room = toRoom(picked);
   stopReplay = replay({
     canvas,
     start: startWorld(picked),
-    commands: runProgram(startWorld(picked), paintStaircase).commands,
+    commands: runProgram(startWorld(picked), () => paintStaircase(room))
+      .commands,
     target: targetWorld(picked),
     frameMs: 70,
     onFinish: () => {
       const result = judge(picked, paintStaircase);
-      verdict.textContent = `${roomName(picked)}: ${result.message}`;
+      verdict.textContent = `${picked.label}: ${result.message}`;
       verdict.style.color = TONE_COLOR[result.tone];
       const overall = judgeAll(paintStaircase);
       if (done) done.hidden = !overall.solved;
@@ -154,18 +151,19 @@ function renderBoth(): void {
   const host = el('both');
   if (!host) return;
   host.replaceChildren();
-  for (const startHeight of rooms) {
+  for (const variant of rooms) {
     const figure = document.createElement('figure');
     const canvas = document.createElement('canvas');
     const caption = document.createElement('figcaption');
-    const solved = judge(startHeight, paintStaircase).solved;
+    const room = toRoom(variant);
+    const solved = judge(variant, paintStaircase).solved;
     drawWorld({
       canvas,
-      world: runProgram(startWorld(startHeight), paintStaircase).world,
-      target: targetWorld(startHeight),
+      world: runProgram(startWorld(variant), () => paintStaircase(room)).world,
+      target: targetWorld(variant),
       cell: 18,
     });
-    caption.textContent = `${roomName(startHeight)}: ${solved ? 'PASS' : 'FAIL'}`;
+    caption.textContent = `${variant.label}: ${solved ? 'PASS' : 'FAIL'}`;
     if (!solved) caption.className = 'fail';
     figure.append(canvas, caption);
     host.append(figure);
@@ -174,8 +172,19 @@ function renderBoth(): void {
 
 function build(): void {
   const index = Math.floor(Math.random() * rooms.length);
-  picked = rooms[index] ?? rooms[0] ?? 2;
+  picked = rooms[index] ?? shortRoom;
   renderLesson();
+}
+
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
 }
 
 function renderCard(): void {
@@ -189,11 +198,12 @@ function show(view: View): void {
     if (section) section.hidden = id !== view;
   }
   if (view === 'learn') {
-    showDemoHeight();
+    showDemoLen();
     drawDemoRooms();
   }
   if (view === 'lesson') renderLesson();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -207,8 +217,8 @@ function go(view: View): void {
 
 window.addEventListener('hashchange', () => show(currentView()));
 
-el('bump')?.addEventListener('click', bumpDemoHeight);
-el('reset')?.addEventListener('click', resetDemoHeight);
+el('bump')?.addEventListener('click', bumpDemoLen);
+el('reset')?.addEventListener('click', resetDemoLen);
 el('to-room')?.addEventListener('click', () => {
   const rooms = el('room-part');
   if (rooms) rooms.hidden = false;
@@ -229,5 +239,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('lesson'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

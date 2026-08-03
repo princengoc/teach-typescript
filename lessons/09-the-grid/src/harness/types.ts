@@ -28,6 +28,8 @@ export type Command =
 // The numbers a room hands the kid's code: how far the box reaches across, and
 // how far it reaches down. Two loops read these, one each.
 export interface Room {
+  // How many squares across the box reaches.
   width: number;
+  // How many rows down the box reaches.
   height: number;
 }

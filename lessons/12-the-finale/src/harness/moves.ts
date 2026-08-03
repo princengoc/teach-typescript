@@ -24,9 +24,9 @@ function backToRowStart(): void {
   backToRowStart();
 }
 
-// Your lesson 11 move: carry the robot to the first square of the row below,
-// facing along it. At the bottom row there is nowhere to drop to, so the robot
-// lands at the start of the row it is already on.
+// Carries the robot to the first square of the row below, facing along it. It
+// is turns and steps you have spent since lesson 02, under one name. On the
+// bottom row there is no row below, so it stays where it is.
 export function nextRow(): void {
   robot.turnLeft();
   robot.turnLeft();

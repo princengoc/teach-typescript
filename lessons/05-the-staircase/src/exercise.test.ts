@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
 import { paintStaircase } from './exercise';
-import { judge } from './harness/task';
+import { judge, longRoom, shortRoom } from './harness/task';
 
-test('the staircase stands when the first bar is 2', () => {
-  expect(judge(2, paintStaircase).solved).toBe(true);
+test('the staircase stands when the first row is 2', () => {
+  expect(judge(shortRoom, paintStaircase).solved).toBe(true);
 });
 
-test('the same code builds the staircase when the first bar is 3', () => {
-  expect(judge(3, paintStaircase).solved).toBe(true);
+test('the same code builds the staircase when the first row is 3', () => {
+  expect(judge(longRoom, paintStaircase).solved).toBe(true);
 });

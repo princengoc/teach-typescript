@@ -1,7 +1,8 @@
 import { robot } from './robot';
 
-// Four moves handed to you ready-made. You spend them: paint a square, step
-// along the row, paint a whole bar, drop to the row below.
+// Three moves handed to you ready-made. You spend them; you may also open them.
+// Painting a whole row is not one of them this lesson: you write that loop out,
+// three times over, and lesson 11 is where you fold it back into a move.
 
 // Paints the square the robot stands on.
 export function paint(): void {
@@ -16,26 +17,17 @@ export function next(): void {
   }
 }
 
-// Lesson 07's move, back again. Paints n squares in a row, starting on the
-// square the robot stands on and going forward.
-export function paintCells(n: number): void {
-  paint();
-  for (let i = 1; i < n; i += 1) {
-    next();
-    paint();
-  }
-}
-
-// Walks back to the first square of the row, feeling for the wall. Nothing new:
-// this is lesson 06's recursion, and the wall is its base case.
+// Walks back to the first square of the row, one square at a time, until the
+// wall stops it.
 function backToRowStart(): void {
   if (robot.wallAhead()) return;
   robot.walk(1);
   backToRowStart();
 }
 
-// Lesson 09's move. Carries the robot to the first square of the row below,
-// facing along it. On the bottom row there is no row below, so it stays put.
+// Carries the robot to the first square of the row below, facing along it. It
+// is turns and steps you have spent since lesson 02, under one name. On the
+// bottom row there is no row below, so it stays where it is.
 export function nextRow(): void {
   robot.turnLeft();
   robot.turnLeft();

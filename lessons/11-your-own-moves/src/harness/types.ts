@@ -25,12 +25,16 @@ export type Command =
   | { kind: 'turn'; hand: 'left' | 'right' }
   | { kind: 'paint' };
 
-// What a room hands the kid's code. Each rung reads its own part: `n` is the
+// What a room hands the kid's code. Each rung reads its own part: `run` is the
 // length of one run, `bars` is a chart, and `bands` with `thick` is a chart
 // whose every bar is `thick` rows deep.
 export interface Room {
-  n: number;
+  // How many squares long one run is.
+  run: number;
+  // One number per row: how long that row's bar is.
   bars: number[];
+  // One number per band: how long that band's bar is.
   bands: number[];
+  // How many rows deep every band goes.
   thick: number;
 }

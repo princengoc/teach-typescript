@@ -196,10 +196,37 @@
       [hidden] {
         display: none;
       }
+      .kit-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.5rem;
+      }
+      .kit-bar button {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.7rem;
+      }
+      #kit table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+      }
+      #kit th,
+      #kit td {
+        border-bottom: 1px solid #cfd8dc;
+        padding: 0.35rem 0.4rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      #kit code {
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
+      <div class="kit-bar">
+        <button id="kit-open" type="button">Your kit</button>
+      </div>
       <!-- LEARN -->
       <section id="learn">
         <h1>Lesson 8: do the sum yourself</h1>
@@ -216,8 +243,8 @@
           square's number <code>i</code> and the lane's length, and answers one
           comparison &mdash; is <code>i</code> at least halfway along?
         </p>
-        <pre><code>function backHalf(i: number, len: number): boolean {
-  return i &gt;= len / 2;   // true when i is at least halfway
+        <pre><code>function backHalf(i: number, width: number): boolean {
+  return i &gt;= width / 2;   // true when i is at least halfway
 }</code></pre>
         <p>
           <code>: boolean</code> promises the answer is a yes or no.
@@ -231,9 +258,9 @@
           The loop counts <code>i</code> up the lane. At each square it does three
           things: ask the rule, paint when the answer is yes, then step on.
         </p>
-        <pre><code>for (let i = 0; i &lt; room.len; i += 1) {
-  if (backHalf(i, room.len)) paint();   // ask the rule; paint on yes
-  next();                               // step to the next square
+        <pre><code>for (let i = 0; i &lt; room.width; i += 1) {
+  if (backHalf(i, room.width)) paint();   // ask the rule; paint on yes
+  next();                                 // step to the next square
 }</code></pre>
         <p>
           Read it as those three jobs. <code>for</code> visits every square, from
@@ -250,7 +277,9 @@
 
         <p>
           Three rungs wait, each the same shape: write a rule, then a loop that
-          runs it. Go build.
+          runs it. The third one steps out of the single lane and asks its rule
+          about a whole row of a box, with <code>paintCells</code> and
+          <code>nextRow</code> back in your hands from lesson 5. Go build.
         </p>
         <button id="to-build" class="primary" type="button">The ladder</button>
       </section>
@@ -273,9 +302,9 @@
           <p class="celebrate">Well done! Three patterns, each from a rule you wrote.</p>
           <p>
             You painted the back half from a comparison, every other square with
-            <code>%</code>, and a band from two tests joined with <code>&amp;&amp;</code>.
-            Each time, a function worked out yes or no, and the robot painted
-            where it said yes.
+            <code>%</code>, and a band of rows from two tests joined with
+            <code>&amp;&amp;</code>. Each time, a function worked out yes or no,
+            and the robot painted where it said yes.
           </p>
           <button id="to-card" class="primary" type="button">What you just learned</button>
         </div>
@@ -292,6 +321,12 @@
         <button class="back" data-back-build type="button">&larr; The ladder</button>
         <div id="card-body" class="card"></div>
         <p class="next-lesson">Next: lesson 09, where the rule meets a grid.</p>
+      </section>
+
+      <!-- KIT -->
+      <section id="kit" hidden>
+        <button class="back" id="kit-back" type="button">&larr; Back</button>
+        <div id="kit-body" class="card"></div>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

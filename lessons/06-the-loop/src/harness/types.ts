@@ -11,15 +11,6 @@ export interface Robot {
   facing: Direction;
 }
 
-// The numbers the room decides and the robot's sensors read back. One rung
-// reads one of them; the rest sit at zero for that rung.
-export interface Dims {
-  squareSide: number;
-  rectWidth: number;
-  rectHeight: number;
-  barCount: number;
-}
-
 export interface World {
   width: number;
   height: number;
@@ -27,7 +18,6 @@ export interface World {
   painted: boolean[][];
   robot: Robot;
   crashed: boolean;
-  dims: Dims;
 }
 
 export type Command =
@@ -35,8 +25,15 @@ export type Command =
   | { kind: 'turn'; hand: 'left' | 'right' }
   | { kind: 'paint' };
 
-export interface Task {
-  start: World;
-  targetPainted: boolean[][];
-  goal?: { x: number; y: number };
+// The numbers a room hands the kid's code. One rung reads one or two of them;
+// the rest sit at zero for that rung, and the blind square reads none at all.
+export interface Room {
+  // How long one side of this room's square is.
+  side: number;
+  // How many squares across the box reaches.
+  width: number;
+  // How many rows down the box reaches.
+  height: number;
+  // How many squares long the first row is.
+  len: number;
 }

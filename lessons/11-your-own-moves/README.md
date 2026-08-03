@@ -39,12 +39,15 @@ write: the mess in rung 3, or the move you cut out of it.
   stands on; `next()` steps to the following one and stops safely at the end of a
   row; `robot.turnLeft()` turns a quarter turn left; `robot.wallAhead()` is the
   sensor from lesson 06.
-- The room hands you its numbers: `room.n`, `room.bars`, `room.bands`,
+- The room hands you its numbers: `room.run`, `room.bars`, `room.bands`,
   `room.thick`. Read them; do not type numbers in.
 - A move has to work on its own, not only inside the picture. The panel calls
   each one by itself.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every move, every robot
+  call, and every number the room hands you, with what each one does and which
+  file it lives in. `kit.md` and `wordbook.md` hold the same words in the file
+  tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/6957b5e9074a641d4e7c49e6050c1b44bca397bd/lessons/11-your-own-moves?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/11-your-own-moves?file=src%2Fexercise.ts

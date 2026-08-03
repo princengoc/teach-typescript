@@ -120,33 +120,37 @@ The whole lesson is the first two words the kid changes: `const` becomes `let`. 
 is one number that grows, and a `const` cannot grow.
 
 ```ts
-export function paintStaircase(): void {
-  let height = robot.startHeight();
-  paintBar(height);
-  goToNextBar();
-  height += 1;
-  paintBar(height);
-  goToNextBar();
-  height += 1;
-  paintBar(height);
+export function paintStaircase(room: Room): void {
+  let len = room.len;
+  paintCells(len);
+  nextRow();
+  len += 1;
+  paintCells(len);
+  nextRow();
+  len += 1;
+  paintCells(len);
 }
 ```
 
-**The other honest way.** `height += 1` is shorthand. Spelled out, it is the same move --
+**The other honest way.** `len += 1` is shorthand. Spelled out, it is the same move --
 read the value, add one, put it back under the same name:
 
 ```ts
-height = height + 1;
+len = len + 1;
 ```
 
 Worth writing out once so the shorthand is not magic: `+=` is "add to what is there," not a
 new kind of thing.
 
-**How a pro reads it.** Three bars, and the code says `paintBar` three times. That is fine
-for three. But `height += 1; paintBar(height); goToNextBar();` is a rung repeated by hand --
-a start value, a step, a body run again. Lesson 06 folds exactly this shape into a `for`
-loop. This is the last lesson where the repeat is written out; see it as a loop waiting to
-happen.
+**How a pro reads it.** Three rows, and the code says `paintCells` three times. That is fine
+for three. But `len += 1; paintCells(len); nextRow();` is a rung repeated by hand -- a start
+value, a step, a body run again. Lesson 06 folds exactly this shape into a `for` loop. This
+is the last lesson where the repeat is written out; see it as a loop waiting to happen.
+
+**Why the room and not the robot.** `room.len` is the same shape every lesson from here on:
+the room is an argument, its numbers are fields, and the kid reads them. Lesson 07 is the
+one exception in the whole course, and it is deliberate -- there the room hands over nothing
+and the number has to be felt for.
 
 ---
 
@@ -158,19 +162,19 @@ figure has more than one honest shape.
 **Square and rectangle -- a `for` loop counts the sides.**
 
 ```ts
-export function paintSquare(): void {
-  const side = robot.squareSide();
+export function paintSquare(room: Room): void {
   for (let i = 0; i < 4; i += 1) {
-    paintSide(side);
+    paintCells(room.side);
+    robot.turnRight();
   }
 }
 
-export function paintRectangle(): void {
-  const width = robot.rectWidth();
-  const height = robot.rectHeight();
+export function paintRectangle(room: Room): void {
   for (let i = 0; i < 2; i += 1) {
-    paintSide(width);
-    paintSide(height);
+    paintCells(room.width);
+    robot.turnRight();
+    paintCells(room.height);
+    robot.turnRight();
   }
 }
 ```
@@ -179,34 +183,33 @@ A rectangle is not four sides, it is a long-and-short pair, twice. Reading the s
 writing the loop is the whole skill: the loop count is how many times the *pattern* repeats,
 not how many sides there are.
 
-**The staircase -- two honest ways.** The `for` loop carries the growing height in a `let`,
+**The staircase -- two honest ways.** The `for` loop carries the growing length in a `let`,
 exactly the lesson-05 counter now living inside the loop:
 
 ```ts
-export function paintStaircaseLoop(): void {
-  const barCount = robot.barCount();
-  let height = 1;
-  for (let i = 0; i < barCount; i += 1) {
-    paintBar(height);
-    stepToNextBar();
-    height += 1;
+export function paintStaircaseLoop(room: Room): void {
+  let len = room.len;
+  for (let i = 0; i < room.height; i += 1) {
+    paintCells(len);
+    nextRow();
+    len += 1;
   }
 }
 ```
 
-Recursion carries the height instead as a number handed to the next copy -- no `let`, because
+Recursion carries the length instead as a number handed to the next copy -- no `let`, because
 nothing changes in place; each call just gets bigger numbers:
 
 ```ts
-function climb(height: number, barsLeft: number): void {
-  if (barsLeft === 0) return;
-  paintBar(height);
-  stepToNextBar();
-  climb(height + 1, barsLeft - 1);
+function stairsFrom(len: number, rowsLeft: number): void {
+  if (rowsLeft === 0) return;
+  paintCells(len);
+  nextRow();
+  stairsFrom(len + 1, rowsLeft - 1);
 }
 
-export function paintStaircaseRec(): void {
-  climb(1, robot.barCount());
+export function paintStaircaseRec(room: Room): void {
+  stairsFrom(room.len, room.height);
 }
 ```
 
@@ -214,9 +217,10 @@ Same staircase. The `for` loop keeps a counter that changes; the recursion keeps
 and hands new numbers down. Neither is the "real" one -- they are two ways to say "again."
 
 **The blind square -- when you do not know how many.** The loop and the recursion above both
-need a count up front. Rung 5 hides it: the side is a `?`, a new size every run. The count
-you cannot get, but the robot can *feel* the end -- `robot.wallAhead()` is true when the next
-step lands on a wall. So the base case is a sensor, not a number:
+need a count up front. Rung 5 hides it: the room hands over no numbers at all, the side is a
+`?`, a new size every run. The count you cannot get, but the robot can *feel* the end --
+`robot.wallAhead()` is true when the next step lands on a wall. So the base case is a sensor,
+not a number:
 
 ```ts
 function paintLine(): void {

@@ -1,15 +1,14 @@
 import { runProgram } from './robot';
-import type { Cell, Dims, Direction, World } from './types';
+import type { Cell, Direction, Room, World } from './types';
 import { makeWorld, paintedCells } from './world';
 
-// One grid holds every rung. It is wide enough for a five-bar staircase (the
-// trailing step lands on the last column) and tall enough for the tallest bar.
+// One grid holds every rung. It is wide enough for the longest staircase row
+// and tall enough for the tallest outline.
 export const WIDTH = 6;
 export const HEIGHT = 6;
-export const BASE_ROW = HEIGHT - 1;
 
-function zeroDims(): Dims {
-  return { squareSide: 0, rectWidth: 0, rectHeight: 0, barCount: 0 };
+function emptyRoom(): Room {
+  return { side: 0, width: 0, height: 0, len: 0 };
 }
 
 function key(cell: Cell): string {
@@ -43,13 +42,13 @@ function borderCells(width: number, height: number): Cell[] {
   return dedupe(cells);
 }
 
-// A staircase of `barCount` bars: bar i stands in column i and is i + 1 tall,
-// growing up from the base row.
-export function staircaseCells(barCount: number): Cell[] {
+// A staircase of `rows` rows: row 0 is `len` squares long and every row below
+// it is one longer, each starting at the left wall.
+export function staircaseCells(len: number, rows: number): Cell[] {
   const cells: Cell[] = [];
-  for (let i = 0; i < barCount; i += 1) {
-    for (let k = 0; k <= i; k += 1) {
-      cells.push({ x: i, y: BASE_ROW - k });
+  for (let y = 0; y < rows; y += 1) {
+    for (let x = 0; x < len + y; x += 1) {
+      cells.push({ x, y });
     }
   }
   return cells;
@@ -60,7 +59,7 @@ export function staircaseCells(barCount: number): Cell[] {
 export interface Variant {
   label: string;
   start: { x: number; y: number; facing: Direction };
-  dims: Dims;
+  room: Room;
   target: Cell[];
   walls?: Cell[];
 }
@@ -69,7 +68,7 @@ function squareVariant(side: number): Variant {
   return {
     label: `side ${side}`,
     start: { x: 0, y: 0, facing: 'east' },
-    dims: { ...zeroDims(), squareSide: side },
+    room: { ...emptyRoom(), side },
     target: borderCells(side, side),
   };
 }
@@ -78,17 +77,17 @@ function rectVariant(width: number, height: number): Variant {
   return {
     label: `${width} by ${height}`,
     start: { x: 0, y: 0, facing: 'east' },
-    dims: { ...zeroDims(), rectWidth: width, rectHeight: height },
+    room: { ...emptyRoom(), width, height },
     target: borderCells(width, height),
   };
 }
 
-function stairVariant(barCount: number): Variant {
+function stairVariant(len: number, rows: number): Variant {
   return {
-    label: `${barCount} bars`,
-    start: { x: 0, y: BASE_ROW, facing: 'north' },
-    dims: { ...zeroDims(), barCount },
-    target: staircaseCells(barCount),
+    label: `${rows} rows from ${len}`,
+    start: { x: 0, y: 0, facing: 'east' },
+    room: { ...emptyRoom(), len, height: rows },
+    target: staircaseCells(len, rows),
   };
 }
 
@@ -103,13 +102,13 @@ function squareWalls(side: number): Cell[] {
   return cells.filter((cell) => cell.x < WIDTH && cell.y < HEIGHT);
 }
 
-// A square whose side the kid is never told: no dim to read, walls at its edge.
-// The label stays `?` so the number never shows on screen to be copied.
+// A square whose side the kid is never told: no number to read, walls at its
+// edge. The label stays `?` so the number never shows on screen to be copied.
 export function blindSquareVariant(side: number): Variant {
   return {
     label: 'side ?',
     start: { x: 0, y: 0, facing: 'east' },
-    dims: zeroDims(),
+    room: emptyRoom(),
     target: borderCells(side, side),
     walls: squareWalls(side),
   };
@@ -119,7 +118,10 @@ export function blindSquareVariant(side: number): Variant {
 // one and misses the other.
 export const squareVariants: Variant[] = [squareVariant(3), squareVariant(4)];
 export const rectVariants: Variant[] = [rectVariant(4, 2), rectVariant(3, 4)];
-export const stairVariants: Variant[] = [stairVariant(3), stairVariant(5)];
+export const stairVariants: Variant[] = [
+  stairVariant(2, 3),
+  stairVariant(1, 5),
+];
 // One room with interior walls, one that fills the grid, so the base case must
 // stop on a real wall and on the grid edge alike.
 export const blindVariants: Variant[] = [
@@ -128,7 +130,7 @@ export const blindVariants: Variant[] = [
 ];
 
 export function startWorld(variant: Variant): World {
-  const world = makeWorld(WIDTH, HEIGHT, { ...variant.start }, variant.dims);
+  const world = makeWorld(WIDTH, HEIGHT, { ...variant.start });
   if (!variant.walls) return world;
   const blocked = world.blocked.map((row) => [...row]);
   for (const cell of variant.walls) {
@@ -156,16 +158,22 @@ export interface Verdict {
   tone: Tone;
 }
 
-// One judge for one room, called by both the test and the preview.
-export function judge(variant: Variant, program: () => void): Verdict {
-  const { world } = runProgram(startWorld(variant), program);
+// One judge for one room, called by both the test and the preview. It hands the
+// program the room's numbers and grades the squares it paints.
+export function judge(
+  variant: Variant,
+  program: (room: Room) => void,
+): Verdict {
+  const { world } = runProgram(startWorld(variant), () =>
+    program(variant.room),
+  );
   const wanted = variant.target.map(key);
   const got = paintedCells(world);
 
   if (world.crashed) {
     return {
       solved: false,
-      message: 'The robot walked off the grid.',
+      message: 'The robot walked into the wall.',
       tone: 'todo',
     };
   }
@@ -186,7 +194,10 @@ export function judge(variant: Variant, program: () => void): Verdict {
 
 // A rung is done only when the same code paints its figure in every room. Code
 // that hardcodes the numbers passes one room and fails the rest.
-export function judgeRung(variants: Variant[], program: () => void): Verdict {
+export function judgeRung(
+  variants: Variant[],
+  program: (room: Room) => void,
+): Verdict {
   const failed = variants
     .map((variant) => ({ variant, verdict: judge(variant, program) }))
     .find((entry) => !entry.verdict.solved);

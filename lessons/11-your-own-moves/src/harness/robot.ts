@@ -19,22 +19,30 @@ function apply(command: Command): void {
 }
 
 export const robot = {
+  // Paints the square the robot stands on.
   paint(): void {
     apply({ kind: 'paint' });
   },
+  // Moves the robot one square forward.
+  step(): void {
+    apply({ kind: 'step' });
+  },
+  // Walks the robot `steps` squares forward.
   walk(steps: number): void {
     for (let i = 0; i < steps; i += 1) {
       apply({ kind: 'step' });
     }
   },
+  // Turns the robot a quarter turn to the left.
   turnLeft(): void {
     apply({ kind: 'turn', hand: 'left' });
   },
+  // Turns the robot a quarter turn to the right.
   turnRight(): void {
     apply({ kind: 'turn', hand: 'right' });
   },
-  // A sensor, not a number: true when the next step lands on a wall. There is
-  // no number to read this lesson. You feel the wall, and count the steps.
+  // A sensor: true when the next step lands on a wall. There is no number to
+  // read this lesson: you feel the wall, and count the steps.
   wallAhead(): boolean {
     return current ? senseWallAhead(current) : true;
   },

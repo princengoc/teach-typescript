@@ -1,6 +1,23 @@
 import { next, paint, robot } from './harness/moves';
 import type { Room } from './harness/types';
 
+// --- your kit ---
+// Everything you can call this lesson. The "Your kit" button in the
+// preview says more about each one.
+//   paint()            paints the square the robot stands on
+//   next()             steps forward to the next square
+//   robot.paint()      paints the square the robot stands on
+//   robot.step()       moves the robot one square forward
+//   robot.walk(steps)  walks the robot `steps` squares forward
+//   robot.turnLeft()   turns the robot a quarter turn to the left
+//   robot.turnRight()  turns the robot a quarter turn to the right
+//   robot.wallAhead()  a sensor: true when the next step lands on a wall
+//   room.run           how many squares long one run is
+//   room.bars          one number per row: how long that row's bar is
+//   room.bands         one number per band: how long that band's bar is
+//   room.thick         how many rows deep every band goes
+// --- end of your kit ---
+
 // This lesson: your own moves. paintCells and nextRow, the moves you have been
 // spending for four lessons, were robot calls under a name -- someone else's
 // name. Open src/harness/moves.ts and see what is left: paint() is one robot
@@ -21,7 +38,7 @@ export function paintCells(n: number): void {
 
 // The call is written for you. Nothing here changes.
 export function paintRun(room: Room): void {
-  paintCells(room.n);
+  paintCells(room.run);
 }
 
 // RUNG 2 -- nextRow, and the move it is built from. nextRow carries the robot

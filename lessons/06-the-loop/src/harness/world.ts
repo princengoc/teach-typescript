@@ -1,11 +1,4 @@
-import type { Command, Dims, Direction, Robot, World } from './types';
-
-const NO_DIMS: Dims = {
-  squareSide: 0,
-  rectWidth: 0,
-  rectHeight: 0,
-  barCount: 0,
-};
+import type { Command, Direction, Robot, World } from './types';
 
 const DELTA: Record<Direction, { dx: number; dy: number }> = {
   north: { dx: 0, dy: -1 },
@@ -36,12 +29,7 @@ function grid(width: number, height: number): boolean[][] {
   );
 }
 
-export function makeWorld(
-  width: number,
-  height: number,
-  robot: Robot,
-  dims: Dims = NO_DIMS,
-): World {
+export function makeWorld(width: number, height: number, robot: Robot): World {
   return {
     width,
     height,
@@ -49,7 +37,6 @@ export function makeWorld(
     painted: grid(width, height),
     robot,
     crashed: false,
-    dims,
   };
 }
 
@@ -95,16 +82,8 @@ export function run(world: World, commands: Command[]): World {
   return current;
 }
 
-// The lesson's one sensor. Left of the robot is one turn anticlockwise from
-// the way it faces; a square off the grid counts as a wall.
-export function wallOnLeft(world: World): boolean {
-  const facing = LEFT[world.robot.facing];
-  const delta = DELTA[facing];
-  return !cellOpen(world, world.robot.x + delta.dx, world.robot.y + delta.dy);
-}
-
-// True when the next step forward lands on a wall or off the grid. The blind
-// square asks this instead of counting: it walks until the answer is yes.
+// The lesson's one sensor. True when the next step forward lands on a wall or
+// off the grid. The kid feels for the wall instead of being told the number.
 export function wallAhead(world: World): boolean {
   const delta = DELTA[world.robot.facing];
   return !cellOpen(world, world.robot.x + delta.dx, world.robot.y + delta.dy);
@@ -118,8 +97,4 @@ export function paintedCells(world: World): string[] {
     });
   });
   return cells.sort();
-}
-
-export function sameCells(a: World, b: World): boolean {
-  return paintedCells(a).join(' ') === paintedCells(b).join(' ');
 }

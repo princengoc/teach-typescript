@@ -9,8 +9,9 @@
     "typecheck": "node scripts/typecheck.mjs",
     "lint": "biome check .",
     "format": "biome format --write .",
+    "kit": "node scripts/build-kit.mjs",
     "test": "node scripts/verify-lessons.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && node scripts/build-kit.mjs --check && npm run test"
   },
   "devDependencies": {
     "typescript": "^5.6.3",

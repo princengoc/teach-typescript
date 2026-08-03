@@ -1,16 +1,19 @@
 import cardSource from '../card.md?raw';
-import { paintChart, paintChartByHand, paintTallBars } from './exercise';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
+import { paintChart, paintTallBars, paintTallest } from './exercise';
 import { renderMarkdown } from './harness/markdown';
 import { drawWorld } from './harness/render';
 import { runProgram } from './harness/robot';
 import {
-  byHandVariants,
   chartVariants,
   judge,
   judgeRung,
   randomChartVariant,
+  randomTallestVariant,
   randomTallVariant,
   startWorld,
+  tallestVariants,
   tallVariants,
   targetWorld,
   toRoom,
@@ -19,8 +22,8 @@ import {
 import { applyBeat, beatLine, beats } from './harness/trace';
 import type { Room } from './harness/types';
 
-type View = 'learn' | 'build' | 'card';
-const VIEWS: View[] = ['learn', 'build', 'card'];
+type View = 'learn' | 'build' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'build', 'card', 'kit'];
 const CELL = 26;
 
 function el<T extends HTMLElement>(id: string): T | null {
@@ -178,18 +181,18 @@ const RUNGS: Rung[] = [
     mystery: randomChartVariant,
   },
   {
-    key: 'byhand',
-    title: '2. Build the bars yourself',
-    program: paintChartByHand,
-    variants: byHandVariants,
-    mystery: randomChartVariant,
-  },
-  {
     key: 'tall',
-    title: '3. Skip the short bars',
+    title: '2. Skip the short bars',
     program: paintTallBars,
     variants: tallVariants,
     mystery: randomTallVariant,
+  },
+  {
+    key: 'tallest',
+    title: '3. Draw the tallest bar',
+    program: paintTallest,
+    variants: tallestVariants,
+    mystery: randomTallestVariant,
   },
 ];
 
@@ -263,6 +266,17 @@ function renderBuild(): void {
   if (done) done.hidden = !allSolved;
 }
 
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
+}
+
 function renderCard(): void {
   const body = el('card-body');
   if (body) body.innerHTML = renderMarkdown(cardSource);
@@ -279,6 +293,7 @@ function show(view: View): void {
   }
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -306,5 +321,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('build'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

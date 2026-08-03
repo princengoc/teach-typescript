@@ -193,10 +193,37 @@
       [hidden] {
         display: none;
       }
+      .kit-bar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0.5rem;
+      }
+      .kit-bar button {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.7rem;
+      }
+      #kit table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+      }
+      #kit th,
+      #kit td {
+        border-bottom: 1px solid #cfd8dc;
+        padding: 0.35rem 0.4rem;
+        text-align: left;
+        vertical-align: top;
+      }
+      #kit code {
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
+      <div class="kit-bar">
+        <button id="kit-open" type="button">Your kit</button>
+      </div>
       <!-- LEARN -->
       <section id="learn">
         <h1>Lesson 6: the loop</h1>
@@ -296,6 +323,12 @@
         <button class="back" data-back-build type="button">&larr; The ladder</button>
         <div id="card-body" class="card"></div>
         <p class="next-lesson">That is the last lesson for now. Well climbed.</p>
+      </section>
+
+      <!-- KIT -->
+      <section id="kit" hidden>
+        <button class="back" id="kit-back" type="button">&larr; Back</button>
+        <div id="kit-body" class="card"></div>
       </section>
     </div>
     <script type="module" src="/src/main.ts"></script>

@@ -28,6 +28,8 @@ export type Command =
 // What a room hands the kid's code: a list of bar lengths, one number per row,
 // and the length a bar must reach to count as tall.
 export interface Room {
+  // One number per row: how long that row's bar is.
   bars: number[];
+  // How long a bar has to be to count as tall.
   min: number;
 }

@@ -1,13 +1,15 @@
 import cardSource from '../card.md?raw';
-import { paintBackHalf, paintBand, paintStripes } from './exercise';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
+import { paintBackHalf, paintBandRows, paintStripes } from './exercise';
 import { renderMarkdown } from './harness/markdown';
 import { drawWorld } from './harness/render';
 import { runProgram } from './harness/robot';
 import {
   backHalfVariant,
   backHalfVariants,
-  bandVariant,
-  bandVariants,
+  bandRowsVariant,
+  bandRowsVariants,
   judge,
   judgeRung,
   startWorld,
@@ -20,8 +22,8 @@ import {
 import type { Room } from './harness/types';
 import { step } from './harness/world';
 
-type View = 'learn' | 'build' | 'card';
-const VIEWS: View[] = ['learn', 'build', 'card'];
+type View = 'learn' | 'build' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'build', 'card', 'kit'];
 const CELL = 30;
 
 function el<T extends HTMLElement>(id: string): T | null {
@@ -53,7 +55,7 @@ function runDemoAnim(): void {
   const log = el('demo-log');
   if (!canvas || !ROOM_A || !log) return;
   cancelDemo?.();
-  const len = ROOM_A.len;
+  const len = ROOM_A.width;
   const target = targetWorld(ROOM_A);
   let world = startWorld(ROOM_A);
   const lines: string[] = [];
@@ -101,7 +103,7 @@ function drawDemoRest(): void {
 function setIntroText(): void {
   const demoButton = el('demo-run');
   if (demoButton && ROOM_A) {
-    demoButton.textContent = `run the loop (lane ${ROOM_A.len})`;
+    demoButton.textContent = `run the loop (lane ${ROOM_A.width})`;
   }
 }
 
@@ -149,14 +151,15 @@ const RUNGS: Rung[] = [
   },
   {
     key: 'band',
-    title: '3. Paint the band, lo to hi',
-    program: paintBand,
-    variants: bandVariants,
+    title: '3. Paint the rows from lo to hi',
+    program: paintBandRows,
+    variants: bandRowsVariants,
     mystery: () => {
-      const len = randomSize(10, 4);
-      const lo = randomSize(2, 3);
-      const hi = lo + randomSize(2, 3);
-      return bandVariant(len, lo, Math.min(hi, len - 1));
+      const width = randomSize(5, 4);
+      const height = randomSize(4, 4);
+      const lo = randomSize(1, 2);
+      const hi = Math.min(lo + randomSize(1, 3), height - 1);
+      return bandRowsVariant(width, height, lo, hi);
     },
   },
 ];
@@ -232,6 +235,17 @@ function renderBuild(): void {
   if (done) done.hidden = !allSolved;
 }
 
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
+}
+
 function renderCard(): void {
   const body = el('card-body');
   if (body) body.innerHTML = renderMarkdown(cardSource);
@@ -248,6 +262,7 @@ function show(view: View): void {
   }
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -275,5 +290,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('build'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

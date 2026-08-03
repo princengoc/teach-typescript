@@ -17,6 +17,28 @@ Draft straight into the file it belongs in; never leave a draft only in chat. Th
 reviews the diff and edits the file. Do not make separate draft files. Plan mode is for plans that
 need approval, not a place to park text.
 
+## The kit
+
+Every lesson tells the kid what it hands them, and the harness is the only source of it.
+`npm run kit` reads each lesson's `src/harness/moves.ts` exports, its `robot` methods, and its
+`Room` fields, each with the `//` line above it, and writes two derived things: `kit.md`, which
+the preview renders behind the **Your kit** button, and the block between the `--- your kit ---`
+markers at the top of `src/exercise.ts`. Edit neither by hand. Fix the comment in the harness and
+run `npm run kit`; `npm run check` fails while either is stale.
+
+A kit is what its own lesson hands over, not everything the course has introduced. `Room` changes
+shape lesson to lesson, and the robot appears only where the exercise imports it. A one-line
+comment above every kid-facing move, robot method and `Room` field is required, because that line
+is the documentation.
+
+The kit reads as one growing thing, so the generator reads all twelve lessons and marks every
+entry `new here`, `since lesson NN`, `back from lesson NN`, `just this room`, or
+`you write it here`. Two rules keep those marks honest. A move that comes back keeps its name and
+its wording: one move, one name, course-wide -- rename it in one lesson and the kid meets a
+stranger. A move that only ever serves one room is fine, and the mark says so; what is not fine is
+the same move under three names, which is what `goToNextBar`, `stepToNextBar` and `toNextBarFoot`
+were before they became `toNextBar`.
+
 ## Stack
 
 | Concern | Choice |

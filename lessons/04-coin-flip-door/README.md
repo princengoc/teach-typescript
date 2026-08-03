@@ -29,11 +29,14 @@ Come back to the preview for the card when you are through.
 
 ## Rules
 
-- Edit `src/exercise.ts` and the files in `drills/` only. `src/harness/` runs
-  the world. Leave it closed.
+- Edit `src/exercise.ts` and the files in `drills/` only. Everything in
+  `src/harness/` runs the world, and changing it changes the test you are meant
+  to pass. Reading it is another matter: open whatever you like.
 - Your code runs once per room, starting at the top of `paintTheRoom`. Making
   one room work by breaking the other is not a fix.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every move, every robot
+  call, and every number the room hands you, with what each one does. `kit.md`
+  and `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 

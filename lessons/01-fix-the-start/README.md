@@ -20,7 +20,9 @@ lesson 2.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass. Reading it is another
+  matter: open whatever you like.
 - `card.md` is yours to keep. The preview renders it, so you never have to open
   it, but it is there when you want to look something up.
 

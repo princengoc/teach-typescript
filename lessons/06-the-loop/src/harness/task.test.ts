@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { paintBar, paintSide, stepToNextBar } from './moves';
+import { nextRow, paintCells } from './moves';
 import { robot, runProgram } from './robot';
 import {
   judge,
@@ -11,52 +11,56 @@ import {
   startWorld,
   targetWorld,
 } from './task';
+import type { Room } from './types';
 import { paintedCells } from './world';
 
 // The intended solutions, one per rung, reading the room's numbers.
-function square(): void {
-  const side = robot.squareSide();
-  for (let i = 0; i < 4; i += 1) paintSide(side);
+function square(room: Room): void {
+  for (let i = 0; i < 4; i += 1) {
+    paintCells(room.side);
+    robot.turnRight();
+  }
 }
 
-function rectangle(): void {
-  const width = robot.rectWidth();
-  const height = robot.rectHeight();
+function rectangle(room: Room): void {
   for (let i = 0; i < 2; i += 1) {
-    paintSide(width);
-    paintSide(height);
+    paintCells(room.width);
+    robot.turnRight();
+    paintCells(room.height);
+    robot.turnRight();
   }
 }
 
-function staircaseLoop(): void {
-  const barCount = robot.barCount();
-  let height = 1;
-  for (let i = 0; i < barCount; i += 1) {
-    paintBar(height);
-    stepToNextBar();
-    height += 1;
+function staircaseLoop(room: Room): void {
+  let len = room.len;
+  for (let i = 0; i < room.height; i += 1) {
+    paintCells(len);
+    nextRow();
+    len += 1;
   }
 }
 
-function climb(height: number, barsLeft: number): void {
-  if (barsLeft === 0) return;
-  paintBar(height);
-  stepToNextBar();
-  climb(height + 1, barsLeft - 1);
+function stairsFrom(len: number, rowsLeft: number): void {
+  if (rowsLeft === 0) return;
+  paintCells(len);
+  nextRow();
+  stairsFrom(len + 1, rowsLeft - 1);
 }
 
-function staircaseRec(): void {
-  climb(1, robot.barCount());
+function staircaseRec(room: Room): void {
+  stairsFrom(room.len, room.height);
 }
 
 // A square with its side nailed to 3. It fits the side-3 room and no other.
 function fixedSquare(): void {
-  for (let i = 0; i < 4; i += 1) paintSide(3);
+  for (let i = 0; i < 4; i += 1) {
+    paintCells(3);
+    robot.turnRight();
+  }
 }
 
-test('a staircase of n bars paints heights 1..n', () => {
-  const cells = staircaseCells(3);
-  expect(cells.length).toBe(1 + 2 + 3);
+test('a staircase of rows from len paints len, len+1, len+2', () => {
+  expect(staircaseCells(2, 3).length).toBe(2 + 3 + 4);
 });
 
 test('the target world paints exactly the figure', () => {
@@ -78,12 +82,12 @@ test('an empty program is not solved', () => {
   expect(verdict.message).toContain('Nothing painted');
 });
 
-test('a side longer than the grid reads as walking off', () => {
+test('a side longer than the grid reads as walking into the wall', () => {
   const variant = squareVariants[0];
   if (!variant) throw new Error('no variant');
-  const verdict = judge(variant, () => paintSide(100));
+  const verdict = judge(variant, () => paintCells(100));
   expect(verdict.solved).toBe(false);
-  expect(verdict.message).toContain('off the grid');
+  expect(verdict.message).toContain('into the wall');
 });
 
 test('each intended solution builds its figure in every room', () => {
@@ -102,10 +106,10 @@ test('each intended solution builds its figure in every room', () => {
 test('the loop and the recursion paint the same staircase', () => {
   for (const variant of stairVariants) {
     const loop = paintedCells(
-      runProgram(startWorld(variant), staircaseLoop).world,
+      runProgram(startWorld(variant), () => staircaseLoop(variant.room)).world,
     );
     const rec = paintedCells(
-      runProgram(startWorld(variant), staircaseRec).world,
+      runProgram(startWorld(variant), () => staircaseRec(variant.room)).world,
     );
     expect(rec).toEqual(loop);
   }
@@ -132,7 +136,6 @@ test('judgeRung passes code that reads the room', () => {
   expect(judgeRung(stairVariants, staircaseRec).solved).toBe(true);
 });
 
-test('the sensors are silent outside a run', () => {
-  expect(robot.squareSide()).toBe(0);
-  expect(robot.barCount()).toBe(0);
+test('the sensor is silent outside a run', () => {
+  expect(robot.wallAhead()).toBe(true);
 });

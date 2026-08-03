@@ -35,7 +35,7 @@ test('the counter climbs when the kid bumps it', () => {
   expect(log?.textContent).toContain('1');
 });
 
-test('typed-in heights pass one room and miss the other', () => {
+test('typed-in lengths pass one room and miss the other', () => {
   document.querySelector<HTMLElement>('#to-room')?.click();
   expect(document.querySelector<HTMLElement>('#room-part')?.hidden).toBe(false);
   expect(document.querySelector<HTMLElement>('#ask-it')?.hidden).toBe(true);
@@ -47,11 +47,11 @@ test('typed-in heights pass one room and miss the other', () => {
   expect(b).toContain('wrong');
 });
 
-test('the sensor answers 2 in one room and 3 in the other', () => {
+test('the room reads 2 in one room and 3 in the other', () => {
   document.querySelector<HTMLElement>('#ask')?.click();
   const log = document.querySelector('#ask-log')?.textContent ?? '';
-  expect(log).toContain('first bar 2\nrobot.startHeight();  ->  2');
-  expect(log).toContain('first bar 3\nrobot.startHeight();  ->  3');
+  expect(log).toContain('first row 2\nroom.len  ->  2');
+  expect(log).toContain('first row 3\nroom.len  ->  3');
   expect(document.querySelector<HTMLElement>('#branch')?.hidden).toBe(false);
 });
 
@@ -61,8 +61,8 @@ test('the build view reports both rooms, whichever one it picks', () => {
   document.querySelector<HTMLElement>('#build')?.click();
   const tiles = document.querySelectorAll('#both figcaption');
   expect(tiles.length).toBe(2);
-  expect(tiles[0]?.textContent).toContain('first bar 2');
-  expect(tiles[1]?.textContent).toContain('first bar 3');
+  expect(tiles[0]?.textContent).toContain('first row 2');
+  expect(tiles[1]?.textContent).toContain('first row 3');
 });
 
 test('the build view replays the picked room and reaches a verdict', async () => {
@@ -70,7 +70,7 @@ test('the build view replays the picked room and reaches a verdict', async () =>
   expect(verdict?.textContent).toBe('running...');
   await new Promise((resolve) => setTimeout(resolve, 6000));
   expect(verdict?.textContent).not.toBe('running...');
-  expect(verdict?.textContent).toContain('first bar');
+  expect(verdict?.textContent).toContain('first row');
 }, 20000);
 
 test('the card view renders card.md, not raw markdown', () => {

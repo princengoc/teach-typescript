@@ -10,12 +10,14 @@ Until now a room handed you one number at a time. This room hands you a whole
    different lists. The code does not change; the charts do.
 2. **Climb the ladder**, by filling `src/exercise.ts` (open on the left), top to
    bottom:
-   - `paintChart` -- swap `const n = room.min;` for `for (const n of room.bars)`
-     around the two lines under it, so every number gets its bar.
-   - `paintChartByHand` -- `paintCells` has gone home. Its work is spelled out
-     for one bar; wrap it in the list loop and let each bar stop at its own `n`.
+   - `paintChart` -- one bar is spelled out for a fixed length. Wrap it in
+     `for (const n of room.bars)`, let each bar stop at its own `n`, and call
+     `nextRow()` at its foot.
    - `paintTallBars` -- write the rule `tall(n, room)` and paint only the bars it
      says yes to. Every number still keeps its row.
+   - `paintTallest` -- one row, as long as the longest number in the list. Walk
+     the whole list carrying the best answer so far, and only take a number when
+     it beats what you are holding.
 
    Save. The panel marks every rung against two lists, and a surprise list drawn
    fresh each run. A loop that reads `room.bars` fits them all.
@@ -31,16 +33,22 @@ number to the list.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
-- The moves you spend are done for you. `paint` colours the square the robot
-  stands on; `next` steps to the following one and stops safely at the end of a
-  row; `paintCells(n)` paints a bar `n` squares long; `nextRow` carries the robot
-  to the first square of the row below.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass.
+- Read anything you like. The three moves you spend are in
+  `src/harness/moves.ts`: `paint` colours the square the robot stands on, `next`
+  steps to the following one and stops safely at the end of a row, and `nextRow`
+  carries the robot to the first square of the row below.
+- Painting a whole row is **not** a move this lesson. You write that loop out,
+  and you write it three times. Notice how that feels; lesson 11 is where you
+  fold it back into a move of your own.
 - The room hands you its list: `room.bars`, and `room.min` for how long a bar
   must be to count as tall. Read them; do not type numbers in.
 - Walk the list with `for...of`. It is the only way in you need.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every move and every
+  number the room hands you, with what each one does and which file it lives in.
+  `kit.md` and `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/8a512a3d1f0ea03cf8b92d7bec629cc4a650e02a/lessons/10-the-list?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/10-the-list?file=src%2Fexercise.ts

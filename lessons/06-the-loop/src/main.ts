@@ -1,4 +1,6 @@
 import cardSource from '../card.md?raw';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
 import {
   paintRectangle,
   paintSquare,
@@ -7,9 +9,9 @@ import {
   paintStaircaseRec,
 } from './exercise';
 import { renderMarkdown } from './harness/markdown';
-import { paintSide } from './harness/moves';
+import { paintCells } from './harness/moves';
 import { drawWorld } from './harness/render';
-import { runProgram } from './harness/robot';
+import { robot, runProgram } from './harness/robot';
 import {
   blindSquareVariant,
   blindVariants,
@@ -22,9 +24,10 @@ import {
   targetWorld,
   type Variant,
 } from './harness/task';
+import type { Room } from './harness/types';
 
-type View = 'learn' | 'build' | 'card';
-const VIEWS: View[] = ['learn', 'build', 'card'];
+type View = 'learn' | 'build' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'build', 'card', 'kit'];
 const CELL = 22;
 
 function el<T extends HTMLElement>(id: string): T | null {
@@ -61,19 +64,21 @@ function runRecTrace(): void {
 // A rectangle with its size nailed to 4 by 2. It fits one room, misses the other.
 function fixedRect(): void {
   for (let i = 0; i < 2; i += 1) {
-    paintSide(4);
-    paintSide(2);
+    paintCells(4);
+    robot.turnRight();
+    paintCells(2);
+    robot.turnRight();
   }
 }
 
 function drawResult(
   canvas: HTMLCanvasElement,
   variant: Variant,
-  program: () => void,
+  program: (room: Room) => void,
 ): boolean {
   drawWorld({
     canvas,
-    world: runProgram(startWorld(variant), program).world,
+    world: runProgram(startWorld(variant), () => program(variant.room)).world,
     target: targetWorld(variant),
     cell: CELL,
   });
@@ -117,7 +122,7 @@ function drawWhyGhosts(): void {
 interface Rung {
   key: string;
   title: string;
-  program: () => void;
+  program: (room: Room) => void;
   variants: Variant[];
 }
 
@@ -156,7 +161,7 @@ const RUNGS: Rung[] = [
 
 // A random room, redrawn each run, to prove the code reads no number. It grades
 // but does not gate the rung: the fixed rooms above decide PASS.
-function renderMystery(program: () => void): HTMLElement {
+function renderMystery(program: (room: Room) => void): HTMLElement {
   const side = 3 + Math.floor(Math.random() * 4);
   const variant = blindSquareVariant(side);
   const box = document.createElement('div');
@@ -226,6 +231,17 @@ function renderBuild(): void {
   if (done) done.hidden = !allSolved;
 }
 
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
+}
+
 function renderCard(): void {
   const body = el('card-body');
   if (body) body.innerHTML = renderMarkdown(cardSource);
@@ -239,6 +255,7 @@ function show(view: View): void {
   if (view === 'learn') drawWhyGhosts();
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -268,5 +285,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('build'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

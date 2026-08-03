@@ -15,20 +15,29 @@ function apply(command: Command): void {
 }
 
 export const robot = {
+  // Paints the square the robot stands on.
   paint(): void {
     apply({ kind: 'paint' });
   },
+  // Moves the robot one square forward.
+  step(): void {
+    apply({ kind: 'step' });
+  },
+  // Walks the robot `steps` squares forward.
   walk(steps: number): void {
     for (let i = 0; i < steps; i += 1) {
       apply({ kind: 'step' });
     }
   },
+  // Turns the robot a quarter turn to the left.
   turnLeft(): void {
     apply({ kind: 'turn', hand: 'left' });
   },
+  // Turns the robot a quarter turn to the right.
   turnRight(): void {
     apply({ kind: 'turn', hand: 'right' });
   },
+  // A sensor: true when the square on the robot's left is a wall.
   wallOnLeft(): boolean {
     return current ? wallOnLeft(current) : false;
   },

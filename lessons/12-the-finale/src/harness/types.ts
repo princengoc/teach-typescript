@@ -30,10 +30,16 @@ export type Command =
 // and how far the diamond reaches from it; rung 3 reads the list of square
 // numbers the picture wants painted.
 export interface Room {
+  // How many squares across the box reaches.
   width: number;
+  // How many rows down the box reaches.
   height: number;
+  // How far across the middle square is.
   midX: number;
+  // How far down the middle square is.
   midY: number;
+  // How far from the middle the diamond reaches.
   reach: number;
+  // The numbers of the squares the picture wants painted.
   marks: number[];
 }

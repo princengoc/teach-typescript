@@ -14,13 +14,16 @@ in does not.
 2. **Climb the ladder**, by filling `src/exercise.ts` (open on the left), top to
    bottom:
    - `paintBackHalf` -- the loop is written for you. Write the rule `backHalf`:
-     return `true` when a square is at least halfway along (`i >= len / 2`).
+     return `true` when a square is at least halfway along (`i >= width / 2`).
    - `paintStripes` -- write both. A rule `stripe(i)` that is `true` on every
      other square (`i % 2 === 0`), and the loop that paints where it says so.
-   - `paintBand` -- write both. A rule `band(i)` that is `true` from `room.lo`
-     to `room.hi`, ends included (`i >= lo && i <= hi`), and its loop.
+   - `paintBandRows` -- write both, and step out of the lane. The room is a box,
+     and the rule is asked about a whole row: `bandRow(y, room)` is `true` from
+     `room.lo` to `room.hi`, ends included (`y >= lo && y <= hi`). Where it says
+     yes, `paintCells(room.width)` paints the row right across; `nextRow()`
+     drops to the next one, painted or not.
 
-   Save. The panel marks every rung in two lanes, and a surprise lane of a new
+   Save. The panel marks every rung in two rooms, and a surprise room of a new
    size each run. A rule fits them all; a typed-in list does not.
 
 When every rung reads `PASS`, the ladder is done. You do not need the terminal
@@ -33,14 +36,17 @@ tell your teacher where else a yes-or-no rule would save you from typing a list.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
-- The moves you spend -- `paint` and `next` -- are done for you. `paint` colours
-  the square the robot stands on; `next` steps to the following one, and stops
-  safely at the end of the lane.
-- The room hands you its numbers: `room.len`, and for the band `room.lo` and
-  `room.hi`. Read them; do not type numbers in.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass.
+- Read anything you like. All four moves you spend -- `paint`, `next`,
+  `paintCells` and `nextRow` -- are in `src/harness/moves.ts`, and that file is
+  the whole of them.
+- The room hands you its numbers: `room.width` and `room.height`, and for the
+  band `room.lo` and `room.hi`. Read them; do not type numbers in.
+- Forgotten a call? Press **Your kit** in the preview: every move and every
+  number the room hands you, with what each one does and which file it lives in.
+  `kit.md` and `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/c41aba6448a14384ce2466508782893fa0e5611a/lessons/08-do-the-sum?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/08-do-the-sum?file=src%2Fexercise.ts

@@ -18,9 +18,9 @@ return 1 + measureGap();
 **Keep the returned number in a name, then spend it -- as many times as you like.**
 
 ```ts
-const height = buildFirstBar();
-paintBar(height);
-paintBar(height);
+const gap = measureGap();
+paintCells(gap);
+paintCells(gap);
 ```
 
 ## For Racket hands

@@ -1,51 +1,68 @@
 import { runProgram } from './robot';
-import type { Cell, World } from './types';
+import type { Cell, Direction, Room, World } from './types';
 import { makeWorld, paintedCells } from './world';
 
-export const WIDTH = 5;
-export const HEIGHT = 6;
-export const BARS = 3;
-export const BASE_ROW = HEIGHT - 1;
-export const FACING = 'north';
+export const ROWS = 3;
 
-// Each room decides how tall the first bar is. The staircase then climbs by
-// one bar after that, so the same code has to read the number, not guess it.
-export const rooms: number[] = [2, 3];
-
-export function roomName(startHeight: number): string {
-  return `first bar ${startHeight}`;
+// One room the staircase is graded in. The room picks how long the first row
+// is; each row below is one square longer, so the same code has to read the
+// number rather than guess it.
+export interface Variant {
+  label: string;
+  len: number;
+  start: { x: number; y: number; facing: Direction };
+  target: Cell[];
 }
 
-// The cells one bar covers: from the foot, straight up.
-function barCells(column: number, height: number): Cell[] {
-  return Array.from({ length: height }, (_, i) => ({
-    x: column,
-    y: BASE_ROW - i,
-  }));
+function key(cell: Cell): string {
+  return `${cell.x},${cell.y}`;
 }
 
-export function staircaseCells(startHeight: number): Cell[] {
+// The room the kid's program is handed: one number, no grid.
+export function toRoom(variant: Variant): Room {
+  return { len: variant.len };
+}
+
+// Row 0 is `len` squares long, and every row below it is one longer.
+export function staircaseCells(len: number): Cell[] {
   const cells: Cell[] = [];
-  for (let i = 0; i < BARS; i += 1) {
-    cells.push(...barCells(i, startHeight + i));
+  for (let y = 0; y < ROWS; y += 1) {
+    for (let x = 0; x < len + y; x += 1) {
+      cells.push({ x, y });
+    }
   }
   return cells;
 }
 
-export function startWorld(startHeight: number): World {
-  return makeWorld(
-    WIDTH,
-    HEIGHT,
-    { x: 0, y: BASE_ROW, facing: FACING },
-    startHeight,
-  );
+// The room is exactly as wide as its longest row, so a row that overruns walks
+// the robot into the wall and the verdict says so.
+export function roomWidth(len: number): number {
+  return len + ROWS - 1;
 }
 
-export function targetWorld(startHeight: number): World {
-  const world = startWorld(startHeight);
-  const wanted = new Set(
-    staircaseCells(startHeight).map((cell) => `${cell.x},${cell.y}`),
-  );
+export function variant(len: number): Variant {
+  return {
+    label: `first row ${len}`,
+    len,
+    start: { x: 0, y: 0, facing: 'east' },
+    target: staircaseCells(len),
+  };
+}
+
+// Two rooms, so a staircase with its lengths typed in fits one and misses the
+// other.
+export const shortRoom = variant(2);
+export const longRoom = variant(3);
+export const rooms: Variant[] = [shortRoom, longRoom];
+
+export function startWorld(variant: Variant): World {
+  return makeWorld(roomWidth(variant.len), ROWS, { ...variant.start });
+}
+
+// A world with the target already painted, for the ghost outline in the preview.
+export function targetWorld(variant: Variant): World {
+  const world = startWorld(variant);
+  const wanted = new Set(variant.target.map(key));
   const painted = world.painted.map((row, y) =>
     row.map((_, x) => wanted.has(`${x},${y}`)),
   );
@@ -60,18 +77,22 @@ export interface Verdict {
   tone: Tone;
 }
 
-// One judge for one room, called by both the test and the preview.
-export function judge(startHeight: number, program: () => void): Verdict {
-  const { world } = runProgram(startWorld(startHeight), program);
-  const wanted = staircaseCells(startHeight).map(
-    (cell) => `${cell.x},${cell.y}`,
-  );
+// One judge for one room, called by both the test and the preview. It hands the
+// program the room's number and grades the squares it paints.
+export function judge(
+  variant: Variant,
+  program: (room: Room) => void,
+): Verdict {
+  const room = toRoom(variant);
+  const { world } = runProgram(startWorld(variant), () => program(room));
+  const wanted = variant.target.map(key);
   const got = paintedCells(world);
 
   if (world.crashed) {
     return {
       solved: false,
-      message: 'The robot walked off the grid. A bar was taller than the room.',
+      message:
+        'The robot walked into the wall. A row was longer than the room.',
       tone: 'todo',
     };
   }
@@ -95,13 +116,11 @@ export function judge(startHeight: number, program: () => void): Verdict {
 }
 
 // The lesson is only done when the same code builds the staircase in every
-// room. Code that hardcodes the heights passes one room and fails the rest.
-export function judgeAll(program: () => void): Verdict {
-  const verdicts = rooms.map((startHeight) => ({
-    startHeight,
-    verdict: judge(startHeight, program),
-  }));
-  const failed = verdicts.find((entry) => !entry.verdict.solved);
+// room. Code that types the lengths in passes one room and fails the rest.
+export function judgeAll(program: (room: Room) => void): Verdict {
+  const failed = rooms
+    .map((variant) => ({ variant, verdict: judge(variant, program) }))
+    .find((entry) => !entry.verdict.solved);
   if (!failed) {
     return {
       solved: true,
@@ -111,6 +130,6 @@ export function judgeAll(program: () => void): Verdict {
   }
   return {
     ...failed.verdict,
-    message: `${roomName(failed.startHeight)}: ${failed.verdict.message}`,
+    message: `${failed.variant.label}: ${failed.verdict.message}`,
   };
 }

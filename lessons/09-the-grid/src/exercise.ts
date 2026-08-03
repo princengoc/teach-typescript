@@ -1,6 +1,16 @@
 import { next, nextRow, paint } from './harness/moves';
 import type { Room } from './harness/types';
 
+// --- your kit ---
+// Everything you can call this lesson. The "Your kit" button in the
+// preview says more about each one.
+//   paint()      paints the square the robot stands on
+//   next()       steps forward to the next square
+//   nextRow()    carries the robot to the first square of the row below,...
+//   room.width   how many squares across the box reaches
+//   room.height  how many rows down the box reaches
+// --- end of your kit ---
+
 // This lesson: a loop inside a loop. The inner loop does one row. The outer
 // loop runs the inner one again for every row, so a row of code paints a box.
 

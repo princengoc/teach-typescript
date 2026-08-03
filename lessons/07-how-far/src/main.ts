@@ -1,18 +1,20 @@
 import cardSource from '../card.md?raw';
-import { climbAndFloor, matchBars, paintFloatingRow } from './exercise';
+import kitSource from '../kit.md?raw';
+import wordbookSource from '../wordbook.md?raw';
+import { matchRows, paintAndMatch, paintFloatingRow } from './exercise';
 import { renderMarkdown } from './harness/markdown';
-import { goToBuildLane, paintCells } from './harness/moves';
+import { nextRow, paintCells } from './harness/moves';
 import { drawWorld, replay } from './harness/render';
 import { robot, runProgram } from './harness/robot';
 import {
-  climbFloorVariant,
-  climbFloorVariants,
   floatingRowVariant,
   floatingRowVariants,
   judge,
   judgeRung,
-  matchBarsVariant,
-  matchBarsVariants,
+  matchRowsVariant,
+  matchRowsVariants,
+  paintAndMatchVariant,
+  paintAndMatchVariants,
   startWorld,
   targetWorld,
   type Variant,
@@ -20,8 +22,8 @@ import {
 import type { World } from './harness/types';
 import { makeWorld } from './harness/world';
 
-type View = 'learn' | 'build' | 'card';
-const VIEWS: View[] = ['learn', 'build', 'card'];
+type View = 'learn' | 'build' | 'card' | 'kit';
+const VIEWS: View[] = ['learn', 'build', 'card', 'kit'];
 const CELL = 22;
 
 function el<T extends HTMLElement>(id: string): T | null {
@@ -120,7 +122,7 @@ function setIntroText(): void {
 // A guess with the gap nailed to the first room's number. It fits the room it
 // was typed for and no other, because no number is measured.
 function guessFirstRoom(): void {
-  goToBuildLane();
+  nextRow();
   paintCells(MEASURE_GAP);
 }
 
@@ -194,18 +196,18 @@ const RUNGS: Rung[] = [
     mystery: () => floatingRowVariant(randomSize(3, 4)),
   },
   {
-    key: 'bars',
-    title: '2. Measure the first bar, match the rest',
-    program: matchBars,
-    variants: matchBarsVariants,
-    mystery: () => matchBarsVariant(randomSize(2, 4)),
+    key: 'rows',
+    title: '2. Measure once, match three rows',
+    program: matchRows,
+    variants: matchRowsVariants,
+    mystery: () => matchRowsVariant(randomSize(2, 4)),
   },
   {
-    key: 'climb',
-    title: '3. Count the climb, lay the floor',
-    program: climbAndFloor,
-    variants: climbFloorVariants,
-    mystery: () => climbFloorVariant(randomSize(2, 4)),
+    key: 'paint',
+    title: '3. Count as you paint, match below',
+    program: paintAndMatch,
+    variants: paintAndMatchVariants,
+    mystery: () => paintAndMatchVariant(randomSize(2, 4)),
   },
 ];
 
@@ -279,6 +281,17 @@ function renderBuild(): void {
   if (done) done.hidden = !allSolved;
 }
 
+let lastView: View = 'learn';
+
+// The kit and the wordbook are the two pages the kid looks things up in. Both
+// are files in the lesson, so this puts them on screen without a second copy.
+function renderKit(): void {
+  const body = el('kit-body');
+  if (body) {
+    body.innerHTML = renderMarkdown(`${kitSource}\n\n${wordbookSource}`);
+  }
+}
+
 function renderCard(): void {
   const body = el('card-body');
   if (body) body.innerHTML = renderMarkdown(cardSource);
@@ -296,6 +309,7 @@ function show(view: View): void {
   }
   if (view === 'build') renderBuild();
   if (view === 'card') renderCard();
+  if (view === 'kit') renderKit();
 }
 
 function currentView(): View {
@@ -324,5 +338,12 @@ for (const link of document.querySelectorAll<HTMLElement>(
 )) {
   link.addEventListener('click', () => go('build'));
 }
+
+el('kit-open')?.addEventListener('click', () => {
+  const now = currentView();
+  if (now !== 'kit') lastView = now;
+  go('kit');
+});
+el('kit-back')?.addEventListener('click', () => go(lastView));
 
 show(currentView());

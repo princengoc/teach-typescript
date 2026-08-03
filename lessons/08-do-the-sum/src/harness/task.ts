@@ -2,12 +2,13 @@ import { runProgram } from './robot';
 import type { Cell, Direction, Room, World } from './types';
 import { makeWorld, paintedCells } from './world';
 
-// One room a rung is graded in: a single lane `len` squares long, plus the two
-// band ends `lo` and `hi`. The kid's code reads these numbers off the room and
-// its rule decides, square by square, which to paint.
+// One room a rung is graded in: a box `width` across and `height` down, plus
+// the band's two ends. Rungs 1 and 2 use a single row; rung 3 uses the box. The
+// kid's code reads these numbers and its rule decides what to paint.
 export interface Variant {
   label: string;
-  len: number;
+  width: number;
+  height: number;
   lo: number;
   hi: number;
   start: { x: number; y: number; facing: Direction };
@@ -20,71 +21,84 @@ function key(cell: Cell): string {
 
 // The room the kid's program is handed: just the numbers, no grid.
 export function toRoom(variant: Variant): Room {
-  return { len: variant.len, lo: variant.lo, hi: variant.hi };
+  return {
+    width: variant.width,
+    height: variant.height,
+    lo: variant.lo,
+    hi: variant.hi,
+  };
 }
 
-// The squares of the one lane, along row 0.
-function lane(len: number): Cell[] {
+// Every square of the box, row by row.
+function box(width: number, height: number): Cell[] {
   const cells: Cell[] = [];
-  for (let i = 0; i < len; i += 1) {
-    cells.push({ x: i, y: 0 });
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      cells.push({ x, y });
+    }
   }
   return cells;
 }
 
-// RUNG 1. Paint the back half: every square whose index is at least len / 2.
-export function backHalfVariant(len: number): Variant {
-  const target = lane(len).filter((cell) => cell.x >= len / 2);
+// RUNG 1. Paint the back half of one row: every square at least halfway along.
+export function backHalfVariant(width: number): Variant {
   return {
-    label: `lane ${len}`,
-    len,
+    label: `lane ${width}`,
+    width,
+    height: 1,
     lo: 0,
     hi: 0,
     start: { x: 0, y: 0, facing: 'east' },
-    target,
+    target: box(width, 1).filter((cell) => cell.x >= width / 2),
   };
 }
 
-// RUNG 2. Paint every other square: the even indices.
-export function stripeVariant(len: number): Variant {
-  const target = lane(len).filter((cell) => cell.x % 2 === 0);
+// RUNG 2. Paint every other square of one row: the even ones.
+export function stripeVariant(width: number): Variant {
   return {
-    label: `lane ${len}`,
-    len,
+    label: `lane ${width}`,
+    width,
+    height: 1,
     lo: 0,
     hi: 0,
     start: { x: 0, y: 0, facing: 'east' },
-    target,
+    target: box(width, 1).filter((cell) => cell.x % 2 === 0),
   };
 }
 
-// RUNG 3. Paint the band: every square from lo to hi, ends included.
-export function bandVariant(len: number, lo: number, hi: number): Variant {
-  const target = lane(len).filter((cell) => cell.x >= lo && cell.x <= hi);
+// RUNG 3. The crossing: the same kind of rule, asked about a row instead of a
+// square. Every row from lo to hi, ends included, is painted right across.
+export function bandRowsVariant(
+  width: number,
+  height: number,
+  lo: number,
+  hi: number,
+): Variant {
   return {
-    label: `lane ${len}, band ${lo}-${hi}`,
-    len,
+    label: `${width} by ${height}, rows ${lo}-${hi}`,
+    width,
+    height,
     lo,
     hi,
     start: { x: 0, y: 0, facing: 'east' },
-    target,
+    target: box(width, height).filter((cell) => cell.y >= lo && cell.y <= hi),
   };
 }
 
-// Each rung is graded in two rooms, so a rule that nails one lane's numbers
+// Each rung is graded in two rooms, so a rule that nails one room's numbers
 // down passes one and misses the other.
 export const backHalfVariants: Variant[] = [
   backHalfVariant(6),
   backHalfVariant(9),
 ];
 export const stripeVariants: Variant[] = [stripeVariant(7), stripeVariant(10)];
-export const bandVariants: Variant[] = [
-  bandVariant(10, 3, 6),
-  bandVariant(11, 4, 8),
+export const bandRowsVariants: Variant[] = [
+  bandRowsVariant(6, 5, 1, 3),
+  bandRowsVariant(7, 6, 2, 4),
 ];
 
 export function startWorld(variant: Variant): World {
-  return makeWorld(variant.len, 1, { ...variant.start });
+  return makeWorld(variant.width, variant.height, { ...variant.start });
 }
 
 // A world with the target already painted, for the ghost outline in the preview.
@@ -119,7 +133,7 @@ export function judge(
   if (world.crashed) {
     return {
       solved: false,
-      message: 'The robot walked off the lane.',
+      message: 'The robot walked into the wall.',
       tone: 'todo',
     };
   }

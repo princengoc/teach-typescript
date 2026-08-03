@@ -13,7 +13,7 @@ for (let i = 0; i < n; i += 1) {
 **Recursion: a function that calls itself does one step, then hands the rest to another copy of itself, with new numbers.**
 
 ```ts
-climb(height + 1, barsLeft - 1);
+stairsFrom(len + 1, rowsLeft - 1);
 ```
 
 **A base case stops it: when nothing is left, `return` before it calls itself again. What counts as nothing left can be a wall the robot feels, not only a number.**

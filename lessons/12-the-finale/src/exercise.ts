@@ -1,6 +1,20 @@
 import { next, nextRow, paint } from './harness/moves';
 import type { Room } from './harness/types';
 
+// --- your kit ---
+// Everything you can call this lesson. The "Your kit" button in the
+// preview says more about each one.
+//   paint()      paints the square the robot stands on
+//   next()       steps forward to the next square
+//   nextRow()    carries the robot to the first square of the row below,...
+//   room.width   how many squares across the box reaches
+//   room.height  how many rows down the box reaches
+//   room.midX    how far across the middle square is
+//   room.midY    how far down the middle square is
+//   room.reach   how far from the middle the diamond reaches
+//   room.marks   the numbers of the squares the picture wants painted
+// --- end of your kit ---
+
 // The finale. Nothing here is new. One walk goes over every square of the box,
 // asks a rule about the square it is standing on, and paints the ones the rule
 // says yes to. Change the rule, get a different picture. That is the whole of

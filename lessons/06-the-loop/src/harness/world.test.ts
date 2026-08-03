@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { makeWorld, paintedCells, run, step, wallOnLeft } from './world';
+import { makeWorld, paintedCells, run, step, wallAhead } from './world';
 
 test('step moves the robot one cell in its facing direction', () => {
   const world = makeWorld(4, 4, { x: 1, y: 1, facing: 'east' });
@@ -39,15 +39,15 @@ test('turning left from south faces east', () => {
   expect(after.robot.facing).toBe('east');
 });
 
-test('facing south, the sensor looks east', () => {
-  const open = makeWorld(4, 4, { x: 0, y: 1, facing: 'south' });
-  expect(wallOnLeft(open)).toBe(false);
-  const walled = makeWorld(4, 4, { x: 3, y: 1, facing: 'south' });
-  expect(wallOnLeft(walled)).toBe(true);
+test('the sensor is true at the end of a row and false before it', () => {
+  const open = makeWorld(4, 4, { x: 2, y: 1, facing: 'east' });
+  expect(wallAhead(open)).toBe(false);
+  const walled = makeWorld(4, 4, { x: 3, y: 1, facing: 'east' });
+  expect(wallAhead(walled)).toBe(true);
 });
 
 test('the sensor turns with the robot', () => {
-  const world = makeWorld(4, 4, { x: 1, y: 0, facing: 'east' });
-  expect(wallOnLeft(world)).toBe(true);
-  expect(wallOnLeft(step(world, { kind: 'turn', hand: 'right' }))).toBe(false);
+  const world = makeWorld(4, 4, { x: 1, y: 0, facing: 'north' });
+  expect(wallAhead(world)).toBe(true);
+  expect(wallAhead(step(world, { kind: 'turn', hand: 'right' }))).toBe(false);
 });

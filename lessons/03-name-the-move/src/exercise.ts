@@ -1,5 +1,15 @@
 import { robot } from './harness/robot';
 
+// --- your kit ---
+// Everything you can call this lesson. The "Your kit" button in the
+// preview says more about each one.
+//   robot.paint()      paints the square the robot stands on
+//   robot.step()       moves the robot one square forward
+//   robot.walk(steps)  walks the robot `steps` squares forward
+//   robot.turnLeft()   turns the robot a quarter turn to the left
+//   robot.turnRight()  turns the robot a quarter turn to the right
+// --- end of your kit ---
+
 // The room has three shelves to paint. Every shelf is the same three squares
 // in a row. So write the move once, give it a name, and spend the name three
 // times.

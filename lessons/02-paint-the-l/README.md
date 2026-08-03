@@ -19,10 +19,18 @@ them, tell your teacher what each of your calls does, then open lesson 3.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass.
+- **Read anything you like.** No file in this project is shut to you. You are
+  not writing in one file with a black box next to it: `robot.paint()` is real
+  code in `src/harness/robot.ts`, and you can open it and see what it does. You
+  will not understand all of it yet, and that is fine. Look anyway. Every lesson
+  after this one hands you more, and all of it is readable the same way.
 - `card.md` is yours to keep. The preview renders it, so you never have to open
   it, but it is there when you want to look something up.
-- `wordbook.md` lists every word so far. Look there before asking.
+- Forgotten a call? Press **Your kit** in the preview: every robot call, with
+  what each one does and which file it lives in. `kit.md` and `wordbook.md` hold
+  the same words in the file tree.
 
 ## The StackBlitz link
 

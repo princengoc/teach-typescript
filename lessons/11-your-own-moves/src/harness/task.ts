@@ -14,7 +14,7 @@ export interface Variant {
   target: Cell[];
 }
 
-const EMPTY: Room = { n: 0, bars: [], bands: [], thick: 0 };
+const EMPTY: Room = { run: 0, bars: [], bands: [], thick: 0 };
 
 function key(cell: Cell): string {
   return `${cell.x},${cell.y}`;
@@ -49,7 +49,7 @@ function start(): { x: number; y: number; facing: Direction } {
 export function runVariant(n: number, lane: number): Variant {
   return {
     label: `n = ${n}, lane ${lane} wide`,
-    room: { ...EMPTY, n },
+    room: { ...EMPTY, run: n },
     width: lane,
     height: 1,
     start: start(),

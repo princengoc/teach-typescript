@@ -25,10 +25,15 @@ export type Command =
   | { kind: 'turn'; hand: 'left' | 'right' }
   | { kind: 'paint' };
 
-// The numbers a room hands the kid's code: the lane length, and the band's two
-// ends. The kid reads these fields; the rule computes from them.
+// The numbers a room hands the kid's code: how far the box reaches, and the
+// band's two ends. The kid reads these fields; the rule computes from them.
 export interface Room {
-  len: number;
+  // How many squares across the box reaches.
+  width: number;
+  // How many rows down the box reaches.
+  height: number;
+  // The first row of the band.
   lo: number;
+  // The last row of the band.
   hi: number;
 }

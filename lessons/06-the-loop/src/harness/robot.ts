@@ -1,8 +1,8 @@
 import type { Command, World } from './types';
 import { wallAhead as senseWallAhead, step as stepWorld } from './world';
 
-// The live facade. The kid's code asks the robot for the room's numbers, and
-// the answers depend on the room. So the robot acts as it is called, against
+// The live facade. The kid's code walks the robot and feels for walls, and the
+// answers depend on the room. So the robot acts as it is called, against
 // whichever room the harness handed it.
 let current: World | null = null;
 let recorded: Command[] = [];
@@ -14,36 +14,30 @@ function apply(command: Command): void {
 }
 
 export const robot = {
+  // Paints the square the robot stands on.
   paint(): void {
     apply({ kind: 'paint' });
   },
+  // Moves the robot one square forward.
+  step(): void {
+    apply({ kind: 'step' });
+  },
+  // Walks the robot `steps` squares forward.
   walk(steps: number): void {
     for (let i = 0; i < steps; i += 1) {
       apply({ kind: 'step' });
     }
   },
+  // Turns the robot a quarter turn to the left.
   turnLeft(): void {
     apply({ kind: 'turn', hand: 'left' });
   },
+  // Turns the robot a quarter turn to the right.
   turnRight(): void {
     apply({ kind: 'turn', hand: 'right' });
   },
-  // The numbers the room decides. Read them; you cannot guess. Each rung reads
-  // the one it needs.
-  squareSide(): number {
-    return current ? current.dims.squareSide : 0;
-  },
-  rectWidth(): number {
-    return current ? current.dims.rectWidth : 0;
-  },
-  rectHeight(): number {
-    return current ? current.dims.rectHeight : 0;
-  },
-  barCount(): number {
-    return current ? current.dims.barCount : 0;
-  },
-  // A sensor, not a number: true when the next step lands on a wall. The blind
-  // square never learns its side; it feels for the wall instead.
+  // A sensor: true when the next step lands on a wall. Not a number: when there
+  // is no number to read, the robot feels for the wall instead.
   wallAhead(): boolean {
     return current ? senseWallAhead(current) : true;
   },

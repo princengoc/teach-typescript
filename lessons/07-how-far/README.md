@@ -14,11 +14,11 @@ wall and count.
    bottom:
    - `measureGap` -- feel your way to the wall, counting the squares, and return
      the count. Then `paintFloatingRow` spends it (written for you).
-   - `matchBars` -- `buildFirstBar()` paints the first bar and returns how tall
-     it was. Keep that number and build two more bars to match, where no ceiling
-     stops you.
-   - `climbCounting` -- climb the bar, painting and counting, and return the
-     height. Then `climbAndFloor` lays a floor as long (written for you).
+   - `matchRows` -- measure the top row once with your own `measureGap`, keep
+     the number, and paint three rows under it to match. Once you have dropped a
+     row there is no wall left to feel, so the number has to be kept.
+   - `paintToWall` -- paint the top row as you count it, and return the count.
+     Then `paintAndMatch` matches it below (written for you).
 
    Save. The panel marks every rung in every room, and a surprise room of a new
    size each run. Code that measures fits them all; code that guesses does not.
@@ -33,13 +33,20 @@ tell your teacher where else a function that gives a number back would save you.
 
 ## Rules
 
-- Edit `src/exercise.ts` only. `src/harness/` runs the world; leave it closed.
-- The moves you spend -- `paintCells`, `buildFirstBar`, `paintBar`,
-  `goToBuildLane`, `toNextBarFoot`, `goHomeFaceEast` -- are done for you.
+- Edit `src/exercise.ts` only. Everything in `src/harness/` runs the world, and
+  changing it changes the test you are meant to pass.
+- Read anything you like. Two new moves arrive this lesson, and both are one
+  line each in `src/harness/moves.ts`: `paint()` paints the square you stand on,
+  and `next()` steps to the one after it, stopping at a wall instead of walking
+  off. They are the smallest moves there are, and every lesson after this is
+  built out of them.
 - `robot.wallAhead()` is a sensor: `true` when the next step lands on a wall.
-  There is no number to read this lesson; you feel the wall and count.
-- `wordbook.md` lists every word so far. Look there before asking.
+  This is the one lesson with no `room` to read at all; you feel the wall and
+  count.
+- Forgotten a call? Press **Your kit** in the preview: every move and every
+  robot call, with what each one does and which file it lives in. `kit.md` and
+  `wordbook.md` hold the same words in the file tree.
 
 ## The StackBlitz link
 
-https://stackblitz.com/github/princengoc/teach-typescript/tree/bfe3c510107a188be9688ed59a19dbc6d13f63f9/lessons/07-how-far?file=src%2Fexercise.ts
+https://stackblitz.com/github/princengoc/teach-typescript/tree/main/lessons/07-how-far?file=src%2Fexercise.ts
