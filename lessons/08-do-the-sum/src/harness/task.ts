@@ -40,6 +40,20 @@ function box(width: number, height: number): Cell[] {
   return cells;
 }
 
+// The rules the kid writes, written once here so the picture and the rule check
+// ask the same question of the same room.
+export function backHalfOf(i: number, width: number): boolean {
+  return i >= width / 2;
+}
+
+export function stripeOf(i: number): boolean {
+  return i % 2 === 0;
+}
+
+export function bandRowOf(y: number, room: Room): boolean {
+  return y >= room.lo && y <= room.hi;
+}
+
 // RUNG 1. Paint the back half of one row: every square at least halfway along.
 export function backHalfVariant(width: number): Variant {
   return {
@@ -49,7 +63,7 @@ export function backHalfVariant(width: number): Variant {
     lo: 0,
     hi: 0,
     start: { x: 0, y: 0, facing: 'east' },
-    target: box(width, 1).filter((cell) => cell.x >= width / 2),
+    target: box(width, 1).filter((cell) => backHalfOf(cell.x, width)),
   };
 }
 
@@ -62,7 +76,7 @@ export function stripeVariant(width: number): Variant {
     lo: 0,
     hi: 0,
     start: { x: 0, y: 0, facing: 'east' },
-    target: box(width, 1).filter((cell) => cell.x % 2 === 0),
+    target: box(width, 1).filter((cell) => stripeOf(cell.x)),
   };
 }
 
@@ -74,6 +88,7 @@ export function bandRowsVariant(
   lo: number,
   hi: number,
 ): Variant {
+  const room: Room = { width, height, lo, hi };
   return {
     label: `${width} by ${height}, rows ${lo}-${hi}`,
     width,
@@ -81,7 +96,7 @@ export function bandRowsVariant(
     lo,
     hi,
     start: { x: 0, y: 0, facing: 'east' },
-    target: box(width, height).filter((cell) => cell.y >= lo && cell.y <= hi),
+    target: box(width, height).filter((cell) => bandRowOf(cell.y, room)),
   };
 }
 
@@ -119,6 +134,12 @@ export interface Verdict {
   tone: Tone;
 }
 
+const PASS: Verdict = { solved: true, message: 'PASS.', tone: 'done' };
+
+function fail(message: string, tone: Tone = 'todo'): Verdict {
+  return { solved: false, message, tone };
+}
+
 // One judge for one room, called by both the test and the preview. It hands the
 // program the room's numbers and grades the squares it paints.
 export function judge(
@@ -130,26 +151,17 @@ export function judge(
   const wanted = variant.target.map(key);
   const got = paintedCells(world);
 
-  if (world.crashed) {
-    return {
-      solved: false,
-      message: 'The robot walked into the wall.',
-      tone: 'todo',
-    };
-  }
-  if (got.length === 0) {
-    return { solved: false, message: 'Nothing painted yet.', tone: 'todo' };
-  }
+  if (world.crashed) return fail('The robot walked into the wall.');
+  if (got.length === 0) return fail('Nothing painted yet.');
 
   const right = got.filter((cell) => wanted.includes(cell));
   if (right.length === wanted.length && got.length === wanted.length) {
-    return { solved: true, message: 'PASS.', tone: 'done' };
+    return PASS;
   }
-  return {
-    solved: false,
-    message: `Not there yet: ${right.length} of ${wanted.length} squares are right.`,
-    tone: 'progress',
-  };
+  return fail(
+    `Not there yet: ${right.length} of ${wanted.length} squares are right.`,
+    'progress',
+  );
 }
 
 // A rung is done only when the same rule paints its pattern in every room. A
@@ -161,11 +173,85 @@ export function judgeRung(
   const failed = variants
     .map((variant) => ({ variant, verdict: judge(variant, program) }))
     .find((entry) => !entry.verdict.solved);
-  if (!failed) {
-    return { solved: true, message: 'PASS. Every room.', tone: 'done' };
-  }
+  if (!failed) return { ...PASS, message: 'PASS. Every room.' };
   return {
     ...failed.verdict,
     message: `${failed.variant.label}: ${failed.verdict.message}`,
   };
+}
+
+// The rules are graded on their own as well as in the picture. A rule is an
+// answer about one square, and it has to be right about every square: painting
+// the right pattern some other way is not writing the rule.
+function firstWrong(
+  count: number,
+  ask: (n: number) => boolean,
+  want: (n: number) => boolean,
+): number | null {
+  for (let n = 0; n < count; n += 1) {
+    if (ask(n) !== want(n)) return n;
+  }
+  return null;
+}
+
+function ruleFail(
+  label: string,
+  thing: string,
+  n: number,
+  wanted: boolean,
+): Verdict {
+  return fail(
+    `${label}: ${thing} ${n} should be ${wanted ? 'yes' : 'no'}, and your rule says ${
+      wanted ? 'no' : 'yes'
+    }.`,
+    'progress',
+  );
+}
+
+export function checkBackHalf(
+  rule: (i: number, width: number) => boolean,
+): Verdict {
+  for (const variant of backHalfVariants) {
+    const wrong = firstWrong(
+      variant.width,
+      (i) => rule(i, variant.width),
+      (i) => backHalfOf(i, variant.width),
+    );
+    if (wrong !== null) {
+      return ruleFail(
+        variant.label,
+        'square',
+        wrong,
+        backHalfOf(wrong, variant.width),
+      );
+    }
+  }
+  return PASS;
+}
+
+export function checkStripe(rule: (i: number) => boolean): Verdict {
+  for (const variant of stripeVariants) {
+    const wrong = firstWrong(variant.width, rule, stripeOf);
+    if (wrong !== null) {
+      return ruleFail(variant.label, 'square', wrong, stripeOf(wrong));
+    }
+  }
+  return PASS;
+}
+
+export function checkBandRow(
+  rule: (y: number, room: Room) => boolean,
+): Verdict {
+  for (const variant of bandRowsVariants) {
+    const room = toRoom(variant);
+    const wrong = firstWrong(
+      variant.height,
+      (y) => rule(y, room),
+      (y) => bandRowOf(y, room),
+    );
+    if (wrong !== null) {
+      return ruleFail(variant.label, 'row', wrong, bandRowOf(wrong, room));
+    }
+  }
+  return PASS;
 }

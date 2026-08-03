@@ -20,6 +20,10 @@ import type { Room } from './harness/types';
 //
 // Nothing else here is new. The loop is lesson 6's, the moves are lesson 7's,
 // and by the third rung the rule is asked about a whole row.
+//
+// Each rule is marked twice: in the picture, and on its own. The panel asks
+// your rule about every square of every room, so painting the right pattern
+// some other way is not writing the rule.
 
 // RUNG 1 -- the back half. The loop is written for you: read it, it is the
 // shape you will copy below. Your job is the rule.
@@ -27,7 +31,7 @@ import type { Room } from './harness/types';
 // TODO: return true for a square in the back half -- one whose index i is at
 // least width / 2. Right now it asks for i >= width, which no square reaches,
 // so nothing paints. Halve it.
-function backHalf(i: number, width: number): boolean {
+export function backHalf(i: number, width: number): boolean {
   return i >= width;
 }
 
@@ -40,9 +44,15 @@ export function paintBackHalf(room: Room): void {
 
 // RUNG 2 -- stripes. Now you write both the rule and the loop.
 //
-// TODO: write a rule stripe(i) that returns true for every other square (the
-// even ones -- use %), then a loop like the one above that paints where it says
-// so. Right now it just walks the lane and paints nothing.
+// TODO 1: stripe says yes to every other square -- the even ones. Right now it
+// only says yes to the very first one. Use %: an even number is one that
+// leaves 0 when you divide it by 2.
+export function stripe(i: number): boolean {
+  return i === 0;
+}
+
+// TODO 2: write the loop. It is the one above, with your rule in it: walk the
+// lane, and paint where stripe says so. Right now it walks and paints nothing.
 export function paintStripes(room: Room): void {
   for (let i = 0; i < room.width; i += 1) {
     next();
@@ -56,10 +66,17 @@ export function paintStripes(room: Room): void {
 // Two moves come back for this. paintCells(n) paints n squares in a row, and
 // nextRow() drops to the row below. You have had both since lesson 5.
 //
-// TODO: write a rule bandRow(y, room) that returns true when y is from lo to
-// hi, ends included (y >= lo AND y <= hi -- join two tests with &&), then ask
-// it before you paint. Every row still drops, painted or not. Right now every
-// row is painted, band or not.
+// TODO 1: bandRow says yes to a row from lo to hi, ends included. It has half
+// the answer -- it says yes to everything from lo down. Join the other half
+// with &&: the row must also be at or before hi. && is true only when both
+// sides are.
+export function bandRow(y: number, room: Room): boolean {
+  return y >= room.lo;
+}
+
+// TODO 2: write the loop. Ask bandRow before you paint, and paint the whole row
+// across when it says yes. Every row still drops, painted or not, so the box
+// keeps its shape. Right now every row is painted, band or not.
 export function paintBandRows(room: Room): void {
   for (let y = 0; y < room.height; y += 1) {
     paintCells(room.width);

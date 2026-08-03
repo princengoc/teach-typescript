@@ -5,7 +5,7 @@ You wrote three rules. Each is a function that gives back `true` or `false`, and
 **A comparison hands back a boolean -- yes or no. `: boolean` promises one.**
 
 ```ts
-function backHalf(i: number, width: number): boolean {
+export function backHalf(i: number, width: number): boolean {
   return i >= width / 2;
 }
 ```

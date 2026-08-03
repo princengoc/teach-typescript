@@ -13,11 +13,12 @@ in does not.
    Watch the rule paint.
 2. **Climb the ladder**, by filling `src/exercise.ts` (open on the left), top to
    bottom:
-   - `paintBackHalf` -- the loop is written for you. Write the rule `backHalf`:
+   - `paintBackHalf` -- the loop is written for you. Fix the rule `backHalf`:
      return `true` when a square is at least halfway along (`i >= width / 2`).
-   - `paintStripes` -- write both. A rule `stripe(i)` that is `true` on every
-     other square (`i % 2 === 0`), and the loop that paints where it says so.
-   - `paintBandRows` -- write both, and step out of the lane. The room is a box,
+   - `paintStripes` -- the rule and the loop are both yours. `stripe(i)` is
+     `true` on every other square (`i % 2 === 0`); the loop paints where it says
+     so.
+   - `paintBandRows` -- both again, and step out of the lane. The room is a box,
      and the rule is asked about a whole row: `bandRow(y, room)` is `true` from
      `room.lo` to `room.hi`, ends included (`y >= lo && y <= hi`). Where it says
      yes, `paintCells(room.width)` paints the row right across; `nextRow()`
@@ -25,6 +26,11 @@ in does not.
 
    Save. The panel marks every rung in two rooms, and a surprise room of a new
    size each run. A rule fits them all; a typed-in list does not.
+
+   Each rule is marked twice: in the picture, and on its own. The panel asks
+   your rule about every square of every room, so a rule that is right reads
+   `PASS` while its loop is still wrong -- and a picture painted some other way
+   does not stand in for the rule.
 
 When every rung reads `PASS`, the ladder is done. You do not need the terminal
 for this lesson. The preview is your test.

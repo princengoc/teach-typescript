@@ -16,7 +16,7 @@ import type { Room } from './harness/types';
 
 // RUNG 1 -- the back half. The loop is written for you; the rule is yours.
 // A square is in the back half when its index is at least halfway along.
-function backHalf(i: number, width: number): boolean {
+export function backHalf(i: number, width: number): boolean {
   return i >= width / 2;
 }
 
@@ -28,7 +28,7 @@ export function paintBackHalf(room: Room): void {
 }
 
 // RUNG 2 -- stripes. Every other square is an even one: i % 2 leaves 0.
-function stripe(i: number): boolean {
+export function stripe(i: number): boolean {
   return i % 2 === 0;
 }
 
@@ -42,7 +42,7 @@ export function paintStripes(room: Room): void {
 // RUNG 3 -- the band of rows. The same rule, asked about a row: it is in the
 // band when it is at or past lo AND at or before hi. && is true only when both
 // tests are. Every row drops, painted or not, so the box keeps its shape.
-function bandRow(y: number, room: Room): boolean {
+export function bandRow(y: number, room: Room): boolean {
   return y >= room.lo && y <= room.hi;
 }
 

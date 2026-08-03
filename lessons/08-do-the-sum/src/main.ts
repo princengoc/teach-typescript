@@ -1,7 +1,14 @@
 import cardSource from '../card.md?raw';
 import kitSource from '../kit.md?raw';
 import wordbookSource from '../wordbook.md?raw';
-import { paintBackHalf, paintBandRows, paintStripes } from './exercise';
+import {
+  backHalf,
+  bandRow,
+  paintBackHalf,
+  paintBandRows,
+  paintStripes,
+  stripe,
+} from './exercise';
 import { renderMarkdown } from './harness/markdown';
 import { drawWorld } from './harness/render';
 import { runProgram } from './harness/robot';
@@ -10,6 +17,9 @@ import {
   backHalfVariants,
   bandRowsVariant,
   bandRowsVariants,
+  checkBackHalf,
+  checkBandRow,
+  checkStripe,
   judge,
   judgeRung,
   startWorld,
@@ -18,6 +28,7 @@ import {
   targetWorld,
   toRoom,
   type Variant,
+  type Verdict,
 } from './harness/task';
 import type { Room } from './harness/types';
 import { step } from './harness/world';
@@ -122,12 +133,18 @@ function drawResult(
   return judge(variant, program).solved;
 }
 
+interface Check {
+  label: string;
+  run: () => Verdict;
+}
+
 interface Rung {
   key: string;
   title: string;
   program: (room: Room) => void;
   variants: Variant[];
   mystery: () => Variant;
+  checks: Check[];
 }
 
 function randomSize(min: number, span: number): number {
@@ -141,6 +158,7 @@ const RUNGS: Rung[] = [
     program: paintBackHalf,
     variants: backHalfVariants,
     mystery: () => backHalfVariant(randomSize(6, 5)),
+    checks: [{ label: 'backHalf', run: () => checkBackHalf(backHalf) }],
   },
   {
     key: 'stripe',
@@ -148,6 +166,7 @@ const RUNGS: Rung[] = [
     program: paintStripes,
     variants: stripeVariants,
     mystery: () => stripeVariant(randomSize(7, 5)),
+    checks: [{ label: 'stripe', run: () => checkStripe(stripe) }],
   },
   {
     key: 'band',
@@ -161,8 +180,43 @@ const RUNGS: Rung[] = [
       const hi = Math.min(lo + randomSize(1, 3), height - 1);
       return bandRowsVariant(width, height, lo, hi);
     },
+    checks: [{ label: 'bandRow', run: () => checkBandRow(bandRow) }],
   },
 ];
+
+// A rule is an answer about one square. These ask it about every square of the
+// room, away from the picture, so a rule that is right reads PASS even while
+// the loop around it is still wrong -- and a picture painted some other way
+// cannot stand in for the rule.
+function renderChecks(rung: Rung): HTMLElement | null {
+  if (rung.checks.length === 0) return null;
+  const box = document.createElement('div');
+  for (const check of rung.checks) {
+    const verdict = check.run();
+    const line = document.createElement('p');
+    line.className = 'check';
+    line.textContent = `${check.label} on its own: ${
+      verdict.solved ? 'PASS' : verdict.message
+    }`;
+    line.style.color = verdict.solved ? '#2e7d32' : '#c62828';
+    box.append(line);
+  }
+  return box;
+}
+
+function rungSolved(rung: Rung): boolean {
+  if (!judgeRung(rung.variants, rung.program).solved) return false;
+  return rung.checks.every((check) => check.run().solved);
+}
+
+// What to tell the kid when a rung is not done: the picture, or the rule when
+// the picture came out right some other way.
+function rungMessage(rung: Rung): string {
+  const picture = judgeRung(rung.variants, rung.program);
+  if (!picture.solved) return picture.message;
+  const check = rung.checks.map((entry) => entry.run()).find((v) => !v.solved);
+  return check ? check.message : picture.message;
+}
 
 // A random room, redrawn each run, to prove the rule reads the numbers and does
 // not hardcode them. It grades but does not gate the rung: the fixed rooms
@@ -197,6 +251,9 @@ function renderRung(rung: Rung): HTMLElement {
   title.textContent = rung.title;
   block.append(title);
 
+  const checks = renderChecks(rung);
+  if (checks) block.append(checks);
+
   const figs = document.createElement('div');
   figs.className = 'figs';
   for (const variant of rung.variants) {
@@ -214,9 +271,9 @@ function renderRung(rung: Rung): HTMLElement {
 
   const verdict = document.createElement('p');
   verdict.className = 'verdict';
-  const result = judgeRung(rung.variants, rung.program);
-  verdict.textContent = result.solved ? 'PASS' : `Not yet: ${result.message}`;
-  verdict.style.color = result.solved ? '#2e7d32' : '#c62828';
+  const solved = rungSolved(rung);
+  verdict.textContent = solved ? 'PASS' : `Not yet: ${rungMessage(rung)}`;
+  verdict.style.color = solved ? '#2e7d32' : '#c62828';
   block.append(verdict);
 
   return block;
@@ -229,7 +286,7 @@ function renderBuild(): void {
   let allSolved = true;
   for (const rung of RUNGS) {
     host.append(renderRung(rung));
-    if (!judgeRung(rung.variants, rung.program).solved) allSolved = false;
+    if (!rungSolved(rung)) allSolved = false;
   }
   const done = el('build-done');
   if (done) done.hidden = !allSolved;
